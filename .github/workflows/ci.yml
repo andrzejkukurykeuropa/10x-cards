@@ -1,5 +1,10 @@
 name: CI
 
+# Quality gate only — lint + build.
+# Deployment is handled exclusively by Cloudflare Pages Git integration
+# (master branch → production, PR branches → preview URLs).
+# Do NOT add a deploy step here.
+
 on:
   push:
     branches: [master]
