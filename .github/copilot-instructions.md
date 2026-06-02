@@ -92,3 +92,22 @@ Dostarczona umiejętność nie zawiera odniesień do 10xDevs / kohorty / certyfi
 Umiejętności nie mogą zapisywać do `context/archive/`. Zarchiwizowane zmiany są niezmienne; jeśli docelowa ścieżka zaczyna się od `context/archive/`, przerwij z komunikatem: "Ta zmiana jest zarchiwizowana. Zamiast tego otwórz nową zmianę za pomocą `/10x-new`."
 
 <!-- END @przeprogramowani/10x-cli -->
+
+## MCP Servers — Cloudflare
+
+Dodaj do ustawień IDE (np. `.vscode/mcp.json` lub konfiguracji MCP klienta):
+
+```json
+{
+  "mcpServers": {
+    "cloudflare-docs": {
+      "command": "npx",
+      "args": ["mcp-remote", "https://docs.mcp.cloudflare.com/mcp"]
+    },
+    "cloudflare-observability": {
+      "command": "npx",
+      "args": ["mcp-remote", "https://observability.mcp.cloudflare.com/mcp"]
+    }
+  }
+}
+```

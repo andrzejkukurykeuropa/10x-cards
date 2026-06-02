@@ -13,7 +13,10 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
-  adapter: cloudflare(),
+  adapter: cloudflare({
+    imageService: "passthrough",
+    sessionBinding: false,
+  }),
   env: {
     schema: {
       SUPABASE_URL: envField.string({ context: "server", access: "secret", optional: true }),

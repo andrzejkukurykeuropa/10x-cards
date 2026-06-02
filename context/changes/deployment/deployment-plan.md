@@ -138,7 +138,162 @@ npx wrangler dev --local
 
 ---
 
-### 0.8 — Dry-run bundle check
+### 0.8 — Supabase: konfiguracja projektu (produkcja)
+
+#### 0.8.1 — Konto i projekt Supabase
+
+- [ ] Założyć konto na [supabase.com](https://supabase.com) jeśli nie istnieje (plan **Free** wystarczy dla MVP).
+- [ ] Kliknąć **New Project** → wybrać organizację → nadać nazwę (np. `10x-cards`).
+- [ ] Wybrać region **Europe (Frankfurt / eu-central-1)** — najniższe opóźnienie z Polski.
+- [ ] Ustawić silne hasło do bazy (zanotować — potrzebne przy migracji przez CLI).
+- [ ] Poczekać ~2 minuty na inicjalizację projektu.
+
+#### 0.8.2 — Pobranie danych połączenia
+
+Po inicjalizacji projektu przejść do **Settings → API**:
+
+| Klucz | Lokalizacja w Dashboard | Zmienna env |
+|---|---|---|
+| Project URL | `https://<ref>.supabase.co` | `SUPABASE_URL` |
+| anon (public) key | pole "anon public" | `SUPABASE_KEY` |
+
+> ⚠️ **Nie używać** klucza `service_role` — ma pełny dostęp z pominięciem RLS. `anon` key jest bezpieczny po stronie przeglądarki/serwera przy włączonym RLS.
+
+```bash
+# Skopiować wartości do .dev.vars (lokalne dev):
+SUPABASE_URL=https://<project-ref>.supabase.co
+SUPABASE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+#### 0.8.3 — Weryfikacja połączenia z hosted Supabase
+
+```bash
+# Sprawdzić dostępność projektu:
+curl https://<project-ref>.supabase.co/rest/v1/ \
+  -H "apikey: <anon-key>" \
+  -H "Authorization: Bearer <anon-key>"
+# Oczekiwany output: {"message":"Not Found"} lub pusta lista — oznacza że auth działa
+```
+
+---
+
+### 0.9 — Supabase: local development (Docker)
+
+Local Supabase emuluje cały stack (Postgres, Auth, Storage, Realtime) lokalnie — nie trzeba łączyć się z hosted projektem podczas developmentu.
+
+#### 0.9.1 — Wymagania
+
+- [ ] **Docker Desktop** uruchomiony:  
+  - Windows: [docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop/)
+  - Zweryfikować: `docker --version` i `docker ps` (nie może zwrócić błędu)
+
+#### 0.9.2 — Inicjalizacja Supabase CLI (jeśli nie zrobione)
+
+```bash
+# Supabase CLI jest w devDependencies — używać przez npx:
+npx supabase --version   # weryfikacja
+
+# Jeśli katalog supabase/ nie istnieje w repo:
+npx supabase init
+# Tworzy: supabase/config.toml
+```
+
+> W tym repo `supabase/` już istnieje (migrations w `supabase/migrations/`).
+
+#### 0.9.3 — Linkowanie z projektem hosted (raz, na maszynę)
+
+```bash
+npx supabase login
+# Otworzy przeglądarkę — zalogować się i wygenerować token dostępu
+
+npx supabase link --project-ref <project-ref>
+# project-ref = segment URL: https://<project-ref>.supabase.co
+# Pyta o hasło do bazy (z kroku 0.8.1)
+```
+
+#### 0.9.4 — Uruchomienie lokalnego Supabase
+
+```bash
+npx supabase start
+```
+
+Pierwsze uruchomienie pobiera obrazy Docker (~500MB). Kolejne starty trwają kilka sekund.
+
+Oczekiwany output:
+
+```
+Started supabase local development setup.
+
+         API URL: http://127.0.0.1:54321
+     GraphQL URL: http://127.0.0.1:54321/graphql/v1
+  S3 Storage URL: http://127.0.0.1:54321/storage/v1/s3
+          DB URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
+      Studio URL: http://127.0.0.1:54323
+    Inbucket URL: http://127.0.0.1:54324
+      JWT secret: super-secret-jwt-token-with-at-least-32-characters-long
+        anon key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+service_role key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+   S3 Access Key: 625729a08b95bf1b7ff351a663f3a23c
+   S3 Secret Key: 850181e4652dd023b7a98c58ae0d2d34bd487ee0bd82750
+       S3 Region: local
+```
+
+#### 0.9.5 — Konfiguracja .dev.vars dla local dev
+
+Skopiować `anon key` z outputu powyżej i zaktualizować `.dev.vars`:
+
+```bash
+# .dev.vars (gitignored) — wartości dla lokalnego Supabase:
+SUPABASE_URL=http://127.0.0.1:54321
+SUPABASE_KEY=<anon key z outputu supabase start>
+```
+
+> **Uwaga:** `.dev.vars` czyta `npm run dev` (Astro dev server z Cloudflare adapter). NIE `.env`.
+
+#### 0.9.6 — Uruchomienie migracji lokalnie
+
+```bash
+# Zastosować wszystkie migracje z supabase/migrations/ na lokalnej bazie:
+npx supabase db push
+# lub (jeśli nie linkowano):
+npx supabase db reset   # czyści bazę i aplikuje migracje od zera
+```
+
+Zweryfikować w Supabase Studio: [http://127.0.0.1:54323](http://127.0.0.1:54323) → Table Editor — powinny być widoczne tabele projektu.
+
+#### 0.9.7 — Uruchomienie migracji na hosted (produkcja)
+
+```bash
+# Po upewnieniu się że migracje działają lokalnie:
+npx supabase db push --linked
+# Pyta o potwierdzenie przed zmianami na produkcyjnej bazie
+```
+
+> ⚠️ Supabase nie wspiera rollback migracji — stosować wyłącznie **forward-only migrations** (każda nowa migracja to addytywna zmiana).
+
+#### 0.9.8 — Zatrzymanie lokalnego Supabase
+
+```bash
+npx supabase stop
+# Zatrzymuje kontenery Docker, dane są zachowane
+
+npx supabase stop --no-backup
+# Zatrzymuje i usuwa dane (czyste uruchomienie przy następnym start)
+```
+
+#### 0.9.9 — Typowe problemy
+
+| Problem | Przyczyna | Rozwiązanie |
+|---|---|---|
+| `Cannot connect to the Docker daemon` | Docker Desktop nie działa | Uruchomić Docker Desktop |
+| `port 54321 already in use` | Poprzednia instancja działa | `npx supabase stop` najpierw |
+| `supabase start` zawiesza się | Pierwszy download obrazów | Poczekać 5–10 min przy wolnym łączu |
+| Auth nie działa po `npm run dev` | Złe wartości w `.dev.vars` | Sprawdzić `anon key` z `supabase start` output |
+| Tabele nie istnieją lokalnie | Migracje niezastosowane | `npx supabase db reset` |
+
+---
+
+### 0.10 — Dry-run bundle check
 
 Przed pierwszym produkcyjnym deployem — zweryfikować że bundle mieści się w limicie 3MB (free plan):
 
@@ -294,8 +449,26 @@ npx wrangler pages secret put SUPABASE_KEY --project-name 10x-cards
 
 ## Kolejność kroków wymagających działania użytkownika
 
-1. `npx wrangler login` (Faza 0)
-2. Utworzyć projekt Pages w Dashboard (Faza 2)
-3. Ustawić sekrety przez CLI (Faza 3)
-4. Zweryfikować `.dev.vars` (Faza 4)
-5. Wyzwolić pierwszy deploy (Faza 5)
+### Supabase (jednorazowo)
+1. Założyć konto i projekt Supabase → pobrać `SUPABASE_URL` + `SUPABASE_KEY` (sekcja 0.8)
+2. Zainstalować Docker Desktop i uruchomić (sekcja 0.9.1)
+3. `npx supabase login` → `npx supabase link --project-ref <ref>` (sekcja 0.9.3)
+4. `npx supabase start` → skopiować `anon key` do `.dev.vars` (sekcje 0.9.4–0.9.5)
+5. `npx supabase db push` — zastosować migracje lokalnie (sekcja 0.9.6)
+6. `npx supabase db push --linked` — zastosować migracje na hosted (sekcja 0.9.7)
+
+### Cloudflare (jednorazowo)
+7. `npx wrangler login` (sekcja 0.4)
+8. Utworzyć projekt Pages w Dashboard (Faza 2)
+9. Ustawić sekrety `SUPABASE_URL` + `SUPABASE_KEY` przez CLI (Faza 3)
+10. Wyzwolić pierwszy deploy (Faza 5)
+
+### Lokalny development (codziennie)
+```bash
+# Terminal 1 — Supabase (jeśli nie działa):
+npx supabase start
+
+# Terminal 2 — Astro dev server:
+npm run dev
+# Otworzyć http://localhost:4321
+```
