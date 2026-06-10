@@ -182,17 +182,17 @@ Brak testów jednostkowych dla samej migracji SQL (Supabase nie oferuje unit tes
 
 #### Automated
 
-- [x] 1.1 Apply migration via `npx supabase db push --linked` without errors
+- [x] 1.1 Apply migration via `npx supabase db push --linked` without errors — 9036168
 
 #### Manual
 
-- [x] 1.2 Verify flashcards table visible in Supabase Dashboard → Table Editor
-- [x] 1.3 Verify 4 RLS policies active on flashcards table
-- [x] 1.4 Verify trigger set_flashcards_updated_at visible in Database → Triggers
+- [x] 1.2 Verify flashcards table visible in Supabase Dashboard → Table Editor — 9036168
+- [x] 1.3 Verify 4 RLS policies active on flashcards table — 9036168
+- [x] 1.4 Verify trigger set_flashcards_updated_at visible in Database → Triggers — 9036168
 
 ### Phase 2: TypeScript type
 
 #### Automated
 
-- [ ] 2.1 Create src/types.ts with Flashcard interface
-- [ ] 2.2 Lint passes: npm run lint
+- [x] 2.1 Create src/types.ts with Flashcard interface
+- [x] 2.2 Lint passes: npm run lint
