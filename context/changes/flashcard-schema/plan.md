@@ -194,5 +194,5 @@ Brak testów jednostkowych dla samej migracji SQL (Supabase nie oferuje unit tes
 
 #### Automated
 
-- [x] 2.1 Create src/types.ts with Flashcard interface
-- [x] 2.2 Lint passes: npm run lint
+- [x] 2.1 Create src/types.ts with Flashcard interface — d69dff5
+- [x] 2.2 Lint passes: npm run lint — d69dff5
