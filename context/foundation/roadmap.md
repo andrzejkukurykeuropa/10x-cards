@@ -3,7 +3,7 @@ project: "10xCards"
 version: 1
 status: draft
 created: 2026-06-05
-updated: 2026-06-05
+updated: 2026-06-13
 prd_version: 1
 main_goal: learn
 top_blocker: skills
@@ -31,7 +31,7 @@ Klin produktu — jedyna cecha, która po usunięciu sprawia, że 10xCards staje
 
 | ID | Change ID | Wynik (użytkownik może…) | Wymagania wstępne | Odnośniki PRD | Status |
 |---|---|---|---|---|---|
-| F-01 | `flashcard-schema` | (fundament) tabela `flashcards` w Supabase z migracją SQL i RLS per użytkownik | — | Access Control, Guardrails | ready |
+| F-01 | `flashcard-schema` | (fundament) tabela `flashcards` w Supabase z migracją SQL i RLS per użytkownik | — | Access Control, Guardrails | done |
 | F-02 | `ai-sdk-edge-spike` | (fundament) AI SDK zintegrowany i zweryfikowany w Cloudflare Workers edge runtime (streaming działa) | — | FR-003, NFR | ready |
 | S-01 | `collection-view` | przeglądać swoje fiszki w kolekcji (lista kart + pusty stan) | F-01 | FR-006 | proposed |
 | S-02 | `ai-generation-flow` | wkleić tekst → zobaczyć propozycje AI → zaakceptować / edytować / odrzucić → zapisać do kolekcji | F-01, F-02 | US-01, FR-003, FR-004, FR-005 | proposed |
@@ -62,6 +62,7 @@ Fundamenty poniżej zakładają, że są one obecne i NIE odbudowują ich.
 
 ### F-01: Schemat danych fiszek
 
+- **Status:** done
 - **Wynik:** (fundament) Tabela `flashcards` istnieje w Supabase z poprawną migracją SQL i polityką RLS — każdy użytkownik widzi tylko własne fiszki. Gotowa do odczytu i zapisu przez kolejne fragmenty.
 - **Change ID:** `flashcard-schema`
 - **Odnośniki PRD:** Access Control (model płaski per użytkownik), Guardrails (dane fiszek nie mogą być tracone)
@@ -138,5 +139,7 @@ Fundamenty poniżej zakładają, że są one obecne i NIE odbudowują ich.
 - **S-03 / FR-007+FR-008** — nice-to-have; parkuj jeśli `top_blocker: skills` pochłonie dostępny czas.
 
 ## Done
+
+- **F-01: (fundament) tabela `flashcards` w Supabase z migracją SQL i RLS per użytkownik** — Archived 2026-06-13 → `context/archive/2026-06-10-flashcard-schema/`. Lesson: —.
 
 <!-- Wypełnia /10x-archive po ukończeniu każdego fragmentu. -->

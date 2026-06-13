@@ -1,9 +1,10 @@
 ---
 change_id: flashcard-schema
 roadmap_id: F-01
-status: implemented
+status: archived
 created: 2026-06-10
-updated: 2026-06-10
+updated: 2026-06-13
+archived_at: 2026-06-13T20:50:00Z
 prd_refs:
   - Access Control
   - Guardrails
