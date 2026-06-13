@@ -19,7 +19,7 @@ export const GET: APIRoute = async (context) => {
 
   const { error } = await supabase.auth.verifyOtp({
     token_hash,
-    type: type as Parameters<typeof supabase.auth.verifyOtp>[0]["type"],
+    type: type,
   });
 
   if (error) {
