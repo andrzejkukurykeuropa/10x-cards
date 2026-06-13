@@ -1,61 +1,55 @@
 ---
 name: 10x-health-check
 description: >
-  Run a health check on an existing project: dependency audit, security scan,
-  test runner detection, CI/CD evaluation, and missing configuration analysis.
-  Maps the three execution gates (pre/in/post) from /10x-bootstrapper to an
-  assessment framework for existing codebases. Reads optional
-  context/foundation/stack-assessment.md from /10x-stack-assess to focus checks
-  on identified gaps. Writes context/foundation/health-check.md with findings,
-  prioritized fixes, and an agent-readiness verdict. Use when the user has an
-  existing project and wants to verify its health before working with an agent.
-  Trigger phrases: "health check", "check my project", "audit my project",
-  "is my project healthy", "sprawdź projekt", "audyt projektu",
-  "health-check", "project health".
-  Use AFTER /10x-stack-assess (brownfield chain), BEFORE agent onboarding (m1-l4).
+  Health-check an existing project: dependency audit, security scan, test
+  runner detection, CI/CD and missing-config analysis. Writes
+  context/foundation/health-check.md with prioritized fixes and an
+  agent-readiness verdict. Trigger phrases: "health check", "audit my project",
+  "is my project healthy", "sprawdź projekt", "audyt projektu". Use AFTER
+  /10x-stack-assess (brownfield chain), BEFORE agent onboarding.
 ---
 
 # Kontrola stanu: Audyt istniejącego projektu pod kątem gotowości agenta
 
-Ta umiejętność jest odpowiednikiem `/10x-bootstrapper` dla projektów brownfield. Podczas gdy bootstrapper tworzy nowy projekt i weryfikuje jego strukturę, kontrola stanu uruchamia te same trzy bramki wykonawcze (pre/in/post) jako ramy oceny dla istniejącej bazy kodu. Ponownie wykorzystuje wzorzec wysyłania audytu dla każdego języka z weryfikacji po utworzeniu struktury bootstrapper'a, ale stosuje go jako ruch otwierający, a nie zamykający.
+Ta umiejętność jest odpowiednikiem `/10x-bootstrapper` dla projektów brownfield. Tam, gdzie bootstrapper tworzy nowy projekt i weryfikuje jego strukturę, kontrola stanu uruchamia te same trzy bramki wykonawcze (pre/in/post) jako ramy oceny dla istniejącej bazy kodu. Ponownie wykorzystuje wzorzec wysyłania audytu dla każdego języka z weryfikacji po utworzeniu struktury bootstrapper'a, ale stosuje go jako ruch otwierający, a nie zamykającą kontrolę.
 
 Umiejętność ta znajduje się w łańcuchu brownfield: `/10x-shape → /10x-prd → /10x-stack-assess → /10x-health-check`. Jej jedyne zadanie: audyt stanu zależności projektu, infrastruktury testowej, konfiguracji CI/CD i kompletności konfiguracji, a następnie sporządzenie ustrukturyzowanego raportu z priorytetowymi poprawkami i werdyktem gotowości agenta.
 
-Gdy istnieje `context/foundation/stack-assessment.md` (z `/10x-stack-assess`), kontrola stanu łączy swoje ustalenia z lukami w bramkach jakości tam zidentyfikowanymi. Oba raporty są komplementarne: stack-assess ocenia *wybór stosu* pod kątem bramek jakości; health-check ocenia *stan projektu* pod kątem kryteriów zdrowia operacyjnego.
+Gdy istnieje `context/foundation/stack-assessment.md` (z `/10x-stack-assess`), kontrola stanu łączy swoje ustalenia z lukami w bramkach jakości tam zidentyfikowanymi. Oba raporty są komplementarne: ocena stosu ocenia *wybór stosu* pod kątem bramek jakości; kontrola stanu ocenia *stan projektu* pod kątem kryteriów zdrowia operacyjnego.
 
 ## Kiedy używać, kiedy pominąć
 
 **Użyj, gdy**: użytkownik ma istniejący projekt i chce zweryfikować jego stan przed rozpoczęciem rozwoju wspomaganego przez agenta. Katalog projektu powinien zawierać rozpoznawalne znaczniki projektu (`package.json`, `Cargo.toml`, `pyproject.toml`, `go.mod`, `Gemfile`, `composer.json`, `*.csproj`, `pubspec.yaml`).
 
-**Pomiń, gdy**: użytkownik tworzy nowy projekt — `/10x-bootstrapper` uruchamia własne sloty weryfikacyjne. Pomiń również, gdy użytkownik chce jedynie oceny bramki jakości stosu bez kontroli stanu operacyjnego — to jest obszar `/10x-stack-assess`.
+**Pomiń, gdy**: użytkownik tworzy nowy projekt — `/10x-bootstrapper` uruchamia własne sloty weryfikacyjne. Pomiń również, gdy użytkownik chce tylko oceny bramki jakości stosu bez kontroli stanu operacyjnego — to jest obszar `/10x-stack-assess`.
 
 ## Związek z innymi umiejętnościami
 
 - `/10x-stack-assess` — upstream. Tworzy `context/foundation/stack-assessment.md`. Opcjonalne wejście — kontrola stanu może działać bez niego, ale raport jest bogatszy, gdy luki są połączone.
 - `/10x-bootstrapper` — równoległy greenfield. Te same trzy bramki wykonawcze, inne zastosowanie (weryfikacja struktury vs audyt istniejącego projektu).
-- `/10x-shape`, `/10x-prd` — wcześniej w łańcuchu brownfield. Nie są bezpośrednimi wejściami, ale kontekst zakresu zmian PRD może informować, które części projektu są najważniejsze.
+- `/10x-shape`, `/10x-prd` — wcześniejsze w łańcuchu brownfield. Nie są bezpośrednimi wejściami, ale kontekst zakresu zmian PRD może informować, które części projektu są najważniejsze.
 
 ## Wymagane dane wejściowe
 
-1. Istniejąca baza kodu w bieżącym katalogu z co najmniej jednym rozpoznawalnym znacznikiem projektu.
+1. Istniejąca baza kodu w bieżącym katalogu roboczym (cwd) z co najmniej jednym rozpoznawalnym znacznikiem projektu.
 
 ## Opcjonalne dane wejściowe
 
-1. `context/foundation/stack-assessment.md` — jeśli jest obecny, kontrola stanu krzyżowo odwołuje się do luk w bramkach jakości z ustaleniami operacyjnymi.
-2. `context/foundation/prd.md` — jeśli jest obecny i ma `context_type: brownfield`, kontrola stanu używa `## Scope of Change` z PRD do priorytetyzacji ustaleń istotnych dla planowanej pracy.
+1. `context/foundation/stack-assessment.md` — jeśli istnieje, kontrola stanu odwołuje się do luk w bramkach jakości z ustaleniami operacyjnymi.
+2. `context/foundation/prd.md` — jeśli istnieje i ma `context_type: brownfield`, kontrola stanu używa `## Scope of Change` z PRD do priorytetyzacji ustaleń istotnych dla planowanej pracy.
 
 ## Początkowa odpowiedź
 
 Gdy ta umiejętność zostanie wywołana:
 
-1. **Jeśli podano argument ścieżki** (np. `/10x-health-check @context/foundation/stack-assessment.md`), usuń początkowe `@`, jeśli jest obecne, i użyj ścieżki jako lokalizacji oceny stosu dla tego uruchomienia. Ocena jest opcjonalnym kontekstem, a nie warunkiem wstępnym.
-2. **Jeśli nie podano argumentu**, sprawdź `context/foundation/stack-assessment.md`. Jeśli jest obecny, załaduj go do krzyżowego odwoływania. Jeśli nie ma, kontynuuj bez niego.
+1. **Jeśli podano argument ścieżki** (np. `/10x-health-check @context/foundation/stack-assessment.md`), usuń początkowe `@`, jeśli występuje, i użyj ścieżki jako lokalizacji oceny stosu dla tego uruchomienia. Ocena jest opcjonalnym kontekstem, a nie warunkiem wstępnym.
+2. **Jeśli nie podano argumentu**, sprawdź `context/foundation/stack-assessment.md`. Jeśli istnieje, załaduj go do odwołań. Jeśli nie ma, kontynuuj bez niego.
 
 ## Przepływ pracy
 
 ### Krok 0 — Warunek wstępny Cwd
 
-Wykryj znaczniki projektu:
+Wykryj znaczniki projektu, wykonując polecenie shella:
 
 ```bash
 find . -maxdepth 1 \( -name "package.json" -o -name "Cargo.toml" -o -name "pyproject.toml" -o -name "go.mod" -o -name "Gemfile" -o -name "composer.json" -o -name "*.csproj" -o -name "pubspec.yaml" \) 2>/dev/null
@@ -72,13 +66,13 @@ Następnie ZATRZYMAJ.
 
 Jeśli znaleziono znaczniki, wykryj rodzinę języków na podstawie znacznika (ta sama logika wykrywania co w `/10x-stack-assess` Krok 1) i przejdź do Kroku 1.
 
-### Krok 1 — Wstępna kontrola (audyt zależności + plik blokady + bezpieczeństwo)
+### Krok 1 — Kontrola wstępna (audyt zależności + plik blokady + bezpieczeństwo)
 
-**Bramka wykonawcza: wstępna kontrola.** Przed odczytaniem lub zmianą czegokolwiek w projekcie, przeprowadź audyt drzewa zależności. Odpowiada to bramce przedwykonawczej bootstrapper'a: "jaki jest stan przekazania, zanim na nim zadziałamy?"
+**Bramka wykonawcza: kontrola wstępna.** Przed odczytaniem lub zmianą czegokolwiek w projekcie, przeprowadź audyt drzewa zależności. Odpowiada to bramce przedwykonawczej bootstrapper'a: "jaki jest stan przekazania, zanim na niego zadziałamy?"
 
 #### 1a. Obecność pliku blokady
 
-Sprawdź, czy istnieje plik blokady pasujący do wykrytej rodziny języków:
+Sprawdź, czy istnieje plik blokady odpowiadający wykrytej rodzinie języków:
 
 | Rodzina języków | Oczekiwane pliki blokady |
 |---|---|
@@ -91,7 +85,7 @@ Sprawdź, czy istnieje plik blokady pasujący do wykrytej rodziny języków:
 | .NET | `packages.lock.json` (NuGet) |
 | Dart | `pubspec.lock` |
 
-Jeśli nie znaleziono pliku blokady, oznacz jako ustalenie:
+Jeśli nie znaleziono pliku blokady, oznacz to jako ustalenie:
 
 ```
 ⚠ No lockfile detected. Dependency versions are not pinned — builds are non-reproducible
@@ -109,40 +103,40 @@ Przekieruj do narzędzia audytowego ekosystemu według rodziny języków. Tabela
 | Python | `pip-audit --format json` | Wycofuje się do pominięcia, jeśli pip-audit nie jest zainstalowany |
 | Rust | `cargo audit --json` | Wycofuje się do pominięcia, jeśli cargo-audit nie jest zainstalowany |
 | Go | `govulncheck -json ./...` | Wycofuje się do pominięcia, jeśli govulncheck nie jest zainstalowany |
-| Ruby | `bundle audit check --update` | Czytelne dla człowieka wyjście, analizuj wiersz po wierszu |
+| Ruby | `bundle audit check --update` | Czytelne dla człowieka wyjście, analizuj linia po linii |
 | PHP | `composer audit --format json` | Wymaga Composer 2.4+ |
 | .NET | `dotnet list package --vulnerable --include-transitive` | Czytelne dla człowieka, analizuj pod kątem znaczników ważności |
-| Java, Dart | (pomiń) | Brak wbudowanego narzędzia audytowego; zanotuj pominięcie i zalecaj zewnętrzne narzędzia |
+| Java, Dart | (pomiń) | Brak wbudowanego narzędzia audytowego; zanotuj pominięcie i poleć narzędzia zewnętrzne |
 
-Uruchom rozwiązane polecenie z bieżącego katalogu. Przechwyć stdout, stderr i kod wyjścia. Kod wyjścia narzędzia audytowego jest informacyjny — kontrola stanu NIE zatrzymuje się na niezerowym wyjściu audytu.
+Uruchom rozwiązane polecenie z bieżącego katalogu roboczego (cwd) za pomocą polecenia shella. Przechwyć stdout, stderr i kod wyjścia. Kod wyjścia narzędzia audytowego jest informacyjny — kontrola stanu NIE zatrzymuje się na niezerowym wyjściu audytu.
 
 **Poziomy ważności** (takie same jak weryfikacja po utworzeniu struktury bootstrapper'a):
 
-- KRYTYCZNY (CVSS >= 9.0) — wyświetl w tekście
-- WYSOKI (CVSS 7.0–8.9) — wyświetl w tekście
-- UMIARKOWANY (CVSS 4.0–6.9) — tylko log
-- NISKI (CVSS < 4.0) — tylko log
+- KRYTYCZNE (CVSS >= 9.0) — wyświetl w tekście
+- WYSOKIE (CVSS 7.0–8.9) — wyświetl w tekście
+- UMIARKOWANE (CVSS 4.0–6.9) — tylko log
+- NISKIE (CVSS < 4.0) — tylko log
 
-Dla narzędzi z natywną ważnością (npm-audit, cargo-audit, govulncheck) użyj etykiety narzędzia. Dla narzędzi bez natywnej ważności, domyślnie ustaw UMIARKOWANY, chyba że zalecenie wyraźnie wymienia KRYTYCZNY lub WYSOKI.
+Dla narzędzi z natywną ważnością (npm-audit, cargo-audit, govulncheck) użyj etykiety narzędzia. Dla narzędzi bez natywnej ważności, domyślnie ustaw UMIARKOWANE, chyba że zalecenie wyraźnie określa KRYTYCZNE lub WYSOKIE.
 
 Gdy narzędzie rozróżnia zależności bezpośrednie od przechodnich, wyświetl podział. Ustalenia bezpośrednie są natychmiastowo możliwe do działania; ustalenia przechodnie są doradcze.
 
-#### 1c. Kontrola przestarzałych zależności
+#### 1c. Sprawdzenie nieaktualnych zależności
 
-Jeśli rodzina języków to obsługuje, uruchom szybką kontrolę przestarzałości:
+Jeśli rodzina języków to obsługuje, uruchom szybkie sprawdzenie aktualności:
 
 | Rodzina języków | Polecenie | Co pokazuje |
 |---|---|---|
-| JS/TS | `npm outdated --json` | Aktualna vs pożądana vs najnowsza dla każdego pakietu |
-| Python | `pip list --outdated --format json` | Aktualna vs najnowsza |
-| Rust | `cargo outdated --root-deps-only` (jeśli zainstalowany) | Przestarzałe bezpośrednie zależności |
-| Ruby | `bundle outdated --only-explicit` | Przestarzałe bezpośrednie gemy |
+| JS/TS | `npm outdated --json` | Bieżąca vs pożądana vs najnowsza dla każdego pakietu |
+| Python | `pip list --outdated --format json` | Bieżąca vs najnowsza |
+| Rust | `cargo outdated --root-deps-only` (jeśli zainstalowane) | Nieaktualne bezpośrednie zależności |
+| Ruby | `bundle outdated --only-explicit` | Nieaktualne bezpośrednie gemy |
 
-Ta kontrola ma charakter informacyjny — wyświetl luki w głównych wersjach i pakiety, które są więcej niż 2 główne wersje w tyle. Nie zgłaszaj każdej drobnej aktualizacji wersji.
+To sprawdzenie jest informacyjne — wyświetl luki w głównych wersjach i pakiety, które są więcej niż 2 główne wersje w tyle. Nie zgłaszaj każdej drobnej aktualizacji wersji.
 
-**Tryb awaryjny dla wszystkich kroków 1a–1c**: OSTRZEŻ-I-KONTYNUUJ. Jeśli narzędzie nie jest zainstalowane, zaloguj pominięcie i kontynuuj. Jeśli wywołanie sieciowe zakończy się niepowodzeniem, zaloguj częściowe wyjście i kontynuuj. Nigdy nie zatrzymuj się na ustaleniu wstępnej kontroli.
+**Tryb awaryjny dla wszystkich kroków 1a–1c**: OSTRZEŻ I KONTYNUUJ. Jeśli narzędzie nie jest zainstalowane, zaloguj pominięcie i kontynuuj. Jeśli wywołanie sieciowe zakończy się niepowodzeniem, zaloguj częściowe wyjście i kontynuuj. Nigdy nie zatrzymuj się na ustaleniu kontroli wstępnej.
 
-Wyświetl jedną linię podsumowania po zakończeniu wstępnej kontroli:
+Wyświetl jedną linię podsumowania po zakończeniu kontroli wstępnej:
 
 ```
 Pre-check: <lockfile status>. Audit: <C> CRITICAL, <H> HIGH, <M> MODERATE, <L> LOW.
@@ -155,7 +149,7 @@ Outdated: <N> packages with major version gaps.
 
 #### 2a. Wykrywanie i stan runnera testów
 
-Wykryj runner testów z plików konfiguracyjnych:
+Wykryj runnera testów z plików konfiguracyjnych:
 
 | Rodzina języków | Źródła wykrywania | Runnery testów |
 |---|---|---|
@@ -167,7 +161,7 @@ Wykryj runner testów z plików konfiguracyjnych:
 | PHP | `phpunit.xml*`, `composer.json` deps | PHPUnit, Pest |
 | .NET | `*.csproj` references | xUnit, NUnit, MSTest |
 
-Jeśli wykryto runner testów, spróbuj uruchomić suchy przebieg, aby zweryfikować, czy testy mogą się wykonać:
+Jeśli wykryto runnera testów, spróbuj wykonać suchy przebieg, aby zweryfikować, czy testy mogą się wykonać, uruchamiając polecenie shella:
 
 ```bash
 # JS/TS examples:
@@ -186,13 +180,13 @@ go test -list '.*' ./... 2>&1 | head -20         # go test
 
 Wyświetl ustalenia:
 
-- **Wykryto runner testów + testy uruchomione**: zgłoś liczbę testów, jeśli dostępna, zanotuj nazwę runnera
-- **Wykryto runner testów + testy nie uruchamiają się**: oznacz jako ustalenie z błędem
+- **Wykryto runnera testów + testy uruchomione**: zgłoś liczbę testów, jeśli dostępna, zanotuj nazwę runnera
+- **Wykryto runnera testów + testy nie uruchamiają się**: oznacz jako ustalenie z błędem
 - **Nie wykryto runnera testów**: oznacz jako znaczące ustalenie — asystent AI nie może zweryfikować własnych zmian
 
 #### 2b. Ocena konfiguracji CI/CD
 
-Sprawdź pliki konfiguracyjne CI/CD:
+Sprawdź pliki konfiguracyjne CI/CD, uruchamiając polecenie shella:
 
 ```bash
 find . -maxdepth 2 \( -name ".github" -o -name ".gitlab-ci.yml" -o -name "Jenkinsfile" -o -name ".circleci" -o -name "cloudbuild.yaml" -o -name "bitbucket-pipelines.yml" -o -name ".travis.yml" \) 2>/dev/null
@@ -215,25 +209,25 @@ CI/CD: <provider> detected. Stages: lint <✓/✗>, test <✓/✗>, build <✓/�
 type-check <✓/✗>, security <✓/✗>.
 ```
 
-Jeśli nie znaleziono konfiguracji CI, zanotuj to jako element kategorii B — uczący się skonfiguruje CI w późniejszej lekcji dotyczącej infrastruktury. Nie oznaczaj tego jako pilnego ustalenia.
+Jeśli nie znaleziono konfiguracji CI, zanotuj to jako element kategorii B — uczeń skonfiguruje CI w późniejszej lekcji dotyczącej infrastruktury. Nie oznaczaj tego jako pilnego ustalenia.
 
 #### 2c. Brakujące pliki konfiguracyjne
 
 Sprawdź typowe konfiguracje deweloperskie:
 
-| Plik | Cel | Ważność, jeśli brakuje |
+| Plik | Cel | Ważność w przypadku braku |
 |---|---|---|
-| `.editorconfig` | Spójne formatowanie w edytorach | niska |
-| `.prettierrc*` / `biome.json` (JS/TS) | Formatowanie kodu | średnia (jeśli nie skonfigurowano formatowania) |
+| `.editorconfig` | Spójne formatowanie w różnych edytorach | niska |
+| `.prettierrc*` / `biome.json` (JS/TS) | Formatowanie kodu | średnia (jeśli brak skonfigurowanego formatowania) |
 | `.eslintrc*` / `eslint.config.*` (JS/TS) | Lintowanie | średnia |
 | `tsconfig.json` z `strict: true` (TS) | Ścisłość typów | wysoka (jeśli projekt TS bez strict) |
 | `.gitignore` | Wykluczenia śledzonych plików | wysoka |
 | `.env.example` / `.env.template` | Dokumentacja zmiennych środowiskowych | niska |
-| `AGENTS.md` | Pliki instrukcji asystenta AI | Kategoria B — omówione w onboardingu agenta |
+| `CLAUDE.md` / `AGENTS.md` | Pliki instrukcji dla agenta | Kategoria B — omówione w onboardingu agenta |
 
 Wyświetl brakujące pliki pogrupowane według ważności.
 
-**Tryb awaryjny dla wszystkich kroków 2a–2c**: OSTRZEŻ-I-KONTYNUUJ. Analiza tylko do odczytu nie powinna zakończyć się niepowodzeniem, ale jeśli odczyt pliku zakończy się błędem lub suchy przebieg zawiesi się, przechwyć to, co możesz, i przejdź dalej.
+**Tryb awaryjny dla wszystkich kroków 2a–2c**: OSTRZEŻ I KONTYNUUJ. Analiza tylko do odczytu nie powinna zakończyć się niepowodzeniem, ale jeśli odczyt pliku zakończy się błędem lub suchy przebieg zawiesi się, przechwyć, co możesz, i kontynuuj.
 
 Wyświetl jedną linię podsumowania po zakończeniu kontroli wewnętrznej:
 
@@ -244,27 +238,27 @@ In-check: test runner <detected/not detected>, CI <provider/not detected>,
 
 ### Krok 3 — Kontrola końcowa (ocena + rekomendacje)
 
-**Bramka wykonawcza: kontrola końcowa.** Syntetyzuj ustalenia z kontroli wstępnej i wewnętrznej w werdykt gotowości agenta i priorytetową listę poprawek. Odpowiada to bramce pokonawczej bootstrapper'a: "jaki jest stan po ocenie wszystkiego?"
+**Bramka wykonawcza: kontrola końcowa.** Synteza ustaleń z kontroli wstępnej i wewnętrznej w werdykt gotowości agenta i priorytetową listę poprawek. Odpowiada to bramce pokonawczej bootstrapper'a: "jaki jest stan po ocenie wszystkiego?"
 
-#### 3a. Krzyżowe odniesienie z oceną stosu
+#### 3a. Odwołanie do oceny stosu
 
-Jeśli istnieje `context/foundation/stack-assessment.md`, odczytaj go i połącz ustalenia:
+Jeśli istnieje `context/foundation/stack-assessment.md`, odczytaj jego zawartość i połącz ustalenia:
 
 - Jeśli ocena stosu zidentyfikowała błąd bramki jakości (np. "typed: fail"), a kontrola stanu nie znalazła sprawdzania typów w CI → wzmocnij: "stosowi brakuje bezpieczeństwa typów ORAZ CI nie wymusza typów — kompensacja jest podwójnie ważna"
-- Jeśli ocena stosu zidentyfikowała strategie kompensacji → sprawdź, czy istnieją zalecane wpisy w plikach instrukcji (czy `AGENTS.md` są obecne? Czy zawierają zalecane reguły?)
+- Jeśli ocena stosu zidentyfikowała strategie kompensacji → sprawdź, czy istnieją zalecane wpisy w plikach instrukcji (czy `CLAUDE.md` / `AGENTS.md` są obecne? Czy zawierają zalecane reguły?)
 - Jeśli ocena stosu dała werdykt `ready-with-compensation`, ale brakuje wpisów kompensacyjnych → oznacz jako lukę
 
 #### 3b. Określ ogólny stan zdrowia
 
 Na podstawie wszystkich ustaleń:
 
-- **healthy**: brak ustaleń audytu KRYTYCZNYCH/WYSOKICH, wykryty i działający runner testów, brak luk konfiguracyjnych o wysokiej ważności w kategorii A.
-- **needs-attention**: niektóre ustalenia kategorii A, ale wszystkie możliwe do rozwiązania. Typowe: kilka zaleceń audytu WYSOKICH, brak formatowania lub brak ścisłości typów.
-- **critical-issues**: ustalenia audytu KRYTYCZNE, brak runnera testów lub wiele luk kategorii A o wysokiej ważności, które się kumulują. Asystent AI będzie miał trudności bez przygotowania.
+- **healthy**: brak krytycznych/wysokich ustaleń audytu, wykryto i działa runner testów, brak luk konfiguracyjnych o wysokiej ważności w kategorii A.
+- **needs-attention**: niektóre ustalenia kategorii A, ale wszystkie możliwe do rozwiązania. Typowe: kilka wysokich zaleceń audytu, brak formatowania lub brak ścisłości typów.
+- **critical-issues**: krytyczne ustalenia audytu, brak runnera testów lub wiele luk konfiguracyjnych o wysokiej ważności w kategorii A. Asystent AI będzie miał trudności bez przygotowania.
 
-Ustalenia kategorii B (brak CI, brak AGENTS.md, brak konfiguracji wdrożenia) **nie** wpływają na werdykt — są oczekiwane na tym etapie i zostaną rozwiązane w późniejszych lekcjach. Projekt może być `healthy` bez potoku CI, jeśli ma działający runner testów, czyste zależności i dobrą lokalną konfigurację.
+Ustalenia kategorii B (brak CI, brak AGENTS.md, brak konfiguracji wdrożenia) **nie** wpływają na werdykt — są one oczekiwane na tym etapie i zostaną rozwiązane w późniejszych lekcjach. Projekt może być `healthy` bez potoku CI, jeśli ma działający runner testów, czyste zależności i dobrą lokalną konfigurację.
 
-Werdykt ma charakter informacyjny, a nie blokujący. Nawet `critical-issues` oznacza "poświęć czas na poprawki kategorii A, zanim spodziewasz się płynnej współpracy z asystentem AI", a nie "porzuć projekt".
+Werdykt jest informacyjny, a nie blokujący. Nawet `critical-issues` oznacza "poświęć czas na poprawki kategorii A, zanim oczekujesz płynnej współpracy z asystentem AI", a nie "porzuć projekt".
 
 #### 3c. Priorytetowa lista poprawek
 
@@ -272,24 +266,24 @@ Podziel ustalenia na dwie kategorie:
 
 **Kategoria A — Napraw przed pracą asystenta AI** (możliwe do działania teraz):
 
-1. **Krytyczne luki w zabezpieczeniach** — napraw przed jakąkolwiek pracą wspomaganą przez asystenta AI, która dotyka dotkniętych ścieżek kodu
-2. **Brak runnera testów** — asystent AI nie może zweryfikować własnych zmian; zainstaluj i skonfiguruj go
-3. **Brak pliku blokady** — niemożliwe do odtworzenia kompilacje podważają niezawodność asystenta AI
+1. **Krytyczne luki w zabezpieczeniach** — napraw przed jakimkolwiek działaniem asystenta AI na dotkniętych ścieżkach kodu
+2. **Brak runnera testów** — asystent AI nie może zweryfikować własnych zmian; zainstaluj i skonfiguruj
+3. **Brak pliku blokady** — niereprodukowalne kompilacje podważają niezawodność asystenta AI
 4. **Wysokie ustalenia audytu** — przejrzyj i załataj lub zaakceptuj ryzyko
 5. **Brak ścisłości typów** (TS bez strict, Python bez mypy) — asystent AI generuje mniej niezawodny kod
 6. **Brak formatowania/lintowania** — styl wyjścia asystenta AI będzie niespójny
-7. **Przestarzałe zależności z dużymi lukami** — potencjalne zmiany powodujące niezgodność podczas aktualizacji
+7. **Nieaktualne zależności z dużymi lukami** — potencjalne zmiany powodujące niezgodność podczas aktualizacji
 8. **Brak .editorconfig / .env.example** — wygoda, nie blokujące
 
 **Kategoria B — Rozwiązane w nadchodzących lekcjach** (potwierdź, nie alarmuj):
 
-Te ustalenia są prawdziwe, ale uczący się skonfiguruje je w nadchodzących krokach. Przedstaw je jako "następne w kolejności", a nie jako problemy:
+Te ustalenia są prawdziwe, ale uczeń skonfiguruje je w nadchodzących krokach. Przedstaw je jako "następne w kolejności", a nie jako problemy:
 
-- **Brak potoku CI** → omówione w lekcji dotyczącej infrastruktury/wdrożenia. Zanotuj lukę, wskaż przyszłość: "Skonfigurujesz CI w nadchodzącej lekcji. Na razie lokalne pokrycie runnera testów jest tym, co ma znaczenie dla współpracy z asystentem AI."
-- **Brak plików instrukcji asystenta AI** (AGENTS.md) → omówione w lekcji onboardingu asystenta AI. Nie zalecaj tworzenia ich teraz: "Onboarding asystenta AI przeprowadzi Cię przez budowanie ich z odpowiednią treścią. Generowanie zaślepki teraz byłoby przedwczesne."
-- **Brak konfiguracji wdrożenia** → omówione w lekcji dotyczącej infrastruktury. Potwierdź, nie priorytetyzuj.
+- **Brak potoku CI** → omówione w lekcji o infrastrukturze/wdrożeniu. Zanotuj lukę, wskaż przyszłość: "Skonfigurujesz CI w nadchodzącej lekcji. Na razie pokrycie lokalnego runnera testów jest tym, co ma znaczenie dla współpracy z asystentem AI."
+- **Brak plików instrukcji dla asystenta AI** (CLAUDE.md / AGENTS.md) → omówione w lekcji o onboardingu asystenta AI. Nie zalecaj ich tworzenia teraz: "Onboarding asystenta AI przeprowadzi Cię przez tworzenie ich z odpowiednią zawartością. Generowanie zaślepki teraz byłoby przedwczesne."
+- **Brak konfiguracji wdrożenia** → omówione w lekcji o infrastrukturze. Potwierdź, nie priorytetyzuj.
 
-Gdy kontrola stanu działa samodzielnie (poza łańcuchem kursu), wszystkie ustalenia trafiają na jedną listę rankingową bez podziału A/B — kontekst kursu ma zastosowanie tylko wtedy, gdy użytkownik przechodzi przez łańcuch brownfield. Podczas działania w łańcuchu kursu 10xDevs, wzbogacaj odniesienia do przodu o tytuły lekcji i linki:
+Gdy kontrola stanu działa samodzielnie (poza łańcuchem kursu), wszystkie ustalenia trafiają na jedną listę rankingową bez podziału A/B — kontekst kursu ma zastosowanie tylko wtedy, gdy użytkownik przechodzi przez łańcuch brownfield. Podczas działania w łańcuchu kursu 10xDevs, wzbogacaj odwołania do przodu o tytuły lekcji i linki:
 - onboarding agenta = [Agent Onboarding: Agents.md, AI Rules i feedback loops (M1L4)](https://platforma.przeprogramowani.pl/external/10xdevs-3/m1-l4)
 - infrastruktura i CI/CD = [Sprint Zero z Agentem: infrastruktura, walking skeleton i pierwszy deploy (M1L5)](https://platforma.przeprogramowani.pl/external/10xdevs-3/m1-l5)
 
@@ -297,20 +291,14 @@ Każdy wpis poprawki (w obu kategoriach) musi zawierać:
 
 - Co jest nie tak (ustalenie)
 - Dlaczego ma to znaczenie dla przepływów pracy asystenta AI (wpływ)
-- Co z tym zrobić (konkretne polecenie poprawki lub działanie, lub lekcja, która to obejmuje)
+- Co z tym zrobić (konkretne polecenie lub działanie naprawcze, lub lekcja, która to obejmuje)
 - Szacowany wysiłek: szybki (< 5 min), umiarkowany (15–30 min), znaczący (> 1 godzina) lub **nadchodząca lekcja** dla elementów kategorii B
 
 ### Krok 4 — Zapisz health-check.md
 
-Sprawdź kolizję:
+Sprawdź kolizję, sprawdzając, czy plik `context/foundation/health-check.md` istnieje.
 
-```bash
-test -f context/foundation/health-check.md
-```
-
-Jeśli plik istnieje, zapytaj:
-
-Zapytaj użytkownika:
+Jeśli plik istnieje, zapytaj użytkownika:
 - question: "context/foundation/health-check.md already exists. How would you like to proceed?"
   header: "Collision"
   options:
@@ -324,33 +312,33 @@ Zapytaj użytkownika:
 
 Zbuduj plik wyjściowy zgodnie z `references/health-check-schema.md`.
 
-Zapisz do `context/foundation/health-check.md` (tworząc `context/foundation/`, jeśli nie istnieje).
+Zapisz zawartość do `context/foundation/health-check.md` (tworząc `context/foundation/`, jeśli nie istnieje).
 
 Po zapisie wydrukuj podsumowanie końcowe:
 
 ```
 ═══════════════════════════════════════════════════════════
-  HEALTH CHECK COMPLETE
+  KONTROLA STANU ZAKOŃCZONA
 ═══════════════════════════════════════════════════════════
 
-  Project:        <project name>
-  Health:         <healthy | needs-attention | critical-issues>
-  Audit findings: <C> CRITICAL, <H> HIGH
-  Test runner:    <detected (runner name) | not detected>
-  CI/CD:          <provider | not detected>
-  Fixes:          <N> recommended (<Q> quick, <M> moderate, <S> significant)
+  Projekt:        <nazwa projektu>
+  Stan:           <healthy | needs-attention | critical-issues>
+  Ustalenia audytu: <C> KRYTYCZNE, <H> WYSOKIE
+  Runner testów:    <wykryto (nazwa runnera) | nie wykryto>
+  CI/CD:          <dostawca | nie wykryto>
+  Poprawki:       <N> zalecane (<Q> szybkie, <M> umiarkowane, <S> znaczące)
 
-  ► Report:       context/foundation/health-check.md
-  ► Next:         AI assistant onboarding — both greenfield and brownfield
-                  paths converge with equivalent context artifacts.
+  ► Raport:       context/foundation/health-check.md
+  ► Dalej:        Onboarding asystenta AI — zarówno ścieżki greenfield, jak i brownfield
+                  zbiegają się z równoważnymi artefaktami kontekstu.
 ═══════════════════════════════════════════════════════════
 ```
 
-ZATRZYMAJ. Nie przechodź automatycznie do żadnej następnej umiejętności.
+ZATRZYMAJ. Nie łącz się automatycznie z żadną następną umiejętnością.
 
 ## Wynik
 
-Zapisany pojedynczy plik: `context/foundation/health-check.md` (lub `health-check-vN.md`, jeśli wybrano zapis wersji).
+Zapisany pojedynczy plik: `context/foundation/health-check.md` (lub `health-check-vN.md`, jeśli wybrano zapis z wersjonowaniem).
 
 ## Referencje
 
@@ -360,18 +348,18 @@ Zapisany pojedynczy plik: `context/foundation/health-check.md` (lub `health-chec
 
 1. **Cwd jest warunkiem wstępnym.** Umiejętność wymaga istniejącej bazy kodu z rozpoznawalnymi znacznikami projektu. Brak oceny wyłącznie na podstawie kontekstu rozmowy.
 
-2. **Analiza tylko do odczytu.** Kontrola stanu nigdy nie modyfikuje projektu. Brak `npm audit fix`, brak `pip install --upgrade`, brak automatycznej poprawki. Sugerowanie poprawek w raporcie jest w porządku; ich uruchamianie wykracza poza zakres.
+2. **Analiza tylko do odczytu.** Kontrola stanu nigdy nie modyfikuje projektu. Brak `npm audit fix`, brak `pip install --upgrade`, brak automatycznego łatania. Sugerowanie poprawek w raporcie jest w porządku; ich uruchamianie wykracza poza zakres.
 
-3. **OSTRZEŻ-I-KONTYNUUJ na każdej gałęzi.** Żadne ustalenie nie zatrzymuje umiejętności. KRYTYCZNE luki w zabezpieczeniach, brak runnerów testów, brak CI — wszystko to pojawia się jako ustalenia z rekomendacjami, nigdy jako blokady. Użytkownik decyduje, co i kiedy naprawić.
+3. **OSTRZEŻ I KONTYNUUJ w każdej gałęzi.** Żadne ustalenie nie zatrzymuje umiejętności. KRYTYCZNE luki w zabezpieczeniach, brak runnerów testów, brak CI — wszystko to pojawia się jako ustalenia z rekomendacjami, nigdy jako blokery. Użytkownik decyduje, co i kiedy naprawić.
 
 4. **Priorytetyzuj według wpływu na asystenta AI.** Lista poprawek jest uporządkowana według wpływu na przepływy pracy asystenta AI, a nie według ogólnej ważności. Brak runnera testów ma większe znaczenie dla asystenta AI niż NISKIE zalecenie audytu, ponieważ asystent AI nie może zweryfikować własnych zmian bez testów.
 
 5. **Konkretne poprawki, a nie ogólne porady.** Każda rekomendacja musi zawierać konkretne polecenie lub działanie. "Dodaj testy" nie jest poprawką; "Uruchom `npm init vitest@latest`, aby skonfigurować Vitest, a następnie dodaj skrypt testowy do package.json" jest poprawką.
 
-6. **Krzyżowe odniesienie do oceny stosu, jeśli dostępne.** Jeśli użytkownik najpierw uruchomił `/10x-stack-assess`, kontrola stanu musi połączyć ustalenia z lukami w bramkach jakości. Oba raporty są komplementarne — nie duplikuj analizy bramki, odwołaj się do niej.
+6. **Odwołanie do oceny stosu, gdy dostępne.** Jeśli użytkownik najpierw uruchomił `/10x-stack-assess`, kontrola stanu musi połączyć ustalenia z lukami w bramkach jakości. Oba raporty są komplementarne — nie duplikuj analizy bramki, odwołaj się do niej.
 
-7. **Etykiety wewnętrzne umiejętności pozostają wewnętrzne.** Rozmawiając z użytkownikiem, nigdy nie odwołuj się do numerów kroków, nazw bramek jako terminów technicznych ani wewnętrznych nazw pól. Używaj prostego języka: "audyt zależności", "kontrola infrastruktury testowej", "ogólny stan zdrowia".
+7. **Etykiety wewnętrzne umiejętności pozostają wewnętrzne.** Podczas rozmowy z użytkownikiem nigdy nie odwołuj się do numerów kroków, nazw bramek jako terminów technicznych ani wewnętrznych nazw pól. Używaj prostego języka: "audyt zależności", "sprawdzenie infrastruktury testowej", "ogólny stan zdrowia".
 
-8. **Świadomość kontekstu kursu.** Kontrola stanu znajduje się na ścieżce nauki. Brak CI/CD, brak pliku konfiguracyjnego AI projektu (AGENTS.md) i brak konfiguracji wdrożenia to oczekiwane luki na tym etapie — przedstaw je jako "następne w kolejności", a nie jako błędy. Werdykt nie może karać uczącego się za rzeczy, których jeszcze nie nauczono.
+8. **Świadomość kontekstu kursu.** Kontrola stanu znajduje się na ścieżce nauki. Brak CI/CD, brak AGENTS.md i brak konfiguracji wdrożenia to oczekiwane luki na tym etapie — przedstaw je jako "następne w kolejności", a nie jako problemy. Werdykt nie może karać ucznia za rzeczy, których jeszcze nie nauczono.
 
-9. **Tylko język uniwersalny.** Brak prywatnych ścieżk do skarbca lub brandingu specyficznego dla organizacji w dostarczanej treści.
+9. **Tylko język uniwersalny.** Brak prywatnych ścieżek skarbca ani brandingu specyficznego dla organizacji w dostarczanej treści.

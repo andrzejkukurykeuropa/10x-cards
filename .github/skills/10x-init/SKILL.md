@@ -5,7 +5,7 @@ description: Initialize the /context directory in this project — scaffold cont
 
 # /10x-init — Inicjalizacja katalogu /context
 
-Tworzy szkielet katalogu `/context` (`changes/`, `archive/`, `foundation/`) oraz uniwersalny plik `README.md` w każdym z nich, aby konwencje śledzenia zmian i dokumentacji podstawowej miały swoje miejsce. Idempotentne: każdy z sześciu artefaktów (3 katalogi + 3 pliki README) jest niezależnie tworzony, jeśli nie istnieje; ponowne uruchomienie w projekcie, w którym wszystko już jest, nie powoduje żadnych zmian.
+Tworzy szkielet katalogu `/context` (`changes/`, `archive/`, `foundation/`) oraz uniwersalny plik `README.md` w każdym z nich, aby konwencje śledzenia zmian i dokumentacji podstawowej miały swoje miejsce. Idempotentne: każdy z sześciu artefaktów (3 katalogi + 3 pliki README) jest tworzony niezależnie, jeśli nie istnieje; ponowne uruchomienie w projekcie, w którym wszystko już jest, nie powoduje żadnych zmian.
 
 Ta umiejętność jest jawnym punktem wejścia dla użytkowników, którzy chcą od razu utworzyć szkielet konwencji przepływu pracy. NIE jest to warunek wstępny dla `/10x-new`, `/10x-archive` ani żadnej umiejętności konsumenckiej — `/10x-new` odmówi działania, jeśli brakuje `context/changes/`, a `/10x-archive` leniwie tworzy `context/archive/` na żądanie. `/10x-init` istnieje dla użytkowników, którzy wolą najpierw skonfigurować szkielet.
 
@@ -74,18 +74,18 @@ context/foundation/             [created|present]
 context/foundation/README.md    [created|present]
 ```
 
-Następnie jednoparograficzny przewodnik, do czego służy każdy katalog i gdzie szukać dalej:
+Następnie jeden akapit przewodnika, do czego służy każdy katalog i gdzie szukać dalej:
 
-- `context/changes/` przechowuje zmiany w toku. Uruchom `/10x-new`, aby utworzyć nowy folder zmian z plikiem tożsamości `change.md`.
+- `context/changes/` przechowuje zmiany w toku. Uruchom `/10x-new`, aby utworzyć nowy folder zmiany z plikiem tożsamości `change.md`.
 - `context/archive/` przechowuje ukończone zmiany. Uruchom `/10x-archive`, gdy zmiana zostanie zakończona — przeniesie ona folder z `changes/` do `archive/`.
-- `context/foundation/` przechowuje dokumenty żywe obejmujące wiele zmian. Nie ma tu stałej listy plików; dokumenty podstawowe są własnością umiejętności, które je zapisują (np. `/10x-prd` zapisuje `prd.md`, `/10x-tech-stack-selector` zapisuje `tech-stack.md`).
+- `context/foundation/` przechowuje żywe dokumenty obejmujące wiele zmian. Nie ma tu stałej listy plików; dokumenty podstawowe są własnością umiejętności, które je zapisują (np. `/10x-prd` zapisuje `prd.md`, `/10x-tech-stack-selector` zapisuje `tech-stack.md`).
 
 Stop. Nie łącz się z `/10x-new` ani żadną inną umiejętnością; użytkownik uruchamia je, gdy ma coś do zrobienia.
 
 ## Uwagi
 
 - **Idempotentne.** Ponowne uruchomienie `/10x-init` w projekcie, w którym wszystkie sześć artefaktów już istnieje, nie powoduje żadnych zmian (z wydrukiem statusu). Nigdy nie może nadpisywać istniejącej zawartości.
-- **Brak wymuszonej kolejności.** Wszystkie sześć artefaktów jest niezależnych. Jeśli istnieją tylko niektóre, utwórz brakujące i pozostaw istniejące bez zmian.
+- **Brak wymuszonego porządku.** Wszystkie sześć artefaktów jest niezależnych. Jeśli istnieją tylko niektóre, utwórz brakujące i pozostaw istniejące bez zmian.
 - **Katalogi nadrzędne są tworzone w razie potrzeby.** `context/` może nie istnieć w świeżym projekcie — utwórz go niejawnie za pomocą semantyki `mkdir -p` dla każdego katalogu podrzędnego.
-- **Nie jest warunkiem wstępnym.** Inne umiejętności samodzielnie uruchamiają swoje pliki. `/10x-init` jest dla użytkowników, którzy lubią konfigurować szkielet `/context` z góry.
+- **Nie jest warunkiem wstępnym.** Inne umiejętności samodzielnie uruchamiają swoje pliki. `/10x-init` jest dla użytkowników, którzy lubią konfigurować szkielet `/context` z wyprzedzeniem.
 - **`lessons.md` i `contract-surfaces.md` nie są tu tworzone.** Te pliki są w całości własnością `/10x-lesson`, `/10x-contract` i gałęzi triage `/10x-impl-review`, które samodzielnie uruchamiają je z ich kanonicznymi nagłówkami przy pierwszym użyciu.

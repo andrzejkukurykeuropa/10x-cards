@@ -25,7 +25,7 @@ Zadam cztery krótkie pytania, a następnie dodam wpis. Cztery pola to:
   3. Rule — sama reguła, w jednym lub dwóch zdaniach
   4. Applies to — do których umiejętności ta reguła powinna być najbardziej brana pod uwagę (frame / plan / implement / review)
 
-Następnie poczekaj.
+Następnie czekaj.
 ```
 
 ## Proces
@@ -69,7 +69,7 @@ Proponowany kształt wpisu (jest to kanoniczny format wpisu lekcji):
 - **Applies to**: <Pole Applies-to>
 ```
 
-Nagłówek H2 JEST tytułem reguły. Utrzymaj go krótko — lista H2 to to, co przyszłe umiejętności skanują najpierw.
+Nagłówek H2 JEST tytułem reguły. Utrzymuj go krótko — lista H2 to to, co przyszłe umiejętności skanują najpierw.
 
 ### Krok 3: Samodzielne uruchomienie i dołączenie
 
@@ -84,7 +84,7 @@ Jeśli plik `context/foundation/lessons.md` nie istnieje, utwórz go z tym kanon
 
 Jeśli plik istnieje, pozostaw go bez zmian i dołącz na końcu. Nie zmieniaj kolejności, nie usuwaj duplikatów ani nie formatuj istniejących wpisów — plik jest tylko do dodawania.
 
-Użyj narzędzia do edycji plików (lub narzędzia do zapisu plików w przypadku uruchomienia) do wprowadzenia zmiany. Po dołączeniu, ponownie odczytaj plik i potwierdź, że nowy nagłówek H2 jest ostatnią sekcją.
+Użyj narzędzia do edycji plików (lub narzędzia do zapisu plików w przypadku uruchomienia) do wprowadzenia zmiany. Po dołączeniu, ponownie odczytaj plik i potwierdź, że nowy H2 jest ostatnią sekcją.
 
 ### Krok 4: Wynik echa
 
@@ -100,6 +100,6 @@ Stop. Nie łącz się z innymi umiejętnościami. Użytkownik wywołał to dla p
 ## Uwagi
 
 - **Tylko do dodawania.** Nigdy nie edytuj ani nie usuwaj istniejących lekcji za pomocą tej umiejętności. Jeśli reguła wymaga rewizji, użytkownik otwiera plik i edytuje go bezpośrednio — to celowe tarcie, ponieważ bezmyślne przepisywanie powtarzających się reguł jest trybem awarii, któremu ta konwencja zapobiega.
-- **Jeden wpis na wywołanie.** Jeśli użytkownik ma wiele lekcji do przechwycenia, wywołuje umiejętność wiele razy. Grupowe wprowadzanie zachęca do wprowadzania wpół napisanych wpisów.
+- **Jeden wpis na wywołanie.** Jeśli użytkownik ma wiele lekcji do przechwycenia, wywołuje umiejętność wielokrotnie. Grupowe wprowadzanie zachęca do wpisów niedokończonych.
 - **Samodzielne uruchomienie jest domyślne.** Nie mów użytkownikowi "najpierw uruchom /10x-init" — utwórz plik z kanonicznym nagłówkiem przy pierwszym użyciu. (`/10x-init` tworzy szkielet katalogu `/context`; ta umiejętność zarządza `lessons.md` od początku do końca.)
-- **Nic nie wypełniaj wstępnie.** W przeciwieństwie do gałęzi triage `/10x-impl-review` (która wstępnie wypełnia Context i Problem z wyniku), ta proaktywna umiejętność oczekuje, że użytkownik sam napisze. Taka jest cena przechwytywania reguł poza ustrukturyzowaną recenzją.
+- **Nic nie wypełniaj wstępnie.** W przeciwieństwie do gałęzi triage `/10x-impl-review` (która wstępnie wypełnia Context i Problem z wyniku), ta proaktywna umiejętność oczekuje, że użytkownik wykona pisanie. Taka jest cena przechwytywania reguł poza ustrukturyzowaną recenzją.
