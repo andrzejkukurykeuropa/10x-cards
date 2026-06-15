@@ -182,14 +182,14 @@ Struktura dashboardu po zmianie:
 
 #### Automated
 
-- [x] 2.1 Create src/pages/api/flashcards.ts GET handler
-- [x] 2.2 Verify lint passes (npm run lint)
+- [x] 2.1 Create src/pages/api/flashcards.ts GET handler — 613a6ba
+- [x] 2.2 Verify lint passes (npm run lint) — 613a6ba
 
 ### Phase 3: FlashcardCollection component
 
 #### Automated
 
-- [ ] 3.1 Create src/components/FlashcardCollection.tsx
+- [x] 3.1 Create src/components/FlashcardCollection.tsx
 
 #### Manual
 
