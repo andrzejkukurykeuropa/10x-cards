@@ -3,7 +3,7 @@ project: "10xCards"
 version: 1
 status: draft
 created: 2026-06-05
-updated: 2026-06-13
+updated: 2026-06-15
 prd_version: 1
 main_goal: learn
 top_blocker: skills
@@ -33,7 +33,7 @@ Klin produktu — jedyna cecha, która po usunięciu sprawia, że 10xCards staje
 |---|---|---|---|---|---|
 | F-01 | `flashcard-schema` | (fundament) tabela `flashcards` w Supabase z migracją SQL i RLS per użytkownik | — | Access Control, Guardrails | done |
 | F-02 | `ai-sdk-edge-spike` | (fundament) AI SDK zintegrowany i zweryfikowany w Cloudflare Workers edge runtime (streaming działa) | — | FR-003, NFR | ready |
-| S-01 | `collection-view` | przeglądać swoje fiszki w kolekcji (lista kart + pusty stan) | F-01 | FR-006 | proposed |
+| S-01 | `collection-view` | przeglądać swoje fiszki w kolekcji (lista kart + pusty stan) | F-01 | FR-006 | done |
 | S-02 | `ai-generation-flow` | wkleić tekst → zobaczyć propozycje AI → zaakceptować / edytować / odrzucić → zapisać do kolekcji | F-01, F-02 | US-01, FR-003, FR-004, FR-005 | proposed |
 | S-03 | `collection-edit-delete` | edytować i usuwać fiszki w kolekcji (nice-to-have) | S-02 | FR-007, FR-008 | proposed |
 
@@ -90,6 +90,7 @@ Fundamenty poniżej zakładają, że są one obecne i NIE odbudowują ich.
 
 ### S-01: Przeglądanie kolekcji
 
+- **Status:** done
 - **Wynik:** Zalogowany użytkownik może zobaczyć listę swoich fiszek w kolekcji (lub pusty stan zachęcający do wygenerowania pierwszych). Widok dostępny z poziomu dashboardu.
 - **Change ID:** `collection-view`
 - **Odnośniki PRD:** FR-006
@@ -141,5 +142,6 @@ Fundamenty poniżej zakładają, że są one obecne i NIE odbudowują ich.
 ## Done
 
 - **F-01: (fundament) tabela `flashcards` w Supabase z migracją SQL i RLS per użytkownik** — Archived 2026-06-13 → `context/archive/2026-06-10-flashcard-schema/`. Lesson: —.
+- **S-01: Zalogowany użytkownik może zobaczyć listę swoich fiszek w kolekcji (lista kart + pusty stan)** — Archived 2026-06-15 → `context/archive/2026-06-10-collection-view/`. Lesson: —.
 
 <!-- Wypełnia /10x-archive po ukończeniu każdego fragmentu. -->

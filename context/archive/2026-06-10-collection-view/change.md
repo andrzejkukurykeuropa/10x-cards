@@ -1,8 +1,10 @@
 ---
 change_id: collection-view
 roadmap_id: S-01
-status: impl_reviewed
+status: archived
 created: 2026-06-10
+archived_at: 2026-06-15T22:47:13Z
+updated: 2026-06-15
 prd_refs:
   - FR-006
 prerequisites:
