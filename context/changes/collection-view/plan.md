@@ -193,14 +193,14 @@ Struktura dashboardu po zmianie:
 
 #### Manual
 
-- [ ] 3.2 Visually verify grid layout and empty state in browser
+- [x] 3.2 Visually verify grid layout and empty state in browser
 
 ### Phase 4: Dashboard integration
 
 #### Automated
 
-- [x] 4.1 Update src/pages/dashboard.astro with FlashcardCollection island
+- [x] 4.1 Update src/pages/dashboard.astro with FlashcardCollection island — 93f094c
 
 #### Manual
 
-- [ ] 4.2 Smoke test: logged-in user sees collection section on /dashboard
+- [x] 4.2 Smoke test: logged-in user sees collection section on /dashboard
