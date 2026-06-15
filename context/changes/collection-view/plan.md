@@ -189,7 +189,7 @@ Struktura dashboardu po zmianie:
 
 #### Automated
 
-- [x] 3.1 Create src/components/FlashcardCollection.tsx
+- [x] 3.1 Create src/components/FlashcardCollection.tsx — fc8ee2f
 
 #### Manual
 
@@ -199,7 +199,7 @@ Struktura dashboardu po zmianie:
 
 #### Automated
 
-- [ ] 4.1 Update src/pages/dashboard.astro with FlashcardCollection island
+- [x] 4.1 Update src/pages/dashboard.astro with FlashcardCollection island
 
 #### Manual
 
