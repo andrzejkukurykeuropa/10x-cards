@@ -6,3 +6,5 @@ export interface Flashcard {
   created_at: string;
   updated_at: string;
 }
+
+export type FlashcardDto = Omit<Flashcard, "user_id">;

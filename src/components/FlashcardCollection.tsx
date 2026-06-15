@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import type { Flashcard } from "@/types";
+import type { FlashcardDto } from "@/types";
 
 type State =
   | { status: "loading" }
   | { status: "error"; message: string }
   | { status: "empty" }
-  | { status: "data"; flashcards: Flashcard[] };
+  | { status: "data"; flashcards: FlashcardDto[] };
 
 export default function FlashcardCollection() {
   const [state, setState] = useState<State>({ status: "loading" });
@@ -16,7 +16,7 @@ export default function FlashcardCollection() {
         if (!res.ok) throw new Error(`Błąd ${res.status}`);
         return res.json();
       })
-      .then((data: Flashcard[]) => {
+      .then((data: FlashcardDto[]) => {
         setState(data.length === 0 ? { status: "empty" } : { status: "data", flashcards: data });
       })
       .catch((err: unknown) => {

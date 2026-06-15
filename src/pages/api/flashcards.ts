@@ -21,7 +21,9 @@ export const GET: APIRoute = async (context) => {
     .order("created_at", { ascending: false });
 
   if (error) {
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+    // eslint-disable-next-line no-console
+    console.error("[flashcards] DB error:", error);
+    return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500 });
   }
 
   return new Response(JSON.stringify(data), {
