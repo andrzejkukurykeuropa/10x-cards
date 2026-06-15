@@ -176,14 +176,14 @@ Struktura dashboardu po zmianie:
 
 #### Automated
 
-- [x] 1.1 Create src/types.ts with Flashcard interface
+- [x] 1.1 Create src/types.ts with Flashcard interface — c8d96d7
 
 ### Phase 2: API endpoint
 
 #### Automated
 
-- [ ] 2.1 Create src/pages/api/flashcards.ts GET handler
-- [ ] 2.2 Verify lint passes (npm run lint)
+- [x] 2.1 Create src/pages/api/flashcards.ts GET handler
+- [x] 2.2 Verify lint passes (npm run lint)
 
 ### Phase 3: FlashcardCollection component
 
