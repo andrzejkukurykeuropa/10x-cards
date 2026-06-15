@@ -1,7 +1,7 @@
 ---
 change_id: collection-view
 roadmap_id: S-01
-status: in-progress
+status: implementing
 created: 2026-06-10
 prd_refs:
   - FR-006

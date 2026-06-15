@@ -176,7 +176,7 @@ Struktura dashboardu po zmianie:
 
 #### Automated
 
-- [ ] 1.1 Create src/types.ts with Flashcard interface
+- [x] 1.1 Create src/types.ts with Flashcard interface
 
 ### Phase 2: API endpoint
 
