@@ -12,6 +12,8 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@ai-sdk/google": "^3.0.83",
+    "@ai-sdk/groq": "^3.0.42",
     "@ai-sdk/openai": "^3.0.74",
     "@astrojs/check": "^0.9.8",
     "@astrojs/cloudflare": "^13.5.0",

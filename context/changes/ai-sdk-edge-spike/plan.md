@@ -350,30 +350,30 @@ Brak zmian w bazie danych. `.env.example` i `.dev.vars` (dla Cloudflare local de
 
 #### Automated
 
-- [x] 2.1 Add FlashcardProposal and GenerateFlashcardsRequest to src/types.ts
-- [x] 2.2 Create src/lib/ai-schemas.ts with flashcardsOutputSchema
-- [x] 2.3 Lint passes: npm run lint
-- [x] 2.4 Build passes: npm run build
+- [x] 2.1 Add FlashcardProposal and GenerateFlashcardsRequest to src/types.ts — a12f5e3
+- [x] 2.2 Create src/lib/ai-schemas.ts with flashcardsOutputSchema — a12f5e3
+- [x] 2.3 Lint passes: npm run lint — a12f5e3
+- [x] 2.4 Build passes: npm run build — a12f5e3
 
 #### Manual
 
-- [x] 2.5 Verify FlashcardProposal and GenerateFlashcardsRequest exported from src/types.ts
-- [x] 2.6 Verify flashcardsOutputSchema exported from src/lib/ai-schemas.ts
+- [x] 2.5 Verify FlashcardProposal and GenerateFlashcardsRequest exported from src/types.ts — a12f5e3
+- [x] 2.6 Verify flashcardsOutputSchema exported from src/lib/ai-schemas.ts — a12f5e3
 
 ### Phase 3: POST /api/generate-flashcards endpoint
 
 #### Automated
 
-- [ ] 3.1 Create src/pages/api/generate-flashcards.ts
-- [ ] 3.2 Lint passes: npm run lint
-- [ ] 3.3 Build passes: npm run build
+- [x] 3.1 Create src/pages/api/generate-flashcards.ts
+- [x] 3.2 Lint passes: npm run lint
+- [x] 3.3 Build passes: npm run build
 
 #### Manual
 
-- [ ] 3.4 POST with valid auth and text returns streaming response
-- [ ] 3.5 POST without session returns 401
-- [ ] 3.6 POST with text < 40 chars returns 422
-- [ ] 3.7 POST with text > 1000 chars returns 422
+- [x] 3.4 POST with valid auth and text returns streaming response
+- [x] 3.5 POST without session returns 401
+- [x] 3.6 POST with text < 40 chars returns 422
+- [x] 3.7 POST with text > 1000 chars returns 422
 
 ### Phase 4: Edge runtime verification
 
