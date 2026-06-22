@@ -379,11 +379,11 @@ Brak zmian w bazie danych. `.env.example` i `.dev.vars` (dla Cloudflare local de
 
 #### Automated
 
-- [x] 4.1 Full build passes without edge runtime warnings: npm run build
-- [x] 4.2 Lint passes: npm run lint
+- [x] 4.1 Full build passes without edge runtime warnings: npm run build — 0b1fb49
+- [x] 4.2 Lint passes: npm run lint — 0b1fb49
 
 #### Manual
 
-- [x] 4.3 Curl test shows streaming chunks visible before generation completes
-- [x] 4.4 First streaming data arrives in < 2s from request send
-- [x] 4.5 Input text not logged in server console (NFR: text not stored)
+- [x] 4.3 Curl test shows streaming chunks visible before generation completes — 0b1fb49
+- [x] 4.4 First streaming data arrives in < 2s from request send — 0b1fb49
+- [x] 4.5 Input text not logged in server console (NFR: text not stored) — 0b1fb49

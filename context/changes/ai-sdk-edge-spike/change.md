@@ -1,7 +1,7 @@
 ---
 change_id: ai-sdk-edge-spike
 title: AI SDK integration on Cloudflare edge — generate-flashcards endpoint
-status: implementing
+status: implemented
 created: 2026-06-22
 updated: 2026-06-22
 archived_at: null
