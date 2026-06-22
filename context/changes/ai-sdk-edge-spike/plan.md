@@ -364,26 +364,26 @@ Brak zmian w bazie danych. `.env.example` i `.dev.vars` (dla Cloudflare local de
 
 #### Automated
 
-- [x] 3.1 Create src/pages/api/generate-flashcards.ts
-- [x] 3.2 Lint passes: npm run lint
-- [x] 3.3 Build passes: npm run build
+- [x] 3.1 Create src/pages/api/generate-flashcards.ts — a0db215
+- [x] 3.2 Lint passes: npm run lint — a0db215
+- [x] 3.3 Build passes: npm run build — a0db215
 
 #### Manual
 
-- [x] 3.4 POST with valid auth and text returns streaming response
-- [x] 3.5 POST without session returns 401
-- [x] 3.6 POST with text < 40 chars returns 422
-- [x] 3.7 POST with text > 1000 chars returns 422
+- [x] 3.4 POST with valid auth and text returns streaming response — a0db215
+- [x] 3.5 POST without session returns 401 — a0db215
+- [x] 3.6 POST with text < 40 chars returns 422 — a0db215
+- [x] 3.7 POST with text > 1000 chars returns 422 — a0db215
 
 ### Phase 4: Edge runtime verification
 
 #### Automated
 
-- [ ] 4.1 Full build passes without edge runtime warnings: npm run build
-- [ ] 4.2 Lint passes: npm run lint
+- [x] 4.1 Full build passes without edge runtime warnings: npm run build
+- [x] 4.2 Lint passes: npm run lint
 
 #### Manual
 
-- [ ] 4.3 Curl test shows streaming chunks visible before generation completes
-- [ ] 4.4 First streaming data arrives in < 2s from request send
-- [ ] 4.5 Input text not logged in server console (NFR: text not stored)
+- [x] 4.3 Curl test shows streaming chunks visible before generation completes
+- [x] 4.4 First streaming data arrives in < 2s from request send
+- [x] 4.5 Input text not logged in server console (NFR: text not stored)
