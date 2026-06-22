@@ -8,3 +8,12 @@ export interface Flashcard {
 }
 
 export type FlashcardDto = Omit<Flashcard, "user_id">;
+
+export interface FlashcardProposal {
+  question: string;
+  answer: string;
+}
+
+export interface GenerateFlashcardsRequest {
+  text: string;
+}

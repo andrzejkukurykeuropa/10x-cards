@@ -337,28 +337,28 @@ Brak zmian w bazie danych. `.env.example` i `.dev.vars` (dla Cloudflare local de
 
 #### Automated
 
-- [x] 1.1 Install ai @ai-sdk/openai zod packages
-- [x] 1.2 Lint passes: npm run lint
-- [x] 1.3 Build passes: npm run build
+- [x] 1.1 Install ai @ai-sdk/openai zod packages — 1364a98
+- [x] 1.2 Lint passes: npm run lint — 1364a98
+- [x] 1.3 Build passes: npm run build — 1364a98
 
 #### Manual
 
-- [x] 1.4 astro.config.mjs contains OPENAI_API_KEY in env schema
-- [x] 1.5 .env.example contains OPENAI_API_KEY entry
+- [x] 1.4 astro.config.mjs contains OPENAI_API_KEY in env schema — 1364a98
+- [x] 1.5 .env.example contains OPENAI_API_KEY entry — 1364a98
 
 ### Phase 2: TypeScript types and Zod output schema
 
 #### Automated
 
-- [ ] 2.1 Add FlashcardProposal and GenerateFlashcardsRequest to src/types.ts
-- [ ] 2.2 Create src/lib/ai-schemas.ts with flashcardsOutputSchema
-- [ ] 2.3 Lint passes: npm run lint
-- [ ] 2.4 Build passes: npm run build
+- [x] 2.1 Add FlashcardProposal and GenerateFlashcardsRequest to src/types.ts
+- [x] 2.2 Create src/lib/ai-schemas.ts with flashcardsOutputSchema
+- [x] 2.3 Lint passes: npm run lint
+- [x] 2.4 Build passes: npm run build
 
 #### Manual
 
-- [ ] 2.5 Verify FlashcardProposal and GenerateFlashcardsRequest exported from src/types.ts
-- [ ] 2.6 Verify flashcardsOutputSchema exported from src/lib/ai-schemas.ts
+- [x] 2.5 Verify FlashcardProposal and GenerateFlashcardsRequest exported from src/types.ts
+- [x] 2.6 Verify flashcardsOutputSchema exported from src/lib/ai-schemas.ts
 
 ### Phase 3: POST /api/generate-flashcards endpoint
 
