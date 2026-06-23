@@ -5,8 +5,8 @@ import { createClient } from "@/lib/supabase";
 export const prerender = false;
 
 const createFlashcardSchema = z.object({
-  question: z.string().min(1),
-  answer: z.string().min(1),
+  question: z.string().trim().min(1),
+  answer: z.string().trim().min(1),
 });
 
 export const GET: APIRoute = async (context) => {
@@ -24,7 +24,8 @@ export const GET: APIRoute = async (context) => {
     .from("flashcards")
     .select("id, question, answer, created_at, updated_at")
     .eq("user_id", user.id)
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .limit(100);
 
   if (error) {
     // eslint-disable-next-line no-console

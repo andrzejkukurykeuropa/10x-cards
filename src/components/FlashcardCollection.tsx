@@ -15,7 +15,8 @@ export default function FlashcardCollection({ refreshKey }: FlashcardCollectionP
   const [state, setState] = useState<State>({ status: "loading" });
 
   useEffect(() => {
-    fetch("/api/flashcards")
+    const ctrl = new AbortController();
+    fetch("/api/flashcards", { signal: ctrl.signal })
       .then((res) => {
         if (!res.ok) throw new Error(`Błąd ${res.status}`);
         return res.json();
@@ -24,8 +25,12 @@ export default function FlashcardCollection({ refreshKey }: FlashcardCollectionP
         setState(data.length === 0 ? { status: "empty" } : { status: "data", flashcards: data });
       })
       .catch((err: unknown) => {
+        if (err instanceof DOMException && err.name === "AbortError") return;
         setState({ status: "error", message: err instanceof Error ? err.message : "Nieznany błąd" });
       });
+    return () => {
+      ctrl.abort();
+    };
   }, [refreshKey]);
 
   if (state.status === "loading") {

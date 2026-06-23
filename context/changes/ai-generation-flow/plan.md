@@ -253,7 +253,13 @@ Nagłówki sekcji: „Generuj fiszki" (h2) nad generatorem, „Moja kolekcja" (h
 
 Brak migracji danych. Zmiana `dashboard.astro` jest niezauważalna dla użytkownika (ta sama struktura, inny import).
 
-## Referencje
+## Aneks: Zmiany odkryte podczas implementacji
+
+### A1 — Aktualizacja system prompt w generate-flashcards.ts
+
+**Plik**: `src/pages/api/generate-flashcards.ts`
+
+Oryginalny plan zawierał barierę "No changes to POST /api/generate-flashcards logic". W trakcie implementacji (commit `4f013c6`) system prompt został zaktualizowany, aby AI tłumaczyło tekst na **polski** zamiast angielskiego. Zmiana wymagana przez użytkownika po weryfikacji działania — poprawne zachowanie dla polskiego produktu.
 
 - Roadmap S-02: `context/foundation/roadmap.md`
 - PRD: `context/foundation/prd.md` (US-01, FR-003, FR-004, FR-005)

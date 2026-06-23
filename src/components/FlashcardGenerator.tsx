@@ -259,6 +259,7 @@ export default function FlashcardGenerator({ onComplete }: FlashcardGeneratorPro
     if (current.status !== "reviewing") return;
     const proposal = current.proposals.find((p) => p.id === id);
     if (!proposal) return;
+    if (proposal.disposition === "saving") return;
 
     const q = question ?? proposal.question;
     const a = answer ?? proposal.answer;
@@ -285,6 +286,9 @@ export default function FlashcardGenerator({ onComplete }: FlashcardGeneratorPro
       updateProposalPatch(id, {
         disposition: "pending",
         saveError: err instanceof Error ? err.message : "Błąd zapisu",
+        isEditing: true,
+        editQuestion: q,
+        editAnswer: a,
       });
     }
   }
