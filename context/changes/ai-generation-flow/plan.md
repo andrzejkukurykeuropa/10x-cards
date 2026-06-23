@@ -284,31 +284,31 @@ Brak migracji danych. Zmiana `dashboard.astro` jest niezauważalna dla użytkown
 
 #### Automatyczne
 
-- [x] 2.1 Linting przechodzi: `npm run lint`
-- [x] 2.2 Build przechodzi: `npm run build`
+- [x] 2.1 Linting przechodzi: `npm run lint` — fe04b2b
+- [x] 2.2 Build przechodzi: `npm run build` — fe04b2b
 
 #### Ręczne
 
-- [ ] 2.3 Textarea blokuje przycisk poniżej 40 znaków, licznik widoczny
-- [ ] 2.4 Generowanie → spinner widoczny podczas oczekiwania
-- [ ] 2.5 Propozycje AI wyświetlają się jako lista kart
-- [ ] 2.6 Zaakceptuj → karta oznaczona, fiszka w Supabase
-- [ ] 2.7 Edytuj inline → zmiana pytania/odpowiedzi → zapis przez API
-- [ ] 2.8 Odrzuć → karta wyłączona
-- [ ] 2.9 Wszystkie obsłużone → podsumowanie z licznikiem
-- [ ] 2.10 Błąd API na karcie → inline error + retry
-- [ ] 2.11 Błąd generowania → komunikat + „Spróbuj ponownie"
+- [x] 2.3 Textarea blokuje przycisk poniżej 40 znaków, licznik widoczny
+- [x] 2.4 Generowanie → spinner widoczny podczas oczekiwania
+- [x] 2.5 Propozycje AI wyświetlają się jako lista kart
+- [x] 2.6 Zaakceptuj → karta oznaczona, fiszka w Supabase
+- [x] 2.7 Edytuj inline → zmiana pytania/odpowiedzi → zapis przez API
+- [x] 2.8 Odrzuć → karta wyłączona
+- [x] 2.9 Wszystkie obsłużone → podsumowanie z licznikiem
+- [x] 2.10 Błąd API na karcie → inline error + retry
+- [x] 2.11 Błąd generowania → komunikat + „Spróbuj ponownie"
 
 ### Faza 3: Integracja dashboardu
 
 #### Automatyczne
 
-- [ ] 3.1 Linting przechodzi: `npm run lint`
-- [ ] 3.2 Build przechodzi: `npm run build`
+- [x] 3.1 Linting przechodzi: `npm run lint`
+- [x] 3.2 Build przechodzi: `npm run build`
 
 #### Ręczne
 
-- [ ] 3.3 Dashboard: „Generuj fiszki" powyżej „Moja kolekcja"
-- [ ] 3.4 Po summary kolekcja odświeża się automatycznie z nowymi fiszkami
-- [ ] 3.5 Kompletny przepływ end-to-end działa
-- [ ] 3.6 Pusty stan kolekcji wciąż działa poprawnie
+- [x] 3.3 Dashboard: „Generuj fiszki" powyżej „Moja kolekcja"
+- [x] 3.4 Po summary kolekcja odświeża się automatycznie z nowymi fiszkami
+- [x] 3.5 Kompletny przepływ end-to-end działa
+- [x] 3.6 Pusty stan kolekcji wciąż działa poprawnie

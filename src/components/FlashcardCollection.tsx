@@ -7,7 +7,11 @@ type State =
   | { status: "empty" }
   | { status: "data"; flashcards: FlashcardDto[] };
 
-export default function FlashcardCollection() {
+interface FlashcardCollectionProps {
+  refreshKey?: number;
+}
+
+export default function FlashcardCollection({ refreshKey }: FlashcardCollectionProps) {
   const [state, setState] = useState<State>({ status: "loading" });
 
   useEffect(() => {
@@ -22,7 +26,7 @@ export default function FlashcardCollection() {
       .catch((err: unknown) => {
         setState({ status: "error", message: err instanceof Error ? err.message : "Nieznany błąd" });
       });
-  }, []);
+  }, [refreshKey]);
 
   if (state.status === "loading") {
     return (

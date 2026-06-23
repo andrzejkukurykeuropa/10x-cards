@@ -11,12 +11,12 @@ const inputSchema = z.object({
   text: z.string().min(40).max(1000),
 });
 
-const SYSTEM_PROMPT = `You are a language learning flashcard creator.
+const SYSTEM_PROMPT = `You are a language learning flashcard creator for Polish speakers.
 Given a text, extract key vocabulary, phrases, grammar rules, and concepts.
 Create between 3 and 10 flashcard pairs. Each flashcard must have:
-- question: testing knowledge of a specific item from the text
-- answer: a clear, concise explanation or translation
-Focus on the most important and learnable content for a language learner.`;
+- question: the foreign word, phrase or grammar point from the text (in the original language)
+- answer: a clear, concise Polish translation or explanation
+Focus on the most important and learnable content. Always translate/explain in Polish.`;
 
 export const POST: APIRoute = async (context) => {
   if (!context.locals.user) {
