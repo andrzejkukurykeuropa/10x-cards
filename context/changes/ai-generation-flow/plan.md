@@ -271,21 +271,21 @@ Brak migracji danych. Zmiana `dashboard.astro` jest niezauważalna dla użytkown
 
 #### Automatyczne
 
-- [x] 1.1 Linting przechodzi: `npm run lint`
-- [x] 1.2 Build przechodzi: `npm run build`
+- [x] 1.1 Linting przechodzi: `npm run lint` — 88197ce
+- [x] 1.2 Build przechodzi: `npm run build` — 88197ce
 
 #### Ręczne
 
-- [x] 1.3 POST /api/flashcards z ważnym body i sesją zapisuje fiszkę i zwraca 201
-- [x] 1.4 Bez sesji zwraca 401
-- [x] 1.5 Z brakującym question zwraca 422
+- [x] 1.3 POST /api/flashcards z ważnym body i sesją zapisuje fiszkę i zwraca 201 — 88197ce
+- [x] 1.4 Bez sesji zwraca 401 — 88197ce
+- [x] 1.5 Z brakującym question zwraca 422 — 88197ce
 
 ### Faza 2: Komponent FlashcardGenerator
 
 #### Automatyczne
 
-- [ ] 2.1 Linting przechodzi: `npm run lint`
-- [ ] 2.2 Build przechodzi: `npm run build`
+- [x] 2.1 Linting przechodzi: `npm run lint`
+- [x] 2.2 Build przechodzi: `npm run build`
 
 #### Ręczne
 
