@@ -289,26 +289,26 @@ Brak migracji danych. Zmiana `dashboard.astro` jest niezauważalna dla użytkown
 
 #### Ręczne
 
-- [x] 2.3 Textarea blokuje przycisk poniżej 40 znaków, licznik widoczny
-- [x] 2.4 Generowanie → spinner widoczny podczas oczekiwania
-- [x] 2.5 Propozycje AI wyświetlają się jako lista kart
-- [x] 2.6 Zaakceptuj → karta oznaczona, fiszka w Supabase
-- [x] 2.7 Edytuj inline → zmiana pytania/odpowiedzi → zapis przez API
-- [x] 2.8 Odrzuć → karta wyłączona
-- [x] 2.9 Wszystkie obsłużone → podsumowanie z licznikiem
-- [x] 2.10 Błąd API na karcie → inline error + retry
-- [x] 2.11 Błąd generowania → komunikat + „Spróbuj ponownie"
+- [x] 2.3 Textarea blokuje przycisk poniżej 40 znaków, licznik widoczny — 4f013c6
+- [x] 2.4 Generowanie → spinner widoczny podczas oczekiwania — 4f013c6
+- [x] 2.5 Propozycje AI wyświetlają się jako lista kart — 4f013c6
+- [x] 2.6 Zaakceptuj → karta oznaczona, fiszka w Supabase — 4f013c6
+- [x] 2.7 Edytuj inline → zmiana pytania/odpowiedzi → zapis przez API — 4f013c6
+- [x] 2.8 Odrzuć → karta wyłączona — 4f013c6
+- [x] 2.9 Wszystkie obsłużone → podsumowanie z licznikiem — 4f013c6
+- [x] 2.10 Błąd API na karcie → inline error + retry — 4f013c6
+- [x] 2.11 Błąd generowania → komunikat + „Spróbuj ponownie" — 4f013c6
 
 ### Faza 3: Integracja dashboardu
 
 #### Automatyczne
 
-- [x] 3.1 Linting przechodzi: `npm run lint`
-- [x] 3.2 Build przechodzi: `npm run build`
+- [x] 3.1 Linting przechodzi: `npm run lint` — 4f013c6
+- [x] 3.2 Build przechodzi: `npm run build` — 4f013c6
 
 #### Ręczne
 
-- [x] 3.3 Dashboard: „Generuj fiszki" powyżej „Moja kolekcja"
-- [x] 3.4 Po summary kolekcja odświeża się automatycznie z nowymi fiszkami
-- [x] 3.5 Kompletny przepływ end-to-end działa
-- [x] 3.6 Pusty stan kolekcji wciąż działa poprawnie
+- [x] 3.3 Dashboard: „Generuj fiszki" powyżej „Moja kolekcja" — 4f013c6
+- [x] 3.4 Po summary kolekcja odświeża się automatycznie z nowymi fiszkami — 4f013c6
+- [x] 3.5 Kompletny przepływ end-to-end działa — 4f013c6
+- [x] 3.6 Pusty stan kolekcji wciąż działa poprawnie — 4f013c6
