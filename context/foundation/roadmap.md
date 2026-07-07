@@ -3,7 +3,7 @@ project: "10xCards"
 version: 1
 status: draft
 created: 2026-06-05
-updated: 2026-06-23
+updated: 2026-07-07
 prd_version: 1
 top_blocker: skills
 ---
@@ -34,7 +34,7 @@ Klin produktu — jedyna cecha, która po usunięciu sprawia, że 10xCards staje
 | F-02 | `ai-sdk-edge-spike` | (fundament) AI SDK zintegrowany i zweryfikowany w Cloudflare Workers edge runtime (streaming działa) | — | FR-003, NFR | done |
 | S-01 | `collection-view` | przeglądać swoje fiszki w kolekcji (lista kart + pusty stan) | F-01 | FR-006 | done |
 | S-02 | `ai-generation-flow` | wkleić tekst → zobaczyć propozycje AI → zaakceptować / edytować / odrzucić → zapisać do kolekcji | F-01, F-02 | US-01, FR-003, FR-004, FR-005 | done |
-| S-03 | `collection-edit-delete` | edytować i usuwać fiszki w kolekcji (nice-to-have) | S-02 | FR-007, FR-008 | proposed |
+| S-03 | `collection-edit-delete` | edytować i usuwać fiszki w kolekcji (nice-to-have) | S-02 | FR-007, FR-008 | done |
 
 ## Strumienie
 
@@ -118,6 +118,7 @@ Fundamenty poniżej zakładają, że są one obecne i NIE odbudowują ich.
 
 ### S-03: Edycja i usuwanie fiszek w kolekcji (nice-to-have)
 
+- **Status:** done
 - **Wynik:** Zalogowany użytkownik może edytować treść istniejącej fiszki w kolekcji (zmiana pytania lub odpowiedzi) oraz usunąć wybraną fiszkę.
 - **Change ID:** `collection-edit-delete`
 - **Odnośniki PRD:** FR-007, FR-008
@@ -146,5 +147,6 @@ Fundamenty poniżej zakładają, że są one obecne i NIE odbudowują ich.
 - **F-02: (fundament) AI SDK poprawnie działający w Cloudflare Workers edge runtime — streaming response działa** — Archived 2026-06-23 → `context/archive/2026-06-22-ai-sdk-edge-spike/`. Lesson: —.
 - **S-01: Zalogowany użytkownik może zobaczyć listę swoich fiszek w kolekcji (lista kart + pusty stan)** — Archived 2026-06-15 → `context/archive/2026-06-10-collection-view/`. Lesson: —.
 - **S-02: Zalogowany użytkownik może wkleić tekst → zobaczyć propozycje AI → zaakceptować / edytować / odrzucić → zapisać do kolekcji** — Archived 2026-06-23 → `context/archive/2026-06-22-ai-generation-flow/`. Lesson: —.
+- **S-03: Zalogowany użytkownik może edytować treść istniejącej fiszki w kolekcji (zmiana pytania lub odpowiedzi) oraz usunąć wybraną fiszkę** — Archived 2026-07-07 → `context/archive/2026-07-07-collection-edit-delete/`. Lesson: —.
 
 <!-- Wypełnia /10x-archive po ukończeniu każdego fragmentu. -->

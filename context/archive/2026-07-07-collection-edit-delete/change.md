@@ -1,10 +1,10 @@
 ---
 change_id: collection-edit-delete
 title: Edit and delete flashcards in the collection
-status: impl_reviewed
+status: archived
 created: 2026-07-07
 updated: 2026-07-07
-archived_at: null
+archived_at: 2026-07-07T18:25:33Z
 ---
 
 ## Notes
