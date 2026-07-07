@@ -191,29 +191,29 @@ Brak — tabela i RLS gotowe. Żadnych zmian w schemacie.
 
 #### Automated
 
-- [x] 1.1 Lint przechodzi po dodaniu nowego endpointu
-- [x] 1.2 Build przechodzi
+- [x] 1.1 Lint przechodzi po dodaniu nowego endpointu — 875b685
+- [x] 1.2 Build przechodzi — 875b685
 
 #### Manual
 
-- [x] 1.3 PATCH aktualizuje fiszkę właściciela, zwraca 200
-- [x] 1.4 DELETE usuwa fiszkę właściciela, zwraca 204
-- [x] 1.5 PATCH na cudzą fiszkę zwraca 404
-- [x] 1.6 PATCH z pustym body zwraca 422
+- [x] 1.3 PATCH aktualizuje fiszkę właściciela, zwraca 200 — 875b685
+- [x] 1.4 DELETE usuwa fiszkę właściciela, zwraca 204 — 875b685
+- [x] 1.5 PATCH na cudzą fiszkę zwraca 404 — 875b685
+- [x] 1.6 PATCH z pustym body zwraca 422 — 875b685
 
 ### Phase 2: UI — inline edit i delete w FlashcardCollection
 
 #### Automated
 
-- [ ] 2.1 Lint przechodzi po modyfikacji komponentu
-- [ ] 2.2 Build przechodzi
+- [x] 2.1 Lint przechodzi po modyfikacji komponentu
+- [x] 2.2 Build przechodzi
 
 #### Manual
 
-- [ ] 2.3 Klik Edytuj zamienia kartę w formularz
-- [ ] 2.4 Zapis aktualizuje kartę i odświeża listę
-- [ ] 2.5 Anuluj przywraca oryginalną treść bez zmian
-- [ ] 2.6 Klik Usuń pokazuje potwierdzenie inline
-- [ ] 2.7 Potwierdzenie usuwa kartę z listy
-- [ ] 2.8 Odrzucenie usunięcia przywraca widok karty
-- [ ] 2.9 Błąd API wyświetlany inline na karcie
+- [x] 2.3 Klik Edytuj zamienia kartę w formularz
+- [x] 2.4 Zapis aktualizuje kartę i odświeża listę
+- [x] 2.5 Anuluj przywraca oryginalną treść bez zmian
+- [x] 2.6 Klik Usuń pokazuje potwierdzenie inline
+- [x] 2.7 Potwierdzenie usuwa kartę z listy
+- [x] 2.8 Odrzucenie usunięcia przywraca widok karty
+- [x] 2.9 Błąd API wyświetlany inline na karcie
