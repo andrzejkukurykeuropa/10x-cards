@@ -17,3 +17,8 @@ export interface FlashcardProposal {
 export interface GenerateFlashcardsRequest {
   text: string;
 }
+
+export interface UpdateFlashcardRequest {
+  question?: string;
+  answer?: string;
+}
