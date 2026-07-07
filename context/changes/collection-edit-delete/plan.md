@@ -205,15 +205,15 @@ Brak — tabela i RLS gotowe. Żadnych zmian w schemacie.
 
 #### Automated
 
-- [x] 2.1 Lint przechodzi po modyfikacji komponentu
-- [x] 2.2 Build przechodzi
+- [x] 2.1 Lint przechodzi po modyfikacji komponentu — 585ae36
+- [x] 2.2 Build przechodzi — 585ae36
 
 #### Manual
 
-- [x] 2.3 Klik Edytuj zamienia kartę w formularz
-- [x] 2.4 Zapis aktualizuje kartę i odświeża listę
-- [x] 2.5 Anuluj przywraca oryginalną treść bez zmian
-- [x] 2.6 Klik Usuń pokazuje potwierdzenie inline
-- [x] 2.7 Potwierdzenie usuwa kartę z listy
-- [x] 2.8 Odrzucenie usunięcia przywraca widok karty
-- [x] 2.9 Błąd API wyświetlany inline na karcie
+- [x] 2.3 Klik Edytuj zamienia kartę w formularz — 585ae36
+- [x] 2.4 Zapis aktualizuje kartę i odświeża listę — 585ae36
+- [x] 2.5 Anuluj przywraca oryginalną treść bez zmian — 585ae36
+- [x] 2.6 Klik Usuń pokazuje potwierdzenie inline — 585ae36
+- [x] 2.7 Potwierdzenie usuwa kartę z listy — 585ae36
+- [x] 2.8 Odrzucenie usunięcia przywraca widok karty — 585ae36
+- [x] 2.9 Błąd API wyświetlany inline na karcie — 585ae36

@@ -1,7 +1,7 @@
 ---
 change_id: collection-edit-delete
 title: Edit and delete flashcards in the collection
-status: implementing
+status: implemented
 created: 2026-07-07
 updated: 2026-07-07
 archived_at: null
