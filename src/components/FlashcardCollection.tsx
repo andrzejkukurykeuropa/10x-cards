@@ -29,9 +29,12 @@ export default function FlashcardCollection({ refreshKey }: FlashcardCollectionP
   useEffect(() => {
     const ctrl = new AbortController();
     fetch("/api/flashcards", { signal: ctrl.signal })
-      .then((res) => {
-        if (!res.ok) throw new Error(`Błąd ${res.status}`);
-        return res.json();
+      .then(async (res) => {
+        if (!res.ok) {
+          const body = (await res.json().catch(() => ({}))) as { error?: string };
+          throw new Error(body.error ?? `Błąd ${res.status}`);
+        }
+        return res.json() as Promise<FlashcardDto[]>;
       })
       .then((data: FlashcardDto[]) => {
         setState(data.length === 0 ? { status: "empty" } : { status: "data", flashcards: data });
@@ -201,6 +204,7 @@ export default function FlashcardCollection({ refreshKey }: FlashcardCollectionP
           );
         }
 
+        const isMutating = activeCard?.mode === "saving";
         return (
           <div key={card.id} className="bg-card rounded-xl border p-4 shadow-sm">
             <p className="text-muted-foreground mb-1 text-xs font-medium tracking-wide uppercase">Pytanie</p>
@@ -212,6 +216,7 @@ export default function FlashcardCollection({ refreshKey }: FlashcardCollectionP
               <Button
                 size="sm"
                 variant="outline"
+                disabled={isMutating}
                 onClick={() => {
                   setActiveCard({ id: card.id, mode: "editing", editQuestion: card.question, editAnswer: card.answer });
                 }}
@@ -221,6 +226,7 @@ export default function FlashcardCollection({ refreshKey }: FlashcardCollectionP
               <Button
                 size="sm"
                 variant="ghost"
+                disabled={isMutating}
                 onClick={() => {
                   setActiveCard({ id: card.id, mode: "confirm-delete" });
                 }}
