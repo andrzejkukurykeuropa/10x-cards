@@ -155,8 +155,8 @@ Migracja jest addytywna i niedestrukcyjna — istniejące wiersze otrzymują war
 
 #### Automated
 
-- [x] 2.1 Lint passes: npm run lint
+- [x] 2.1 Lint passes: npm run lint — ada055f
 
 #### Manual
 
-- [x] 2.2 Verify Flashcard interface has 4 new SM-2 fields in src/types.ts
+- [x] 2.2 Verify Flashcard interface has 4 new SM-2 fields in src/types.ts — ada055f
