@@ -1,10 +1,10 @@
 ---
 change_id: srs-schema
 title: Add SM-2 fields to flashcards table
-status: impl_reviewed
+status: archived
 created: 2026-07-08
 updated: 2026-07-08
-archived_at: null
+archived_at: 2026-07-08T20:29:40Z
 ---
 
 ## Notes
