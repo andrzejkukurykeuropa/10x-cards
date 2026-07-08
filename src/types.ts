@@ -5,6 +5,10 @@ export interface Flashcard {
   answer: string;
   created_at: string;
   updated_at: string;
+  due_date: string | null;
+  easiness_factor: number;
+  interval: number;
+  repetitions: number;
 }
 
 export type FlashcardDto = Omit<Flashcard, "user_id">;

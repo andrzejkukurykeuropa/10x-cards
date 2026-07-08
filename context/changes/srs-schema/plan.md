@@ -143,20 +143,20 @@ Migracja jest addytywna i niedestrukcyjna — istniejące wiersze otrzymują war
 
 #### Automated
 
-- [x] 1.1 Apply migration via `npx supabase db push --linked` without errors
+- [x] 1.1 Apply migration via `npx supabase db push --linked` without errors — f09bc39
 
 #### Manual
 
-- [x] 1.2 Verify 4 new columns visible in Supabase Dashboard → Table Editor
-- [x] 1.3 Verify due_date is timestamptz and nullable, easiness_factor is numeric DEFAULT 2.50
-- [x] 1.4 Verify index flashcards_due_date_idx visible in Database → Indexes
+- [x] 1.2 Verify 4 new columns visible in Supabase Dashboard → Table Editor — f09bc39
+- [x] 1.3 Verify due_date is timestamptz and nullable, easiness_factor is numeric DEFAULT 2.50 — f09bc39
+- [x] 1.4 Verify index flashcards_due_date_idx visible in Database → Indexes — f09bc39
 
 ### Phase 2: TypeScript types — extend Flashcard interface
 
 #### Automated
 
-- [ ] 2.1 Lint passes: npm run lint
+- [x] 2.1 Lint passes: npm run lint
 
 #### Manual
 
-- [ ] 2.2 Verify Flashcard interface has 4 new SM-2 fields in src/types.ts
+- [x] 2.2 Verify Flashcard interface has 4 new SM-2 fields in src/types.ts
