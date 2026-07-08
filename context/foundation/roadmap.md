@@ -3,7 +3,7 @@ project: "10xCards"
 version: 1
 status: draft
 created: 2026-06-05
-updated: 2026-07-07
+updated: 2026-07-08
 prd_version: 1
 top_blocker: skills
 ---
@@ -32,9 +32,12 @@ Klin produktu — jedyna cecha, która po usunięciu sprawia, że 10xCards staje
 |---|---|---|---|---|---|
 | F-01 | `flashcard-schema` | (fundament) tabela `flashcards` w Supabase z migracją SQL i RLS per użytkownik | — | Access Control, Guardrails | done |
 | F-02 | `ai-sdk-edge-spike` | (fundament) AI SDK zintegrowany i zweryfikowany w Cloudflare Workers edge runtime (streaming działa) | — | FR-003, NFR | done |
+| F-03 | `srs-schema` | (fundament) pola SM-2 (`due_date`, `easiness_factor`, `interval`, `repetitions`) dodane do tabeli `flashcards` z migracją SQL | F-01 | FR-011, FR-012 | todo |
 | S-01 | `collection-view` | przeglądać swoje fiszki w kolekcji (lista kart + pusty stan) | F-01 | FR-006 | done |
 | S-02 | `ai-generation-flow` | wkleić tekst → zobaczyć propozycje AI → zaakceptować / edytować / odrzucić → zapisać do kolekcji | F-01, F-02 | US-01, FR-003, FR-004, FR-005 | done |
 | S-03 | `collection-edit-delete` | edytować i usuwać fiszki w kolekcji (nice-to-have) | S-02 | FR-007, FR-008 | done |
+| S-04 | `study-session` | otworzyć sesję nauki — widzieć pytanie fiszki, odsłonić odpowiedź, ocenić zapamiętanie; harmonogram SM-2 lub tryb „wszystkie fiszki" | S-01, F-03 | FR-010, FR-011, FR-012 | todo |
+| S-05 | `vocab-generation` | wygenerować fiszki słownikowe PL→IT (pojedyncze słowo) z wklejonego tekstu | S-02 | FR-013 | todo |
 
 ## Strumienie
 
@@ -43,7 +46,8 @@ Pomoc nawigacyjna — grupuje elementy, które dzielą łańcuch wymagań wstęp
 | Strumień | Temat | Łańcuch | Uwaga |
 |---|---|---|---|
 | A | Fundament danych i kolekcja | `F-01` → `S-01` → `S-02` → `S-03` | Ścieżka danych; S-01 można budować, gdy F-02 jest jeszcze w toku. |
-| B | Integracja AI | `F-02` → `S-02` | Klin AI-first (top_blocker: skills); dołącza do Strumienia A w `S-02`. |
+| B | Integracja AI | `F-02` → `S-02` → `S-05` | Klin AI-first; S-05 rozszerza prompt generowania. |
+| C | Sesja nauki SM-2 | `F-01` → `F-03` → `S-04` | Niezależna od Strumienia B; można równolegle z S-05. |
 
 ## Baza
 
@@ -127,19 +131,60 @@ Fundamenty poniżej zakładają, że są one obecne i NIE odbudowują ich.
 - **Blokady:** —
 - **Niewiadome:** —
 
+---
+
+### F-03: Schemat SM-2 w bazie danych
+
+- **Status:** todo
+- **Wynik:** (fundament) Tabela `flashcards` rozszerzona o pola algorytmu SM-2: `due_date` (timestamp), `easiness_factor` (float, domyślnie 2.5), `interval` (int dni, domyślnie 0), `repetitions` (int, domyślnie 0). Migracja SQL z domyślnymi wartościami dla istniejących fiszek. Gotowe do odczytu i zapisu przez S-04.
+- **Change ID:** `srs-schema`
+- **Odnośniki PRD:** FR-011, FR-012
+- **Odblokowania:** S-04
+- **Wymagania wstępne:** F-01
+- **Równolegle z:** S-05
+- **Blokady:** —
+- **Niewiadome:**
+  - Pytanie: Która biblioteka SM-2 (np. `ts-fsrs`, `supermemo`, `sm2`) jest najlepsza dla TypeScript/Node.js i Cloudflare Workers edge runtime? Owner: developer. Block: **nie** — schemat kolumn jest niezależny od wyboru biblioteki; biblioteka może być wymieniona bez zmiany migracji.
+
+---
+
+### S-04: Sesja nauki z SM-2
+
+- **Status:** todo
+- **Wynik:** Zalogowany użytkownik może otworzyć widok sesji nauki — widzi pytanie jednej fiszki na raz, odsłania odpowiedź, ocenia zapamiętanie wg skali biblioteki SM-2; wynik aktualizuje `due_date` fiszki. Dwa tryby: „Do powtórki dziś" (fiszki z `due_date ≤ now`) i „Wszystkie fiszki". Pusty stan gdy brak fiszek do powtórki.
+- **Change ID:** `study-session`
+- **Odnośniki PRD:** FR-010, FR-011, FR-012
+- **Wymagania wstępne:** S-01, F-03
+- **Równolegle z:** S-05
+- **Blokady:** —
+- **Niewiadome:**
+  - Pytanie: Która biblioteka SM-2 wybrać (patrz F-03)? Owner: developer. Block: **tak** — musi być wybrana przed implementacją S-04.
+  - Pytanie: Pusty stan „Do powtórki dziś" — pokazać datę kolejnej zaplanowanej fiszki? Owner: developer. Block: **nie** — to decyzja UX, nie blokuje architektonicznie.
+
+---
+
+### S-05: Tryb generowania słownikowego PL→IT
+
+- **Status:** todo
+- **Wynik:** Zalogowany użytkownik może wybrać w generatorze tryb „słownikowy PL→IT" — AI generuje pary (pojedynczy wyraz po polsku, tłumaczenie na włoski) z wklejonego tekstu zamiast ogólnych par pytanie-odpowiedź.
+- **Change ID:** `vocab-generation`
+- **Odnośniki PRD:** FR-013
+- **Wymagania wstępne:** S-02
+- **Równolegle z:** F-03, S-04
+- **Blokady:** —
+- **Niewiadome:** —
+
 ## Otwarte pytania mapy drogowej
 
 1. **Kontrola kosztów API AI** (z PRD §Open Questions) — jak ograniczyć koszty generowania gdy liczba użytkowników rośnie? Brak limitu per użytkownik może prowadzić do nieoczekiwanych kosztów operacyjnych. Owner: developer. Priorytet: wysoki przed uruchomieniem produkcyjnym dla realnych użytkowników.
 
 ## Odłożone (parkuj)
 
-- **Własny algorytm SRS (SM-2)** — poza zakresem MVP; dodać w v2, gdy podstawowy przepływ generowania działa. (PRD §Non-Goals)
 - **Import plików (PDF, DOCX)** — tylko tekst wklejany ręcznie w v1. (PRD §Non-Goals)
 - **Współdzielenie zestawów fiszek między użytkownikami** — brak w v1. (PRD §Non-Goals)
 - **Integracja z Duolingo / Anki** — poza zakresem. (PRD §Non-Goals)
 - **Aplikacja mobilna** — tylko web w v1. (PRD §Non-Goals)
 - **Ręczne tworzenie fiszek (FR-009)** — nice-to-have; AI-first focus, parkuj po ukończeniu S-02.
-- **S-03 / FR-007+FR-008** — nice-to-have; parkuj jeśli `top_blocker: skills` pochłonie dostępny czas.
 
 ## Done
 

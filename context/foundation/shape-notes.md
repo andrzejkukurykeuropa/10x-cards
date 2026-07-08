@@ -2,7 +2,7 @@
 project: "10xCards"
 context_type: greenfield
 created: 2026-05-26
-updated: 2026-05-26
+updated: 2026-07-08
 checkpoint:
   current_phase: 8
   phases_completed: [1, 2, 3, 4, 5, 6, 7]
@@ -21,7 +21,7 @@ checkpoint:
       decision: "nice-to-have — AI is the focus"
     - topic: "AI cost risk"
       decision: "risk acknowledged; no budget control in MVP → Open Question"
-  frs_drafted: 9
+  frs_drafted: 13
   quality_check_status: accepted
 ---
 
@@ -97,6 +97,20 @@ Acknowledged on 2026-05-26: 6-tygodniowe MVP wymaga stałego zaangażowania po g
 - FR-009: Użytkownik może ręcznie stworzyć fiszkę (pytanie + odpowiedź). Priority: nice-to-have
   > Sokrates: Zmieniono na nice-to-have — jeśli AI działa dobrze, manualne tworzenie jest zbędne dla MVP. Skupienie na AI-first.
 
+### Study Session
+- FR-010: Użytkownik może otworzyć widok sesji nauki i widzieć fiszki z kolekcji po jednej (strona pytania). Priority: must-have. Change: nowa
+  > Sokrates: Rozważono ryzyko: użytkownik bez fiszek lub bez fiszek do powtórki trafi na pustą sesję. Decyzja: stan pustego ekranu z komunikatem i linkiem do generatora jest wymagany.
+
+- FR-011: Użytkownik może odsłonić odpowiedź fiszki i ocenić jakość zapamiętania wg skali zdefiniowanej przez wybraną bibliotekę SM-2, co aktualizuje termin następnej powtórki. Priority: must-have. Change: nowa
+  > Sokrates: Rozważono złożoność persystencji SM-2 (easiness factor, interval, repetitions per fiszka). Decyzja: użyjemy zewnętrznej biblioteki SM-2 — skala ocen i algorytm są jej odpowiedzialnością; UI adaptuje się do API biblioteki.
+
+- FR-012: Sesja nauki priorytetyzuje fiszki wg terminu SM-2 (najpierw przeterminowane i zaplanowane na dziś), ale udostępnia też tryb „wszystkie fiszki" dla użytkownika, który chce powtórzyć kolekcję w całości. Priority: must-have. Change: nowa
+  > Sokrates: Rozważono ryzyko: użytkownik może chcieć powtórzyć wszystkie fiszki bez względu na harmonogram. Decyzja: dwa tryby sesji — „Do powtórki dziś" (domyślny, SM-2) i „Wszystkie fiszki" (na żądanie).
+
+### Vocabulary Generation
+- FR-013: Użytkownik może wybrać tryb generowania „słownikowy PL→IT": AI tworzy pary (pojedynczy wyraz PL, tłumaczenie IT) z wklejonego tekstu. Priority: must-have. Change: nowa
+  > Sokrates: Brak kontrargumentu; FR-013 pozostaje bez zmian.
+
 ## Business Logic
 
 System analizuje wklejony tekst i wyodrębnia z niego pary pytań-odpowiedzi zoptymalizowane pod kątem nauki języków obcych.
@@ -115,11 +129,11 @@ Logowanie e-mail + hasło. Model płaski — każdy zalogowany użytkownik ma do
 
 ## Non-Goals
 
-- Brak własnego algorytmu powtórek (SRS) — integracja z gotowym algorytmem open-source (np. SM-2) zostanie dodana w v2, gdy podstawowy przepływ generowania działa.
 - Brak importu plików (PDF, DOCX, itp.) — tylko tekst wklejany ręcznie w v1.
 - Brak współdzielenia zestawów fiszek między użytkownikami.
 - Brak integracji z zewnętrznymi platformami edukacyjnymi (Duolingo, Anki, itp.).
 - Brak aplikacji mobilnej — tylko web w v1.
+- Brak własnych algorytmów SRS — implementacja SM-2 via zewnętrzna biblioteka open-source.
 
 ## Open Questions
 
