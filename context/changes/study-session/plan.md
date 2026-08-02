@@ -401,16 +401,16 @@ Brak migracji danych — schemat DB jest już gotowy (F-04, zarchiwizowane). Ta 
 
 #### Automatyczne
 
-- [x] 3.1 npm run lint przechodzi
-- [x] 3.2 npm run build przechodzi
+- [x] 3.1 npm run lint przechodzi — a82bbbe
+- [x] 3.2 npm run build przechodzi — a82bbbe
 
 #### Ręczne
 
-- [ ] 3.3 Link "Rozpocznij naukę" na /dashboard prowadzi do /study
-- [ ] 3.4 Niezalogowany użytkownik wchodzący na /study jest przekierowany do /auth/signin
-- [ ] 3.5 Tryb "Wszystkie fiszki" pokazuje karty w losowej kolejności
-- [ ] 3.6 "Pokaż odpowiedź" odsłania odpowiedź i 4 przyciski oceny
-- [ ] 3.7 Ocena karty zapisuje się i przechodzi do kolejnej karty
-- [ ] 3.8 Ekran podsumowania pokazuje poprawną liczbę i rozkład ocen
-- [ ] 3.9 Tryb "Do powtórki dziś" z pustą kolejką pokazuje pusty stan
-- [ ] 3.10 Błąd sieci przy zapisie oceny pokazuje komunikat inline z możliwością ponowienia
+- [x] 3.3 Link "Rozpocznij naukę" na /dashboard prowadzi do /study
+- [x] 3.4 Niezalogowany użytkownik wchodzący na /study jest przekierowany do /auth/signin
+- [x] 3.5 Tryb "Wszystkie fiszki" pokazuje karty w losowej kolejności
+- [x] 3.6 "Pokaż odpowiedź" odsłania odpowiedź i 4 przyciski oceny
+- [x] 3.7 Ocena karty zapisuje się i przechodzi do kolejnej karty
+- [x] 3.8 Ekran podsumowania pokazuje poprawną liczbę i rozkład ocen
+- [x] 3.9 Tryb "Do powtórki dziś" z pustą kolejką pokazuje pusty stan
+- [x] 3.10 Błąd sieci przy zapisie oceny pokazuje komunikat inline z możliwością ponowienia
