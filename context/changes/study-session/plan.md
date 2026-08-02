@@ -386,23 +386,23 @@ Brak migracji danych — schemat DB jest już gotowy (F-04, zarchiwizowane). Ta 
 
 #### Automatyczne
 
-- [x] 2.1 npm run lint przechodzi
-- [x] 2.2 npm run build przechodzi
+- [x] 2.1 npm run lint przechodzi — d26efad
+- [x] 2.2 npm run build przechodzi — d26efad
 
 #### Ręczne
 
-- [x] 2.3 GET /api/study/queue?mode=all zwraca fiszki zalogowanego użytkownika z polami SRS
-- [x] 2.4 GET /api/study/queue?mode=due dla świeżo utworzonej fiszki zwraca ją mimo due_date IS NULL
-- [x] 2.5 POST /api/study/review z poprawnym id i rating aktualizuje wiersz w DB
-- [x] 2.6 Żądanie z id innego użytkownika lub nieistniejącym → 404
-- [x] 2.7 Nieprawidłowy rating → 422
+- [x] 2.3 GET /api/study/queue?mode=all zwraca fiszki zalogowanego użytkownika z polami SRS — d26efad
+- [x] 2.4 GET /api/study/queue?mode=due dla świeżo utworzonej fiszki zwraca ją mimo due_date IS NULL — d26efad
+- [x] 2.5 POST /api/study/review z poprawnym id i rating aktualizuje wiersz w DB — d26efad
+- [x] 2.6 Żądanie z id innego użytkownika lub nieistniejącym → 404 — d26efad
+- [x] 2.7 Nieprawidłowy rating → 422 — d26efad
 
 ### Faza 3: UI sesji nauki
 
 #### Automatyczne
 
-- [ ] 3.1 npm run lint przechodzi
-- [ ] 3.2 npm run build przechodzi
+- [x] 3.1 npm run lint przechodzi
+- [x] 3.2 npm run build przechodzi
 
 #### Ręczne
 
