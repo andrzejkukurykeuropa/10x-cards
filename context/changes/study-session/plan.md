@@ -375,27 +375,27 @@ Brak migracji danych — schemat DB jest już gotowy (F-04, zarchiwizowane). Ta 
 
 #### Automatyczne
 
-- [x] 1.1 npm run lint przechodzi bez błędów
-- [x] 1.2 npx astro check (lub npm run build) nie zgłasza błędów typów w nowych plikach
+- [x] 1.1 npm run lint przechodzi bez błędów — 670fbb8
+- [x] 1.2 npx astro check (lub npm run build) nie zgłasza błędów typów w nowych plikach — 670fbb8
 
 #### Ręczne
 
-- [x] 1.3 Ręczne wywołanie scheduleReview dla świeżej karty zwraca sensowne wartości
+- [x] 1.3 Ręczne wywołanie scheduleReview dla świeżej karty zwraca sensowne wartości — 670fbb8
 
 ### Faza 2: API sesji nauki
 
 #### Automatyczne
 
-- [ ] 2.1 npm run lint przechodzi
-- [ ] 2.2 npm run build przechodzi
+- [x] 2.1 npm run lint przechodzi
+- [x] 2.2 npm run build przechodzi
 
 #### Ręczne
 
-- [ ] 2.3 GET /api/study/queue?mode=all zwraca fiszki zalogowanego użytkownika z polami SRS
-- [ ] 2.4 GET /api/study/queue?mode=due dla świeżo utworzonej fiszki zwraca ją mimo due_date IS NULL
-- [ ] 2.5 POST /api/study/review z poprawnym id i rating aktualizuje wiersz w DB
-- [ ] 2.6 Żądanie z id innego użytkownika lub nieistniejącym → 404
-- [ ] 2.7 Nieprawidłowy rating → 422
+- [x] 2.3 GET /api/study/queue?mode=all zwraca fiszki zalogowanego użytkownika z polami SRS
+- [x] 2.4 GET /api/study/queue?mode=due dla świeżo utworzonej fiszki zwraca ją mimo due_date IS NULL
+- [x] 2.5 POST /api/study/review z poprawnym id i rating aktualizuje wiersz w DB
+- [x] 2.6 Żądanie z id innego użytkownika lub nieistniejącym → 404
+- [x] 2.7 Nieprawidłowy rating → 422
 
 ### Faza 3: UI sesji nauki
 
