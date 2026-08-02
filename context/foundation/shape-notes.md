@@ -101,11 +101,11 @@ Acknowledged on 2026-05-26: 6-tygodniowe MVP wymaga stałego zaangażowania po g
 - FR-010: Użytkownik może otworzyć widok sesji nauki i widzieć fiszki z kolekcji po jednej (strona pytania). Priority: must-have. Change: nowa
   > Sokrates: Rozważono ryzyko: użytkownik bez fiszek lub bez fiszek do powtórki trafi na pustą sesję. Decyzja: stan pustego ekranu z komunikatem i linkiem do generatora jest wymagany.
 
-- FR-011: Użytkownik może odsłonić odpowiedź fiszki i ocenić jakość zapamiętania wg skali zdefiniowanej przez wybraną bibliotekę SM-2, co aktualizuje termin następnej powtórki. Priority: must-have. Change: nowa
-  > Sokrates: Rozważono złożoność persystencji SM-2 (easiness factor, interval, repetitions per fiszka). Decyzja: użyjemy zewnętrznej biblioteki SM-2 — skala ocen i algorytm są jej odpowiedzialnością; UI adaptuje się do API biblioteki.
+- FR-011: Użytkownik może odsłonić odpowiedź fiszki i ocenić jakość zapamiętania wg skali zdefiniowanej przez wybraną bibliotekę SRS (spaced repetition), co aktualizuje termin następnej powtórki. Priority: must-have. Change: nowa
+  > Sokrates: Rozważono złożoność persystencji stanu harmonogramu (easiness factor, interval, repetitions per fiszka). Decyzja: użyjemy zewnętrznej biblioteki SRS — skala ocen i algorytm są jej odpowiedzialnością; UI adaptuje się do API biblioteki.
 
-- FR-012: Sesja nauki priorytetyzuje fiszki wg terminu SM-2 (najpierw przeterminowane i zaplanowane na dziś), ale udostępnia też tryb „wszystkie fiszki" dla użytkownika, który chce powtórzyć kolekcję w całości. Priority: must-have. Change: nowa
-  > Sokrates: Rozważono ryzyko: użytkownik może chcieć powtórzyć wszystkie fiszki bez względu na harmonogram. Decyzja: dwa tryby sesji — „Do powtórki dziś" (domyślny, SM-2) i „Wszystkie fiszki" (na żądanie).
+- FR-012: Sesja nauki priorytetyzuje fiszki wg terminu wyznaczonego przez algorytm SRS (najpierw przeterminowane i zaplanowane na dziś), ale udostępnia też tryb „wszystkie fiszki" dla użytkownika, który chce powtórzyć kolekcję w całości. Priority: must-have. Change: nowa
+  > Sokrates: Rozważono ryzyko: użytkownik może chcieć powtórzyć wszystkie fiszki bez względu na harmonogram. Decyzja: dwa tryby sesji — „Do powtórki dziś" (domyślny, wg harmonogramu SRS) i „Wszystkie fiszki" (na żądanie).
 
 ### Vocabulary Generation
 - FR-013: Użytkownik może wybrać tryb generowania „słownikowy PL→IT": AI tworzy pary (pojedynczy wyraz PL, tłumaczenie IT) z wklejonego tekstu. Priority: must-have. Change: nowa
@@ -133,7 +133,7 @@ Logowanie e-mail + hasło. Model płaski — każdy zalogowany użytkownik ma do
 - Brak współdzielenia zestawów fiszek między użytkownikami.
 - Brak integracji z zewnętrznymi platformami edukacyjnymi (Duolingo, Anki, itp.).
 - Brak aplikacji mobilnej — tylko web w v1.
-- Brak własnych algorytmów SRS — implementacja SM-2 via zewnętrzna biblioteka open-source.
+- Brak własnych algorytmów SRS — implementacja harmonogramu powtórek via zewnętrzna biblioteka open-source.
 
 ## Open Questions
 

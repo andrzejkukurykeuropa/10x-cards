@@ -27,4 +27,7 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
+# local MCP config (may contain API keys)
+.vscode/mcp.json
+
 dev.vars

@@ -32,3 +32,11 @@ export interface UpdateFlashcardRequest {
   question?: string;
   answer?: string;
 }
+
+export type StudyMode = "due" | "all";
+export type StudyRating = "again" | "hard" | "good" | "easy";
+
+export interface SubmitReviewRequest {
+  id: string;
+  rating: StudyRating;
+}

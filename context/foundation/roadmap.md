@@ -3,7 +3,7 @@ project: "10xCards"
 version: 1
 status: draft
 created: 2026-06-05
-updated: 2026-07-08
+updated: 2026-08-02
 prd_version: 1
 top_blocker: skills
 ---
@@ -32,11 +32,12 @@ Klin produktu — jedyna cecha, która po usunięciu sprawia, że 10xCards staje
 |---|---|---|---|---|---|
 | F-01 | `flashcard-schema` | (fundament) tabela `flashcards` w Supabase z migracją SQL i RLS per użytkownik | — | Access Control, Guardrails | done |
 | F-02 | `ai-sdk-edge-spike` | (fundament) AI SDK zintegrowany i zweryfikowany w Cloudflare Workers edge runtime (streaming działa) | — | FR-003, NFR | done |
-| F-03 | `srs-schema` | (fundament) pola SM-2 (`due_date`, `easiness_factor`, `interval`, `repetitions`) dodane do tabeli `flashcards` z migracją SQL | F-01 | FR-011, FR-012 | done |
+| F-03 | `srs-schema` | (fundament) pola harmonogramu powtórek SRS (`due_date`, `easiness_factor`, `interval`, `repetitions`) dodane do tabeli `flashcards` z migracją SQL | F-01 | FR-011, FR-012 | done |
+| F-04 | `fsrs-schema-migration` | (fundament) migracja schematu SRS z SM-2 na FSRS — nowe pola (`stability`, `difficulty`, `state`, `lapses`, `last_review`) w tabeli `flashcards`, zgodne z biblioteką `ts-fsrs` | F-03 | FR-011, FR-012 | done |
 | S-01 | `collection-view` | przeglądać swoje fiszki w kolekcji (lista kart + pusty stan) | F-01 | FR-006 | done |
 | S-02 | `ai-generation-flow` | wkleić tekst → zobaczyć propozycje AI → zaakceptować / edytować / odrzucić → zapisać do kolekcji | F-01, F-02 | US-01, FR-003, FR-004, FR-005 | done |
 | S-03 | `collection-edit-delete` | edytować i usuwać fiszki w kolekcji (nice-to-have) | S-02 | FR-007, FR-008 | done |
-| S-04 | `study-session` | otworzyć sesję nauki — widzieć pytanie fiszki, odsłonić odpowiedź, ocenić zapamiętanie; harmonogram SM-2 lub tryb „wszystkie fiszki" | S-01, F-03 | FR-010, FR-011, FR-012 | todo |
+| S-04 | `study-session` | otworzyć sesję nauki — widzieć pytanie fiszki, odsłonić odpowiedź, ocenić zapamiętanie wg skali FSRS (`ts-fsrs`); harmonogram SRS lub tryb „wszystkie fiszki" | S-01, F-04 | FR-010, FR-011, FR-012 | todo |
 | S-05 | `vocab-generation` | wygenerować fiszki słownikowe PL→IT (pojedyncze słowo) z wklejonego tekstu | S-02 | FR-013 | todo |
 
 ## Strumienie
@@ -47,7 +48,7 @@ Pomoc nawigacyjna — grupuje elementy, które dzielą łańcuch wymagań wstęp
 |---|---|---|---|
 | A | Fundament danych i kolekcja | `F-01` → `S-01` → `S-02` → `S-03` | Ścieżka danych; S-01 można budować, gdy F-02 jest jeszcze w toku. |
 | B | Integracja AI | `F-02` → `S-02` → `S-05` | Klin AI-first; S-05 rozszerza prompt generowania. |
-| C | Sesja nauki SM-2 | `F-01` → `F-03` → `S-04` | Niezależna od Strumienia B; można równolegle z S-05. |
+| C | Sesja nauki (SRS) | `F-01` → `F-03` → `F-04` → `S-04` | Niezależna od Strumienia B; można równolegle z S-05. F-04 to refaktor schematu SM-2 → FSRS wymagany przed S-04. |
 
 ## Baza
 
@@ -133,10 +134,10 @@ Fundamenty poniżej zakładają, że są one obecne i NIE odbudowują ich.
 
 ---
 
-### F-03: Schemat SM-2 w bazie danych
+### F-03: Schemat harmonogramu powtórek (SRS) w bazie danych
 
 - **Status:** done
-- **Wynik:** (fundament) Tabela `flashcards` rozszerzona o pola algorytmu SM-2: `due_date` (timestamp), `easiness_factor` (float, domyślnie 2.5), `interval` (int dni, domyślnie 0), `repetitions` (int, domyślnie 0). Migracja SQL z domyślnymi wartościami dla istniejących fiszek. Gotowe do odczytu i zapisu przez S-04.
+- **Wynik:** (fundament) Tabela `flashcards` rozszerzona o pola do przechowywania stanu harmonogramu powtórek: `due_date` (timestamp), `easiness_factor` (float, domyślnie 2.5), `interval` (int dni, domyślnie 0), `repetitions` (int, domyślnie 0). Migracja SQL z domyślnymi wartościami dla istniejących fiszek. Gotowe do odczytu i zapisu przez S-04.
 - **Change ID:** `srs-schema`
 - **Odnośniki PRD:** FR-011, FR-012
 - **Odblokowania:** S-04
@@ -144,21 +145,39 @@ Fundamenty poniżej zakładają, że są one obecne i NIE odbudowują ich.
 - **Równolegle z:** S-05
 - **Blokady:** —
 - **Niewiadome:**
-  - Pytanie: Która biblioteka SM-2 (np. `ts-fsrs`, `supermemo`, `sm2`) jest najlepsza dla TypeScript/Node.js i Cloudflare Workers edge runtime? Owner: developer. Block: **nie** — schemat kolumn jest niezależny od wyboru biblioteki; biblioteka może być wymieniona bez zmiany migracji.
+  - Pytanie: Którą bibliotekę SRS (spaced repetition) wybrać jako implementację algorytmu, kompatybilną z TypeScript/Node.js i Cloudflare Workers edge runtime? Owner: developer. Block: **nie** — schemat kolumn jest niezależny od wyboru biblioteki/algorytmu; biblioteka może być wymieniona bez zmiany migracji.
+  - **Rozstrzygnięte:** wybrano `ts-fsrs` (FSRS v6) zamiast SM-2 — patrz F-04 (refaktor schematu wymagany, bo pola tej migracji SM-2 nie są zgodne z modelem FSRS).
 
 ---
 
-### S-04: Sesja nauki z SM-2
+### F-04: Migracja schematu SRS z SM-2 na FSRS
 
-- **Status:** todo
-- **Wynik:** Zalogowany użytkownik może otworzyć widok sesji nauki — widzi pytanie jednej fiszki na raz, odsłania odpowiedź, ocenia zapamiętanie wg skali biblioteki SM-2; wynik aktualizuje `due_date` fiszki. Dwa tryby: „Do powtórki dziś" (fiszki z `due_date ≤ now`) i „Wszystkie fiszki". Pusty stan gdy brak fiszek do powtórki.
-- **Change ID:** `study-session`
-- **Odnośniki PRD:** FR-010, FR-011, FR-012
-- **Wymagania wstępne:** S-01, F-03
+- **Status:** done
+- **Wynik:** (fundament) Tabela `flashcards` zrefaktoryzowana ze schematu SM-2 (F-03) na schemat zgodny z biblioteką `ts-fsrs` (FSRS v6). Migracja SQL dodaje/zastępuje pola: `stability` (float), `difficulty` (float, 1–10), `state` (enum: New/Learning/Review/Relearning), `lapses` (int, domyślnie 0), `last_review` (timestamp, nullable). Pole `due_date` pozostaje (mapowane na `due` w `ts-fsrs`), `repetitions` pozostaje (mapowane na `reps`). Pole `easiness_factor` traci sens pod FSRS i jest usuwane/zastępowane przez `difficulty` + `stability`; `interval` zastępowane przez `scheduled_days` lub wyliczane z `stability`. Migracja zawiera wartości domyślne dla istniejących fiszek (nowe karty = stan „New" w FSRS). Gotowe do odczytu i zapisu przez S-04.
+- **Change ID:** `fsrs-schema-migration`
+- **Odnośniki PRD:** FR-011, FR-012
+- **Odblokowania:** S-04
+- **Wymagania wstępne:** F-03
 - **Równolegle z:** S-05
 - **Blokady:** —
 - **Niewiadome:**
-  - Pytanie: Która biblioteka SM-2 wybrać (patrz F-03)? Owner: developer. Block: **tak** — musi być wybrana przed implementacją S-04.
+  - Pytanie: Czy zachować kolumny SM-2 (`easiness_factor`, `interval`) jako legacy (soft-migration, bez usuwania) czy usunąć je od razu (hard cut)? Owner: developer. Block: **nie** — decyzja o czystości schematu, nie blokuje architektonicznie; można zacząć od hard cut, bo brak jeszcze produkcyjnych danych zależnych od SM-2 (S-04 jeszcze nie zaimplementowane).
+  - Pytanie: Czy przechowywać `elapsed_days` jawnie w kolumnie, czy wyliczać go w locie z `last_review` przy każdym uruchomieniu schedulera `ts-fsrs`? Owner: developer. Block: **nie** — `ts-fsrs` akceptuje `now` do wyliczenia elapsed_days; przechowywanie jest opcjonalną optymalizacją.
+
+---
+
+### S-04: Sesja nauki z algorytmem SRS
+
+- **Status:** todo
+- **Wynik:** Zalogowany użytkownik może otworzyć widok sesji nauki — widzi pytanie jednej fiszki na raz, odsłania odpowiedź, ocenia zapamiętanie wg skali FSRS (`ts-fsrs`: Again/Hard/Good/Easy); wynik aktualizuje harmonogram powtórek fiszki (`due_date`, `stability`, `difficulty`, `state` i powiązane pola z F-04). Dwa tryby: „Do powtórki dziś" (fiszki z `due_date ≤ now`) i „Wszystkie fiszki". Pusty stan gdy brak fiszek do powtórki.
+- **Change ID:** `study-session`
+- **Odnośniki PRD:** FR-010, FR-011, FR-012
+- **Wymagania wstępne:** S-01, F-04
+- **Równolegle z:** S-05
+- **Blokady:** —
+- **Niewiadome:**
+  - Pytanie: Którą bibliotekę SRS wybrać (patrz F-03)? Owner: developer. Block: **tak** — musi być wybrana przed implementacją S-04.
+  - **Rozstrzygnięte:** `ts-fsrs` (FSRS v6) — patrz `context/changes/study-session/research.md`. Wymaga F-04 (migracja schematu) jako wymagania wstępnego.
   - Pytanie: Pusty stan „Do powtórki dziś" — pokazać datę kolejnej zaplanowanej fiszki? Owner: developer. Block: **nie** — to decyzja UX, nie blokuje architektonicznie.
 
 ---
@@ -193,6 +212,7 @@ Fundamenty poniżej zakładają, że są one obecne i NIE odbudowują ich.
 - **S-01: Zalogowany użytkownik może zobaczyć listę swoich fiszek w kolekcji (lista kart + pusty stan)** — Archived 2026-06-15 → `context/archive/2026-06-10-collection-view/`. Lesson: —.
 - **S-02: Zalogowany użytkownik może wkleić tekst → zobaczyć propozycje AI → zaakceptować / edytować / odrzucić → zapisać do kolekcji** — Archived 2026-06-23 → `context/archive/2026-06-22-ai-generation-flow/`. Lesson: —.
 - **S-03: Zalogowany użytkownik może edytować treść istniejącej fiszki w kolekcji (zmiana pytania lub odpowiedzi) oraz usunąć wybraną fiszkę** — Archived 2026-07-07 → `context/archive/2026-07-07-collection-edit-delete/`. Lesson: —.
-- **F-03: (fundament) Tabela `flashcards` rozszerzona o pola algorytmu SM-2: `due_date`, `easiness_factor`, `interval`, `repetitions`** — Archived 2026-07-08 → `context/archive/2026-07-08-srs-schema/`. Lesson: —.
+- **F-03: (fundament) Tabela `flashcards` rozszerzona o pola harmonogramu powtórek (SRS): `due_date`, `easiness_factor`, `interval`, `repetitions`** — Archived 2026-07-08 → `context/archive/2026-07-08-srs-schema/`. Lesson: —.
+- **F-04: (fundament) Tabela `flashcards` zrefaktoryzowana ze schematu SM-2 (F-03) na schemat zgodny z biblioteką `ts-fsrs` (FSRS v6). Migracja SQL dodaje/zastępuje pola: `stability` (float), `difficulty` (float, 1–10), `state` (enum: New/Learning/Review/Relearning), `lapses` (int, domyślnie 0), `last_review` (timestamp, nullable). Pole `due_date` pozostaje (mapowane na `due` w `ts-fsrs`), `repetitions` pozostaje (mapowane na `reps`). Pole `easiness_factor` traci sens pod FSRS i jest usuwane/zastępowane przez `difficulty` + `stability`; `interval` zastępowane przez `scheduled_days` lub wyliczane z `stability`. Migracja zawiera wartości domyślne dla istniejących fiszek (nowe karty = stan „New" w FSRS). Gotowe do odczytu i zapisu przez S-04.** — Archived 2026-08-02 → `context/archive/2026-08-02-fsrs-schema-migration/`. Lesson: —.
 
 <!-- Wypełnia /10x-archive po ukończeniu każdego fragmentu. -->

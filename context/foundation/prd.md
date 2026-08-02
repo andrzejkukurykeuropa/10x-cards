@@ -101,7 +101,7 @@ Logowanie e-mail + hasło. Model płaski — każdy zalogowany użytkownik ma do
 
 ## Non-Goals
 
-- Brak własnego algorytmu powtórek (SRS) — integracja z gotowym algorytmem open-source (np. SM-2) zostanie dodana w v2, gdy podstawowy przepływ generowania działa.
+- Brak własnego algorytmu powtórek (SRS) — integracja z gotową biblioteką open-source do obsługi powtórek rozłożonych w czasie zostanie dodana w v2, gdy podstawowy przepływ generowania działa.
 - Brak importu plików (PDF, DOCX, itp.) — tylko tekst wklejany ręcznie w v1.
 - Brak współdzielenia zestawów fiszek między użytkownikami.
 - Brak integracji z zewnętrznymi platformami edukacyjnymi (Duolingo, Anki, itp.).
