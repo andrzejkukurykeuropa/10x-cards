@@ -184,23 +184,23 @@ Migracja jest częściowo destrukcyjna (usuwa `easiness_factor`, `interval`) —
 
 #### Automatyczne
 
-- [x] 1.1 Migracja stosuje się bez błędów: npx supabase db push --linked
+- [x] 1.1 Migracja stosuje się bez błędów: npx supabase db push --linked — 242eb12
 
 #### Ręczne
 
-- [x] 1.2 Tabela flashcards nie zawiera już easiness_factor ani interval
-- [x] 1.3 Kolumny stability, difficulty, state, lapses, last_review, scheduled_days widoczne z poprawnymi typami i DEFAULT
-- [x] 1.4 Typ enum fsrs_state widoczny z wartościami New, Learning, Review, Relearning
-- [x] 1.5 Istniejący wiersz testowy ma świeży stan FSRS (state='New', stability=0, difficulty=0, lapses=0, last_review=NULL, scheduled_days=0, repetitions=0, due_date ≈ teraz)
-- [x] 1.6 Próba wstawienia difficulty=11 lub stability=-1 kończy się błędem CHECK constraint
+- [x] 1.2 Tabela flashcards nie zawiera już easiness_factor ani interval — 242eb12
+- [x] 1.3 Kolumny stability, difficulty, state, lapses, last_review, scheduled_days widoczne z poprawnymi typami i DEFAULT — 242eb12
+- [x] 1.4 Typ enum fsrs_state widoczny z wartościami New, Learning, Review, Relearning — 242eb12
+- [x] 1.5 Istniejący wiersz testowy ma świeży stan FSRS (state='New', stability=0, difficulty=0, lapses=0, last_review=NULL, scheduled_days=0, repetitions=0, due_date ≈ teraz) — 242eb12
+- [x] 1.6 Próba wstawienia difficulty=11 lub stability=-1 kończy się błędem CHECK constraint — 242eb12
 
 ### Faza 2: Typy TypeScript — aktualizacja interfejsu Flashcard
 
 #### Automatyczne
 
-- [ ] 2.1 Lint przechodzi bez błędów: npm run lint
+- [x] 2.1 Lint przechodzi bez błędów: npm run lint
 
 #### Ręczne
 
-- [ ] 2.2 Flashcard interfejs bez easiness_factor/interval, z sześcioma nowymi polami FSRS w src/types.ts
-- [ ] 2.3 FlashcardDto (przez Omit) pośrednio zawiera nowe pola
+- [x] 2.2 Flashcard interfejs bez easiness_factor/interval, z sześcioma nowymi polami FSRS w src/types.ts
+- [x] 2.3 FlashcardDto (przez Omit) pośrednio zawiera nowe pola
