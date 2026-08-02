@@ -1,10 +1,10 @@
 ---
 change_id: fsrs-schema-migration
 title: Migrate SRS schema from SM-2 to FSRS
-status: impl_reviewed
+status: archived
 created: 2026-08-02
 updated: 2026-08-02
-archived_at: null
+archived_at: 2026-08-02T11:28:27Z
 ---
 
 ## Notes
