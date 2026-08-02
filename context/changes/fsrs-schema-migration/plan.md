@@ -198,9 +198,9 @@ Migracja jest częściowo destrukcyjna (usuwa `easiness_factor`, `interval`) —
 
 #### Automatyczne
 
-- [x] 2.1 Lint przechodzi bez błędów: npm run lint
+- [x] 2.1 Lint przechodzi bez błędów: npm run lint — 9d1bf1a
 
 #### Ręczne
 
-- [x] 2.2 Flashcard interfejs bez easiness_factor/interval, z sześcioma nowymi polami FSRS w src/types.ts
-- [x] 2.3 FlashcardDto (przez Omit) pośrednio zawiera nowe pola
+- [x] 2.2 Flashcard interfejs bez easiness_factor/interval, z sześcioma nowymi polami FSRS w src/types.ts — 9d1bf1a
+- [x] 2.3 FlashcardDto (przez Omit) pośrednio zawiera nowe pola — 9d1bf1a
