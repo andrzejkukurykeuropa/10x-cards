@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import type { FlashcardDto, StudyMode, StudyRating } from "@/types";
 
@@ -46,7 +46,9 @@ export default function StudySession() {
   const [state, setState] = useState<SessionState>({ status: "mode-select" });
   // Updated after each render (not during render) — safe to read in async event handlers
   const stateRef = useRef(state);
-  stateRef.current = state;
+  useEffect(() => {
+    stateRef.current = state;
+  }, [state]);
 
   async function handleSelectMode(mode: StudyMode) {
     setState({ status: "loading" });

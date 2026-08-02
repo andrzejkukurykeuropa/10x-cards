@@ -58,19 +58,30 @@ export const POST: APIRoute = async (context) => {
     return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500 });
   }
 
-  const updates = scheduleReview(current, rating, new Date());
+  let updates: ReturnType<typeof scheduleReview>;
+  try {
+    updates = scheduleReview(current, rating, new Date());
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error("[study/review] scheduleReview error:", err);
+    return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500 });
+  }
 
-  const { data, error: updateError } = await supabase
-    .from("flashcards")
-    .update(updates)
-    .eq("id", id)
-    .eq("user_id", user.id)
-    .select(STUDY_QUEUE_COLUMNS)
-    .single();
+  // Optimistic lock: only apply the update if last_review still matches what we just read,
+  // so a concurrent review of the same card (e.g. double submit) can't silently overwrite it.
+  let updateQuery = supabase.from("flashcards").update(updates).eq("id", id).eq("user_id", user.id);
+  updateQuery =
+    current.last_review === null
+      ? updateQuery.is("last_review", null)
+      : updateQuery.eq("last_review", current.last_review);
+
+  const { data, error: updateError } = await updateQuery.select(STUDY_QUEUE_COLUMNS).single();
 
   if (updateError) {
     if (updateError.code === "PGRST116") {
-      return new Response(JSON.stringify({ error: "Not found" }), { status: 404 });
+      // The SELECT above confirmed the card exists for this user, so a missing row here means
+      // it was concurrently modified (race) between our read and write, not a genuine 404.
+      return new Response(JSON.stringify({ error: "Conflict: card was modified concurrently" }), { status: 409 });
     }
     // eslint-disable-next-line no-console
     console.error("[study/review] UPDATE DB error:", updateError);

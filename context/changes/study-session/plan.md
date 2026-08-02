@@ -265,6 +265,12 @@ kontenerów (zgodnie z lekcją o scope creep w layoucie — wyłącznie dodanie 
 powitaniem użytkownika, stylizowany spójnie z istniejącym przyciskiem "Sign out" (te same klasy `rounded-lg
 border border-white/20 bg-white/10 ...`).
 
+**Addendum (przegląd implementacji, 2026-08-02)**: Aby wyrównać nowy link "Rozpocznij naukę" i istniejący
+przycisk "Sign out" obok siebie, `<form class="mt-6">` zostało opakowane w `<div class="mt-6 flex items-center
+justify-center gap-3">` (klasa `mt-6` przeniesiona z `<form>` na `<div>`). To techniczne odejście od "braku zmian
+klas istniejących kontenerów" zostało zaakceptowane jako konieczne dla poprawnego layoutu dwóch przycisków —
+patrz `context/changes/study-session/reviews/impl-review.md` (F1).
+
 #### 4. Komponent sesji nauki
 
 **Plik**: `src/components/StudySession.tsx` (nowy)
