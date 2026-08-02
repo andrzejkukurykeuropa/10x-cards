@@ -406,11 +406,11 @@ Brak migracji danych — schemat DB jest już gotowy (F-04, zarchiwizowane). Ta 
 
 #### Ręczne
 
-- [x] 3.3 Link "Rozpocznij naukę" na /dashboard prowadzi do /study
-- [x] 3.4 Niezalogowany użytkownik wchodzący na /study jest przekierowany do /auth/signin
-- [x] 3.5 Tryb "Wszystkie fiszki" pokazuje karty w losowej kolejności
-- [x] 3.6 "Pokaż odpowiedź" odsłania odpowiedź i 4 przyciski oceny
-- [x] 3.7 Ocena karty zapisuje się i przechodzi do kolejnej karty
-- [x] 3.8 Ekran podsumowania pokazuje poprawną liczbę i rozkład ocen
-- [x] 3.9 Tryb "Do powtórki dziś" z pustą kolejką pokazuje pusty stan
-- [x] 3.10 Błąd sieci przy zapisie oceny pokazuje komunikat inline z możliwością ponowienia
+- [x] 3.3 Link "Rozpocznij naukę" na /dashboard prowadzi do /study — db0b5cd
+- [x] 3.4 Niezalogowany użytkownik wchodzący na /study jest przekierowany do /auth/signin — db0b5cd
+- [x] 3.5 Tryb "Wszystkie fiszki" pokazuje karty w losowej kolejności — db0b5cd
+- [x] 3.6 "Pokaż odpowiedź" odsłania odpowiedź i 4 przyciski oceny — db0b5cd
+- [x] 3.7 Ocena karty zapisuje się i przechodzi do kolejnej karty — db0b5cd
+- [x] 3.8 Ekran podsumowania pokazuje poprawną liczbę i rozkład ocen — db0b5cd
+- [x] 3.9 Tryb "Do powtórki dziś" z pustą kolejką pokazuje pusty stan — db0b5cd
+- [x] 3.10 Błąd sieci przy zapisie oceny pokazuje komunikat inline z możliwością ponowienia — db0b5cd
