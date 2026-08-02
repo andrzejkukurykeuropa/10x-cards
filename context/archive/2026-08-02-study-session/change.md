@@ -1,10 +1,10 @@
 ---
 change_id: study-session
 title: Otwarcie sesji nauki (S-04)
-status: impl_reviewed
+status: archived
 created: 2026-08-02
 updated: 2026-08-02
-archived_at: null
+archived_at: 2026-08-02T16:47:54Z
 ---
 
 ## Notes

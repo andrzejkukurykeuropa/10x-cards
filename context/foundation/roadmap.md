@@ -37,7 +37,7 @@ Klin produktu — jedyna cecha, która po usunięciu sprawia, że 10xCards staje
 | S-01 | `collection-view` | przeglądać swoje fiszki w kolekcji (lista kart + pusty stan) | F-01 | FR-006 | done |
 | S-02 | `ai-generation-flow` | wkleić tekst → zobaczyć propozycje AI → zaakceptować / edytować / odrzucić → zapisać do kolekcji | F-01, F-02 | US-01, FR-003, FR-004, FR-005 | done |
 | S-03 | `collection-edit-delete` | edytować i usuwać fiszki w kolekcji (nice-to-have) | S-02 | FR-007, FR-008 | done |
-| S-04 | `study-session` | otworzyć sesję nauki — widzieć pytanie fiszki, odsłonić odpowiedź, ocenić zapamiętanie wg skali FSRS (`ts-fsrs`); harmonogram SRS lub tryb „wszystkie fiszki" | S-01, F-04 | FR-010, FR-011, FR-012 | todo |
+| S-04 | `study-session` | otworzyć sesję nauki — widzieć pytanie fiszki, odsłonić odpowiedź, ocenić zapamiętanie wg skali FSRS (`ts-fsrs`); harmonogram SRS lub tryb „wszystkie fiszki" | S-01, F-04 | FR-010, FR-011, FR-012 | done |
 | S-05 | `vocab-generation` | wygenerować fiszki słownikowe PL→IT (pojedyncze słowo) z wklejonego tekstu | S-02 | FR-013 | todo |
 
 ## Strumienie
@@ -168,7 +168,7 @@ Fundamenty poniżej zakładają, że są one obecne i NIE odbudowują ich.
 
 ### S-04: Sesja nauki z algorytmem SRS
 
-- **Status:** todo
+- **Status:** done
 - **Wynik:** Zalogowany użytkownik może otworzyć widok sesji nauki — widzi pytanie jednej fiszki na raz, odsłania odpowiedź, ocenia zapamiętanie wg skali FSRS (`ts-fsrs`: Again/Hard/Good/Easy); wynik aktualizuje harmonogram powtórek fiszki (`due_date`, `stability`, `difficulty`, `state` i powiązane pola z F-04). Dwa tryby: „Do powtórki dziś" (fiszki z `due_date ≤ now`) i „Wszystkie fiszki". Pusty stan gdy brak fiszek do powtórki.
 - **Change ID:** `study-session`
 - **Odnośniki PRD:** FR-010, FR-011, FR-012
@@ -214,5 +214,6 @@ Fundamenty poniżej zakładają, że są one obecne i NIE odbudowują ich.
 - **S-03: Zalogowany użytkownik może edytować treść istniejącej fiszki w kolekcji (zmiana pytania lub odpowiedzi) oraz usunąć wybraną fiszkę** — Archived 2026-07-07 → `context/archive/2026-07-07-collection-edit-delete/`. Lesson: —.
 - **F-03: (fundament) Tabela `flashcards` rozszerzona o pola harmonogramu powtórek (SRS): `due_date`, `easiness_factor`, `interval`, `repetitions`** — Archived 2026-07-08 → `context/archive/2026-07-08-srs-schema/`. Lesson: —.
 - **F-04: (fundament) Tabela `flashcards` zrefaktoryzowana ze schematu SM-2 (F-03) na schemat zgodny z biblioteką `ts-fsrs` (FSRS v6). Migracja SQL dodaje/zastępuje pola: `stability` (float), `difficulty` (float, 1–10), `state` (enum: New/Learning/Review/Relearning), `lapses` (int, domyślnie 0), `last_review` (timestamp, nullable). Pole `due_date` pozostaje (mapowane na `due` w `ts-fsrs`), `repetitions` pozostaje (mapowane na `reps`). Pole `easiness_factor` traci sens pod FSRS i jest usuwane/zastępowane przez `difficulty` + `stability`; `interval` zastępowane przez `scheduled_days` lub wyliczane z `stability`. Migracja zawiera wartości domyślne dla istniejących fiszek (nowe karty = stan „New" w FSRS). Gotowe do odczytu i zapisu przez S-04.** — Archived 2026-08-02 → `context/archive/2026-08-02-fsrs-schema-migration/`. Lesson: —.
+- **S-04: Sesja nauki z algorytmem SRS** — Archived 2026-08-02 → `context/archive/2026-08-02-study-session/`. Lesson: —.
 
 <!-- Wypełnia /10x-archive po ukończeniu każdego fragmentu. -->
