@@ -1,9 +1,4 @@
-export enum FsrsState {
-  New = "New",
-  Learning = "Learning",
-  Review = "Review",
-  Relearning = "Relearning",
-}
+export type FsrsState = "New" | "Learning" | "Review" | "Relearning";
 
 export interface Flashcard {
   id: string;
