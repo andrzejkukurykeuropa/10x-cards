@@ -108,8 +108,7 @@ Acknowledged on 2026-05-26: 6-tygodniowe MVP wymaga stałego zaangażowania po g
   > Sokrates: Rozważono ryzyko: użytkownik może chcieć powtórzyć wszystkie fiszki bez względu na harmonogram. Decyzja: dwa tryby sesji — „Do powtórki dziś" (domyślny, wg harmonogramu SRS) i „Wszystkie fiszki" (na żądanie).
 
 ### Vocabulary Generation
-- FR-013: Użytkownik może wybrać tryb generowania „słownikowy PL→IT": AI tworzy pary (pojedynczy wyraz PL, tłumaczenie IT) z wklejonego tekstu. Priority: must-have. Change: nowa
-  > Sokrates: Brak kontrargumentu; FR-013 pozostaje bez zmian.
+- FR-013: ~~Użytkownik może wybrać tryb generowania „słownikowy PL→IT": AI tworzy pary (pojedynczy wyraz PL, tłumaczenie IT) z wklejonego tekstu.~~ Priority: — Status: **zrezygnowano** (2026-08-04, decyzja użytkownika). Odpowiadający fragment mapy drogowej S-05 (`vocab-generation`) usunięty z `roadmap.md`.
 
 ## Business Logic
 

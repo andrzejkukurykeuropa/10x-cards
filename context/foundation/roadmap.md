@@ -38,7 +38,6 @@ Klin produktu — jedyna cecha, która po usunięciu sprawia, że 10xCards staje
 | S-02 | `ai-generation-flow` | wkleić tekst → zobaczyć propozycje AI → zaakceptować / edytować / odrzucić → zapisać do kolekcji | F-01, F-02 | US-01, FR-003, FR-004, FR-005 | done |
 | S-03 | `collection-edit-delete` | edytować i usuwać fiszki w kolekcji (nice-to-have) | S-02 | FR-007, FR-008 | done |
 | S-04 | `study-session` | otworzyć sesję nauki — widzieć pytanie fiszki, odsłonić odpowiedź, ocenić zapamiętanie wg skali FSRS (`ts-fsrs`); harmonogram SRS lub tryb „wszystkie fiszki" | S-01, F-04 | FR-010, FR-011, FR-012 | done |
-| S-05 | `vocab-generation` | wygenerować fiszki słownikowe PL→IT (pojedyncze słowo) z wklejonego tekstu | S-02 | FR-013 | todo |
 
 ## Strumienie
 
@@ -47,8 +46,8 @@ Pomoc nawigacyjna — grupuje elementy, które dzielą łańcuch wymagań wstęp
 | Strumień | Temat | Łańcuch | Uwaga |
 |---|---|---|---|
 | A | Fundament danych i kolekcja | `F-01` → `S-01` → `S-02` → `S-03` | Ścieżka danych; S-01 można budować, gdy F-02 jest jeszcze w toku. |
-| B | Integracja AI | `F-02` → `S-02` → `S-05` | Klin AI-first; S-05 rozszerza prompt generowania. |
-| C | Sesja nauki (SRS) | `F-01` → `F-03` → `F-04` → `S-04` | Niezależna od Strumienia B; można równolegle z S-05. F-04 to refaktor schematu SM-2 → FSRS wymagany przed S-04. |
+| B | Integracja AI | `F-02` → `S-02` | Klin AI-first. |
+| C | Sesja nauki (SRS) | `F-01` → `F-03` → `F-04` → `S-04` | Niezależna od Strumienia B. F-04 to refaktor schematu SM-2 → FSRS wymagany przed S-04. |
 
 ## Baza
 
@@ -142,7 +141,7 @@ Fundamenty poniżej zakładają, że są one obecne i NIE odbudowują ich.
 - **Odnośniki PRD:** FR-011, FR-012
 - **Odblokowania:** S-04
 - **Wymagania wstępne:** F-01
-- **Równolegle z:** S-05
+- **Równolegle z:** —
 - **Blokady:** —
 - **Niewiadome:**
   - Pytanie: Którą bibliotekę SRS (spaced repetition) wybrać jako implementację algorytmu, kompatybilną z TypeScript/Node.js i Cloudflare Workers edge runtime? Owner: developer. Block: **nie** — schemat kolumn jest niezależny od wyboru biblioteki/algorytmu; biblioteka może być wymieniona bez zmiany migracji.
@@ -158,7 +157,7 @@ Fundamenty poniżej zakładają, że są one obecne i NIE odbudowują ich.
 - **Odnośniki PRD:** FR-011, FR-012
 - **Odblokowania:** S-04
 - **Wymagania wstępne:** F-03
-- **Równolegle z:** S-05
+- **Równolegle z:** —
 - **Blokady:** —
 - **Niewiadome:**
   - Pytanie: Czy zachować kolumny SM-2 (`easiness_factor`, `interval`) jako legacy (soft-migration, bez usuwania) czy usunąć je od razu (hard cut)? Owner: developer. Block: **nie** — decyzja o czystości schematu, nie blokuje architektonicznie; można zacząć od hard cut, bo brak jeszcze produkcyjnych danych zależnych od SM-2 (S-04 jeszcze nie zaimplementowane).
@@ -173,25 +172,12 @@ Fundamenty poniżej zakładają, że są one obecne i NIE odbudowują ich.
 - **Change ID:** `study-session`
 - **Odnośniki PRD:** FR-010, FR-011, FR-012
 - **Wymagania wstępne:** S-01, F-04
-- **Równolegle z:** S-05
+- **Równolegle z:** —
 - **Blokady:** —
 - **Niewiadome:**
   - Pytanie: Którą bibliotekę SRS wybrać (patrz F-03)? Owner: developer. Block: **tak** — musi być wybrana przed implementacją S-04.
   - **Rozstrzygnięte:** `ts-fsrs` (FSRS v6) — patrz `context/changes/study-session/research.md`. Wymaga F-04 (migracja schematu) jako wymagania wstępnego.
   - Pytanie: Pusty stan „Do powtórki dziś" — pokazać datę kolejnej zaplanowanej fiszki? Owner: developer. Block: **nie** — to decyzja UX, nie blokuje architektonicznie.
-
----
-
-### S-05: Tryb generowania słownikowego PL→IT
-
-- **Status:** todo
-- **Wynik:** Zalogowany użytkownik może wybrać w generatorze tryb „słownikowy PL→IT" — AI generuje pary (pojedynczy wyraz po polsku, tłumaczenie na włoski) z wklejonego tekstu zamiast ogólnych par pytanie-odpowiedź.
-- **Change ID:** `vocab-generation`
-- **Odnośniki PRD:** FR-013
-- **Wymagania wstępne:** S-02
-- **Równolegle z:** F-03, S-04
-- **Blokady:** —
-- **Niewiadome:** —
 
 ## Otwarte pytania mapy drogowej
 
@@ -204,6 +190,7 @@ Fundamenty poniżej zakładają, że są one obecne i NIE odbudowują ich.
 - **Integracja z Duolingo / Anki** — poza zakresem. (PRD §Non-Goals)
 - **Aplikacja mobilna** — tylko web w v1. (PRD §Non-Goals)
 - **Ręczne tworzenie fiszek (FR-009)** — nice-to-have; AI-first focus, parkuj po ukończeniu S-02.
+- **Tryb generowania słownikowego PL→IT (S-05, `vocab-generation`, FR-013)** — zrezygnowano z tej funkcji; usunięto z mapy drogowej.
 
 ## Done
 
