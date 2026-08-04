@@ -38,6 +38,8 @@ Klin produktu — jedyna cecha, która po usunięciu sprawia, że 10xCards staje
 | S-02 | `ai-generation-flow` | wkleić tekst → zobaczyć propozycje AI → zaakceptować / edytować / odrzucić → zapisać do kolekcji | F-01, F-02 | US-01, FR-003, FR-004, FR-005 | done |
 | S-03 | `collection-edit-delete` | edytować i usuwać fiszki w kolekcji (nice-to-have) | S-02 | FR-007, FR-008 | done |
 | S-04 | `study-session` | otworzyć sesję nauki — widzieć pytanie fiszki, odsłonić odpowiedź, ocenić zapamiętanie wg skali FSRS (`ts-fsrs`); harmonogram SRS lub tryb „wszystkie fiszki" | S-01, F-04 | FR-010, FR-011, FR-012 | done |
+| S-05 | `ux-improvements` | zaakceptować wszystkie propozycje fiszek jednym kliknięciem, przerwać (zakończyć wcześniej) sesję nauki w dowolnym momencie oraz czytać tekst na białych przyciskach bez najeżdżania myszą (poprawki wizualne/UX z S-02–S-04) | S-02, S-03, S-04 | FR-004, FR-010 | draft |
+| S-06 | `account-deletion-retention` | mieć konto automatycznie usunięte (wraz ze wszystkimi fiszkami i postępami nauki SRS/FSRS) po 24 miesiącach nieaktywności, zgodnie z zasadą minimalizacji przechowywania danych (RODO art. 5 ust. 1 lit. e); może też samodzielnie usunąć konto w dowolnym momencie | F-01, F-04 | Access Control (nowe: RODO / storage limitation) | draft |
 
 ## Strumienie
 
@@ -48,6 +50,8 @@ Pomoc nawigacyjna — grupuje elementy, które dzielą łańcuch wymagań wstęp
 | A | Fundament danych i kolekcja | `F-01` → `S-01` → `S-02` → `S-03` | Ścieżka danych; S-01 można budować, gdy F-02 jest jeszcze w toku. |
 | B | Integracja AI | `F-02` → `S-02` | Klin AI-first. |
 | C | Sesja nauki (SRS) | `F-01` → `F-03` → `F-04` → `S-04` | Niezależna od Strumienia B. F-04 to refaktor schematu SM-2 → FSRS wymagany przed S-04. |
+| D | Poprawki UX | `S-02`, `S-03`, `S-04` → `S-05` | Poprawki wizualne/UX na bazie ukończonych fragmentów A i C; brak nowych fundamentów. |
+| E | Zgodność z RODO (retencja danych) | `F-01`, `F-04` → `S-06` | Niezależna od Strumienia D; wymaga jedynie istniejących tabel `flashcards` (F-01) i pól FSRS (F-04) do usunięcia danych nauki. |
 
 ## Baza
 
@@ -178,6 +182,38 @@ Fundamenty poniżej zakładają, że są one obecne i NIE odbudowują ich.
   - Pytanie: Którą bibliotekę SRS wybrać (patrz F-03)? Owner: developer. Block: **tak** — musi być wybrana przed implementacją S-04.
   - **Rozstrzygnięte:** `ts-fsrs` (FSRS v6) — patrz `context/changes/study-session/research.md`. Wymaga F-04 (migracja schematu) jako wymagania wstępnego.
   - Pytanie: Pusty stan „Do powtórki dziś" — pokazać datę kolejnej zaplanowanej fiszki? Owner: developer. Block: **nie** — to decyzja UX, nie blokuje architektonicznie.
+
+### S-05: Poprawki wizualne i UX
+
+- **Status:** draft
+- **Wynik:** Zalogowany użytkownik może: (1) zaakceptować wszystkie wygenerowane propozycje fiszek jednym kliknięciem („Zaakceptuj wszystkie") zamiast pojedynczo dla każdej propozycji; (2) przerwać sesję nauki w dowolnym momencie (przycisk/link „Zakończ sesję", z powrotem do dashboardu/kolekcji, bez wymogu przejścia przez wszystkie fiszki); (3) czytać tekst na wszystkich przyciskach z białym/jasnym tłem — kolor tekstu ma wystarczający kontrast w stanie domyślnym, nie tylko po najechaniu myszą (hover). Poprawki dotyczą przepływów wprowadzonych w S-02, S-03 i S-04.
+- **Change ID:** `ux-improvements`
+- **Odnośniki PRD:** FR-004 (przegląd i akceptacja propozycji AI), FR-010 (sesja nauki)
+- **Wymagania wstępne:** S-02 (lista propozycji do masowej akceptacji), S-03 (spójność wzorca przycisków w kolekcji), S-04 (sesja nauki do przerwania)
+- **Równolegle z:** —
+- **Blokady:** —
+- **Niewiadome:**
+  - Pytanie: Czy „Zaakceptuj wszystkie" akceptuje również propozycje już edytowane przez użytkownika, czy tylko te nietknięte? Owner: developer. Block: **nie** — domyślnie akceptuje wszystkie widoczne propozycje (w tym edytowane), można doprecyzować podczas implementacji.
+  - Pytanie: Czy przerwanie sesji nauki zapisuje ocenę dla fiszek już ocenionych w tej sesji, czy wymaga potwierdzenia „na pewno przerwać?" Owner: developer. Block: **nie** — decyzja UX; domyślnie oceny już udzielone są zapisywane, przerwanie nie cofa postępu.
+  - Pytanie: Czy poprawka kontrastu przycisków wymaga audytu wszystkich wariantów `Button` w `src/components/ui/` czy tylko wariantu „outline"/„ghost" używanego w zgłoszonych ekranach? Owner: developer. Block: **nie** — zakres można zawęzić podczas planowania (`/10x-plan`).
+
+---
+
+### S-06: Usuwanie konta i retencja danych (RODO)
+
+- **Status:** draft
+- **Wynik:** (1) Zalogowany użytkownik może samodzielnie zainicjować trwałe usunięcie własnego konta wraz ze wszystkimi powiązanymi danymi — fiszkami oraz polami postępu nauki SRS/FSRS (`stability`, `difficulty`, `state`, `lapses`, `last_review`, `due_date`, `repetitions`) — w dowolnym momencie, z ekranu ustawień konta. (2) System automatycznie usuwa konto i wszystkie powiązane dane po **24 miesiącach nieaktywności** (brak logowania), zgodnie z zasadą minimalizacji przechowywania danych (RODO art. 5 ust. 1 lit. e — „storage limitation"). Usunięcie jest nieodwracalne i obejmuje dane w tabeli `flashcards` oraz konto w Supabase Auth.
+- **Change ID:** `account-deletion-retention`
+- **Odnośniki PRD:** Access Control (rozszerzenie o wymóg zgodności z RODO — brak dotąd w PRD; do rozważenia dopisanie jako nowy FR przy następnej aktualizacji PRD)
+- **Wymagania wstępne:** F-01 (tabela `flashcards` do usunięcia), F-04 (pola FSRS objęte usunięciem)
+- **Równolegle z:** S-05 (niezależny strumień, brak współdzielonego kodu)
+- **Blokady:** —
+- **Niewiadome:**
+  - **Ustalone podczas researchu (exa/RODO):** RODO (art. 5 ust. 1 lit. e) nie narzuca sztywnego okresu przechowywania — wymaga jedynie, by administrator sam zdefiniował i uzasadnił okres retencji adekwatny do celu przetwarzania. Sugerowane przez użytkownika „30 dni nieaktywności" jest nietypowo krótkie i myli dwa różne terminy: (a) 30 dni to ustawowy termin na **realizację żądania usunięcia danych** na wniosek użytkownika (art. 12/17 RODO), nie próg nieaktywności konta; (b) dla **nieaktywnych kont** praktyka organów nadzorczych (np. decyzja CNIL ws. Discord, 2023) wskazuje typowo **2–3 lata** jako uzasadniony okres. Po konsultacji z użytkownikiem przyjęto **24 miesiące (2 lata)** nieaktywności jako próg dla automatycznego usunięcia.
+  - Pytanie: Czy przed automatycznym usunięciem po 24 miesiącach użytkownik powinien otrzymać e-mail z ostrzeżeniem (np. na 30 dni przed usunięciem) z możliwością zalogowania się, by przerwać proces? Owner: developer. Block: **nie** dla MVP, ale zalecane dobrą praktyką RODO (prawo do bycia poinformowanym) — do rozważenia w planie.
+  - Pytanie: Jak technicznie wykrywać „nieaktywność" — brak logowania (`last_sign_in_at` z Supabase Auth) czy brak jakiejkolwiek aktywności (w tym sesji nauki)? Owner: developer. Block: **nie** — decyzja implementacyjna, nie blokuje architektonicznie; prostszy wariant to `last_sign_in_at`.
+  - Pytanie: Mechanizm automatycznego usuwania — scheduled job (Cloudflare Cron Trigger) czy manualny/administracyjny proces w MVP? Owner: developer. Block: **tak** dla pełnej automatyzacji — wymaga wyboru mechanizmu przed implementacją; można rozpocząć od joba uruchamianego ręcznie/administracyjnie jako krok pośredni.
+  - Pytanie: Czy PRD wymaga formalnej aktualizacji o nowy FR (np. FR-014: „Użytkownik może usunąć konto") przed planowaniem tego fragmentu? Owner: developer. Block: **nie** — roadmapa może wyprzedzać PRD, ale zalecane dopisanie do PRD dla spójności dokumentacji.
 
 ## Otwarte pytania mapy drogowej
 
