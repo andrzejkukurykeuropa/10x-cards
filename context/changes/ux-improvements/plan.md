@@ -239,13 +239,13 @@ Brak zmian schematu danych ani migracji — wszystkie trzy poprawki dotyczą wy�
 
 #### Automatyczne
 
-- [x] 3.1 `npm run lint` przechodzi bez nowych błędów/ostrzeżeń
-- [x] 3.2 `npm run build` kończy się sukcesem
+- [x] 3.1 `npm run lint` przechodzi bez nowych błędów/ostrzeżeń — c7a726b
+- [x] 3.2 `npm run build` kończy się sukcesem — c7a726b
 
 #### Ręczne
 
-- [x] 3.3 „Zakończ sesję” przed oceną jakiejkolwiek karty pokazuje „Oceniono 0 z N”
-- [x] 3.4 „Anuluj” wraca do tej samej karty bez utraty stanu
-- [x] 3.5 Potwierdzenie po ocenieniu kilku kart przekierowuje do `/dashboard`
-- [x] 3.6 Oceny sprzed przerwania są trwałe (widoczne po powrocie do sesji)
-- [x] 3.7 Przycisk działa niezależnie od stanu `revealed`
+- [x] 3.3 „Zakończ sesję” przed oceną jakiejkolwiek karty pokazuje „Oceniono 0 z N” — c7a726b
+- [x] 3.4 „Anuluj” wraca do tej samej karty bez utraty stanu — c7a726b
+- [x] 3.5 Potwierdzenie po ocenieniu kilku kart przekierowuje do `/dashboard` — c7a726b
+- [x] 3.6 Oceny sprzed przerwania są trwałe (widoczne po powrocie do sesji) — c7a726b
+- [x] 3.7 Przycisk działa niezależnie od stanu `revealed` — c7a726b
