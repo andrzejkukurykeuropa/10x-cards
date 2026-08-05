@@ -428,30 +428,30 @@ do sekretów produkcyjnych Cloudflare Pages / GitHub Actions przed wdrożeniem o
 
 #### Automatyczne
 
-- [x] 1.1 Lint przechodzi
-- [x] 1.2 Build przechodzi
-- [x] 1.3 TypeScript rozpoznaje `SUPABASE_SERVICE_ROLE_KEY` bez błędów typów
+- [x] 1.1 Lint przechodzi — c0628b9
+- [x] 1.2 Build przechodzi — c0628b9
+- [x] 1.3 TypeScript rozpoznaje `SUPABASE_SERVICE_ROLE_KEY` bez błędów typów — c0628b9
 
 #### Ręczne
 
-- [x] 1.4 `createAdminClient()` zwraca `null` bez klucza skonfigurowanego
-- [x] 1.5 `createAdminClient().auth.admin.listUsers()` działa z lokalnym kluczem service_role
+- [x] 1.4 `createAdminClient()` zwraca `null` bez klucza skonfigurowanego — c0628b9
+- [x] 1.5 `createAdminClient().auth.admin.listUsers()` działa z lokalnym kluczem service_role — c0628b9
 
 ### Faza 2: Samodzielne usunięcie konta (must-have)
 
 #### Automatyczne
 
-- [ ] 2.1 Lint przechodzi
-- [ ] 2.2 Build przechodzi
-- [ ] 2.3 Endpoint zwraca 401 bez sesji
+- [x] 2.1 Lint przechodzi
+- [x] 2.2 Build przechodzi
+- [x] 2.3 Endpoint zwraca 401 bez sesji
 
 #### Ręczne
 
-- [ ] 2.4 `/settings` widoczne z sekcją "Usuń konto"
-- [ ] 2.5 Przycisk potwierdzenia nieaktywny bez wpisania "USUŃ"
-- [ ] 2.6 Konto i fiszki znikają po potwierdzeniu, użytkownik wylogowany i przekierowany
-- [ ] 2.7 Logowanie starymi danymi po usunięciu kończy się błędem
-- [ ] 2.8 Niezalogowany użytkownik przekierowany z `/settings` na `/auth/signin`
+- [x] 2.4 `/settings` widoczne z sekcją "Usuń konto"
+- [x] 2.5 Przycisk potwierdzenia nieaktywny bez wpisania "USUŃ"
+- [x] 2.6 Konto i fiszki znikają po potwierdzeniu, użytkownik wylogowany i przekierowany
+- [x] 2.7 Logowanie starymi danymi po usunięciu kończy się błędem
+- [x] 2.8 Niezalogowany użytkownik przekierowany z `/settings` na `/auth/signin`
 
 ### Faza 3: Wykrywanie i usuwanie nieaktywnych kont (nice-to-have)
 
