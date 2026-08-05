@@ -441,32 +441,32 @@ do sekretów produkcyjnych Cloudflare Pages / GitHub Actions przed wdrożeniem o
 
 #### Automatyczne
 
-- [x] 2.1 Lint przechodzi
-- [x] 2.2 Build przechodzi
-- [x] 2.3 Endpoint zwraca 401 bez sesji
+- [x] 2.1 Lint przechodzi — 1ecbd74
+- [x] 2.2 Build przechodzi — 1ecbd74
+- [x] 2.3 Endpoint zwraca 401 bez sesji — 1ecbd74
 
 #### Ręczne
 
-- [x] 2.4 `/settings` widoczne z sekcją "Usuń konto"
-- [x] 2.5 Przycisk potwierdzenia nieaktywny bez wpisania "USUŃ"
-- [x] 2.6 Konto i fiszki znikają po potwierdzeniu, użytkownik wylogowany i przekierowany
-- [x] 2.7 Logowanie starymi danymi po usunięciu kończy się błędem
-- [x] 2.8 Niezalogowany użytkownik przekierowany z `/settings` na `/auth/signin`
+- [x] 2.4 `/settings` widoczne z sekcją "Usuń konto" — 1ecbd74
+- [x] 2.5 Przycisk potwierdzenia nieaktywny bez wpisania "USUŃ" — 1ecbd74
+- [x] 2.6 Konto i fiszki znikają po potwierdzeniu, użytkownik wylogowany i przekierowany — 1ecbd74
+- [x] 2.7 Logowanie starymi danymi po usunięciu kończy się błędem — 1ecbd74
+- [x] 2.8 Niezalogowany użytkownik przekierowany z `/settings` na `/auth/signin` — 1ecbd74
 
 ### Faza 3: Wykrywanie i usuwanie nieaktywnych kont (nice-to-have)
 
 #### Automatyczne
 
-- [ ] 3.1 Lint przechodzi
-- [ ] 3.2 Build przechodzi
-- [ ] 3.3 Endpoint zwraca 401 bez poprawnego nagłówka Authorization
+- [x] 3.1 Lint przechodzi
+- [x] 3.2 Build przechodzi
+- [x] 3.3 Endpoint zwraca 401 bez poprawnego nagłówka Authorization
 
 #### Ręczne
 
-- [ ] 3.4 `dryRun=true` zwraca konto testowe bez faktycznego usunięcia
-- [ ] 3.5 `dryRun=false` faktycznie usuwa konto testowe i jego fiszki
-- [ ] 3.6 Konto aktywne nigdy nie pojawia się na liście `deleted`
-- [ ] 3.7 Endpoint kontynuuje mimo błędu pojedynczego konta
+- [x] 3.4 `dryRun=true` zwraca konto testowe bez faktycznego usunięcia
+- [x] 3.5 `dryRun=false` faktycznie usuwa konto testowe i jego fiszki
+- [x] 3.6 Konto aktywne nigdy nie pojawia się na liście `deleted`
+- [x] 3.7 Endpoint kontynuuje mimo błędu pojedynczego konta
 
 ### Faza 4: E-mail ostrzegawczy i harmonogram (nice-to-have, zależne od Fazy 3)
 
