@@ -300,14 +300,16 @@ export default function FlashcardGenerator({ onComplete }: FlashcardGeneratorPro
     if (current.status !== "reviewing") return;
     const pending = current.proposals.filter((p) => p.disposition === "pending");
 
-    const saves = pending.map((p) => {
-      const q = p.isEditing ? p.editQuestion : p.question;
-      const a = p.isEditing ? p.editAnswer : p.answer;
-      if (p.isEditing) {
-        updateProposalPatch(p.id, { isEditing: false });
-      }
-      return handleAccept(p.id, q, a);
-    });
+    const saves = pending
+      .filter((p) => !p.isEditing || (p.editQuestion.trim() && p.editAnswer.trim()))
+      .map((p) => {
+        const q = p.isEditing ? p.editQuestion : p.question;
+        const a = p.isEditing ? p.editAnswer : p.answer;
+        if (p.isEditing) {
+          updateProposalPatch(p.id, { isEditing: false });
+        }
+        return handleAccept(p.id, q, a);
+      });
 
     await Promise.allSettled(saves);
   }

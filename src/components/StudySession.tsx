@@ -241,7 +241,7 @@ export default function StudySession() {
         <p className="text-sm text-blue-100/60">
           Karta {state.index + 1} z {state.queue.length}
         </p>
-        <Button size="sm" variant="ghost" onClick={handleRequestExit}>
+        <Button size="sm" variant="ghost" onClick={handleRequestExit} disabled={state.submitting}>
           Zakończ sesję
         </Button>
       </div>
@@ -252,7 +252,7 @@ export default function StudySession() {
             Oceniono {reviewedCount} z {state.queue.length} fiszek. Na pewno zakończyć sesję?
           </p>
           <div className="flex justify-center gap-3">
-            <Button variant="destructive" onClick={handleConfirmExit}>
+            <Button variant="destructive" onClick={handleConfirmExit} disabled={state.submitting}>
               Zakończ
             </Button>
             <Button variant="outline" onClick={handleCancelExit}>
