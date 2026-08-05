@@ -209,15 +209,15 @@ Brak zmian schematu danych ani migracji — wszystkie trzy poprawki dotyczą wy�
 
 #### Automatyczne
 
-- [ ] 1.1 `npm run lint` przechodzi bez nowych błędów/ostrzeżeń
-- [ ] 1.2 `npm run build` kończy się sukcesem
+- [x] 1.1 `npm run lint` przechodzi bez nowych błędów/ostrzeżeń
+- [x] 1.2 `npm run build` kończy się sukcesem
 
 #### Ręczne
 
-- [ ] 1.3 Przyciski `outline` na `/study` czytelne w stanie domyślnym
-- [ ] 1.4 Przyciski `outline`/`ghost` na `/dashboard` (generator AI) czytelne w stanie domyślnym i po hover
-- [ ] 1.5 Przyciski `outline`/`ghost` w widoku kolekcji czytelne
-- [ ] 1.6 Brak regresji wizualnej tła/hover
+- [x] 1.3 Przyciski `outline` na `/study` czytelne w stanie domyślnym
+- [x] 1.4 Przyciski `outline`/`ghost` na `/dashboard` (generator AI) czytelne w stanie domyślnym i po hover
+- [x] 1.5 Przyciski `outline`/`ghost` w widoku kolekcji czytelne
+- [x] 1.6 Brak regresji wizualnej tła/hover
 
 ### Faza 2: „Zaakceptuj wszystkie” propozycje AI
 
