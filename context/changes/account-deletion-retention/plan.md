@@ -472,13 +472,13 @@ do sekretów produkcyjnych Cloudflare Pages / GitHub Actions przed wdrożeniem o
 
 #### Automatyczne
 
-- [x] 4.1 Lint przechodzi
-- [x] 4.2 Build przechodzi
-- [x] 4.3 `isInactiveForDeletion` i `isInWarningWindow` wzajemnie się wykluczają
+- [x] 4.1 Lint przechodzi — 7dba7f6
+- [x] 4.2 Build przechodzi — 7dba7f6
+- [x] 4.3 `isInactiveForDeletion` i `isInWarningWindow` wzajemnie się wykluczają — 7dba7f6
 
 #### Ręczne
 
-- [x] 4.4 Konto w oknie 23-24 miesięcy otrzymuje e-mail w lokalnym Inbucket z poprawną treścią
-- [x] 4.5 Zalogowanie się linkiem z e-maila usuwa konto z listy `warned` przy kolejnym uruchomieniu
-- [x] 4.6 Ręczne uruchomienie `workflow_dispatch` kończy się sukcesem
-- [x] 4.7 Harmonogram `cron` widoczny i poprawny w zakładce Actions
+- [x] 4.4 Konto w oknie 23-24 miesięcy otrzymuje e-mail w lokalnym Inbucket z poprawną treścią — 7dba7f6
+- [x] 4.5 Zalogowanie się linkiem z e-maila usuwa konto z listy `warned` przy kolejnym uruchomieniu — 7dba7f6
+- [x] 4.6 Ręczne uruchomienie `workflow_dispatch` kończy się sukcesem — 7dba7f6
+- [x] 4.7 Harmonogram `cron` widoczny i poprawny w zakładce Actions — 7dba7f6
