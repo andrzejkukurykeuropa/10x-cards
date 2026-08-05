@@ -428,14 +428,14 @@ do sekretów produkcyjnych Cloudflare Pages / GitHub Actions przed wdrożeniem o
 
 #### Automatyczne
 
-- [ ] 1.1 Lint przechodzi
-- [ ] 1.2 Build przechodzi
-- [ ] 1.3 TypeScript rozpoznaje `SUPABASE_SERVICE_ROLE_KEY` bez błędów typów
+- [x] 1.1 Lint przechodzi
+- [x] 1.2 Build przechodzi
+- [x] 1.3 TypeScript rozpoznaje `SUPABASE_SERVICE_ROLE_KEY` bez błędów typów
 
 #### Ręczne
 
-- [ ] 1.4 `createAdminClient()` zwraca `null` bez klucza skonfigurowanego
-- [ ] 1.5 `createAdminClient().auth.admin.listUsers()` działa z lokalnym kluczem service_role
+- [x] 1.4 `createAdminClient()` zwraca `null` bez klucza skonfigurowanego
+- [x] 1.5 `createAdminClient().auth.admin.listUsers()` działa z lokalnym kluczem service_role
 
 ### Faza 2: Samodzielne usunięcie konta (must-have)
 
