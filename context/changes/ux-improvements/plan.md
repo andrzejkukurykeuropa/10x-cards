@@ -223,29 +223,29 @@ Brak zmian schematu danych ani migracji — wszystkie trzy poprawki dotyczą wy�
 
 #### Automatyczne
 
-- [x] 2.1 `npm run lint` przechodzi bez nowych błędów/ostrzeżeń
-- [x] 2.2 `npm run build` kończy się sukcesem
-- [x] 2.3 Brak błędów TypeScript
+- [x] 2.1 `npm run lint` przechodzi bez nowych błędów/ostrzeżeń — 38f478f
+- [x] 2.2 `npm run build` kończy się sukcesem — 38f478f
+- [x] 2.3 Brak błędów TypeScript — 38f478f
 
 #### Ręczne
 
-- [x] 2.4 „Zaakceptuj wszystkie” zapisuje wszystkie propozycje pending i odświeża kolekcję
-- [x] 2.5 Edytowana (niezapisana) propozycja zapisuje się z edytowaną treścią
-- [x] 2.6 Odrzucona propozycja nie jest ponownie zapisywana
-- [x] 2.7 Częściowy błąd zapisu: pozostałe propozycje zapisują się poprawnie, błędna pokazuje „Spróbuj ponownie”
-- [x] 2.8 Przycisk wyłączony, gdy brak propozycji `pending`
+- [x] 2.4 „Zaakceptuj wszystkie” zapisuje wszystkie propozycje pending i odświeża kolekcję — 38f478f
+- [x] 2.5 Edytowana (niezapisana) propozycja zapisuje się z edytowaną treścią — 38f478f
+- [x] 2.6 Odrzucona propozycja nie jest ponownie zapisywana — 38f478f
+- [x] 2.7 Częściowy błąd zapisu: pozostałe propozycje zapisują się poprawnie, błędna pokazuje „Spróbuj ponownie” — 38f478f
+- [x] 2.8 Przycisk wyłączony, gdy brak propozycji `pending` — 38f478f
 
 ### Faza 3: Przerwanie sesji nauki
 
 #### Automatyczne
 
-- [ ] 3.1 `npm run lint` przechodzi bez nowych błędów/ostrzeżeń
-- [ ] 3.2 `npm run build` kończy się sukcesem
+- [x] 3.1 `npm run lint` przechodzi bez nowych błędów/ostrzeżeń
+- [x] 3.2 `npm run build` kończy się sukcesem
 
 #### Ręczne
 
-- [ ] 3.3 „Zakończ sesję” przed oceną jakiejkolwiek karty pokazuje „Oceniono 0 z N”
-- [ ] 3.4 „Anuluj” wraca do tej samej karty bez utraty stanu
-- [ ] 3.5 Potwierdzenie po ocenieniu kilku kart przekierowuje do `/dashboard`
-- [ ] 3.6 Oceny sprzed przerwania są trwałe (widoczne po powrocie do sesji)
-- [ ] 3.7 Przycisk działa niezależnie od stanu `revealed`
+- [x] 3.3 „Zakończ sesję” przed oceną jakiejkolwiek karty pokazuje „Oceniono 0 z N”
+- [x] 3.4 „Anuluj” wraca do tej samej karty bez utraty stanu
+- [x] 3.5 Potwierdzenie po ocenieniu kilku kart przekierowuje do `/dashboard`
+- [x] 3.6 Oceny sprzed przerwania są trwałe (widoczne po powrocie do sesji)
+- [x] 3.7 Przycisk działa niezależnie od stanu `revealed`
