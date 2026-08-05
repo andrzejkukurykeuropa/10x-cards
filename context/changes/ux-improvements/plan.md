@@ -209,31 +209,31 @@ Brak zmian schematu danych ani migracji — wszystkie trzy poprawki dotyczą wy�
 
 #### Automatyczne
 
-- [x] 1.1 `npm run lint` przechodzi bez nowych błędów/ostrzeżeń
-- [x] 1.2 `npm run build` kończy się sukcesem
+- [x] 1.1 `npm run lint` przechodzi bez nowych błędów/ostrzeżeń — dc62988
+- [x] 1.2 `npm run build` kończy się sukcesem — dc62988
 
 #### Ręczne
 
-- [x] 1.3 Przyciski `outline` na `/study` czytelne w stanie domyślnym
-- [x] 1.4 Przyciski `outline`/`ghost` na `/dashboard` (generator AI) czytelne w stanie domyślnym i po hover
-- [x] 1.5 Przyciski `outline`/`ghost` w widoku kolekcji czytelne
-- [x] 1.6 Brak regresji wizualnej tła/hover
+- [x] 1.3 Przyciski `outline` na `/study` czytelne w stanie domyślnym — dc62988
+- [x] 1.4 Przyciski `outline`/`ghost` na `/dashboard` (generator AI) czytelne w stanie domyślnym i po hover — dc62988
+- [x] 1.5 Przyciski `outline`/`ghost` w widoku kolekcji czytelne — dc62988
+- [x] 1.6 Brak regresji wizualnej tła/hover — dc62988
 
 ### Faza 2: „Zaakceptuj wszystkie” propozycje AI
 
 #### Automatyczne
 
-- [ ] 2.1 `npm run lint` przechodzi bez nowych błędów/ostrzeżeń
-- [ ] 2.2 `npm run build` kończy się sukcesem
-- [ ] 2.3 Brak błędów TypeScript
+- [x] 2.1 `npm run lint` przechodzi bez nowych błędów/ostrzeżeń
+- [x] 2.2 `npm run build` kończy się sukcesem
+- [x] 2.3 Brak błędów TypeScript
 
 #### Ręczne
 
-- [ ] 2.4 „Zaakceptuj wszystkie” zapisuje wszystkie propozycje pending i odświeża kolekcję
-- [ ] 2.5 Edytowana (niezapisana) propozycja zapisuje się z edytowaną treścią
-- [ ] 2.6 Odrzucona propozycja nie jest ponownie zapisywana
-- [ ] 2.7 Częściowy błąd zapisu: pozostałe propozycje zapisują się poprawnie, błędna pokazuje „Spróbuj ponownie”
-- [ ] 2.8 Przycisk wyłączony, gdy brak propozycji `pending`
+- [x] 2.4 „Zaakceptuj wszystkie” zapisuje wszystkie propozycje pending i odświeża kolekcję
+- [x] 2.5 Edytowana (niezapisana) propozycja zapisuje się z edytowaną treścią
+- [x] 2.6 Odrzucona propozycja nie jest ponownie zapisywana
+- [x] 2.7 Częściowy błąd zapisu: pozostałe propozycje zapisują się poprawnie, błędna pokazuje „Spróbuj ponownie”
+- [x] 2.8 Przycisk wyłączony, gdy brak propozycji `pending`
 
 ### Faza 3: Przerwanie sesji nauki
 
