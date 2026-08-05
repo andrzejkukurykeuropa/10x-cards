@@ -1,0 +1,20 @@
+name: Cleanup Inactive Accounts
+
+# Daily scheduled call to the production cleanup endpoint (GDPR storage-limitation job,
+# see context/changes/account-deletion-retention). Also runnable manually for testing.
+
+on:
+  schedule:
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call cleanup-inactive-accounts endpoint
+        run: |
+          curl --fail --show-error \
+            -X POST \
+            -H "Authorization: Bearer ${{ secrets.CLEANUP_ENDPOINT_SECRET }}" \
+            "${{ secrets.PRODUCTION_URL }}/api/admin/cleanup-inactive-accounts"

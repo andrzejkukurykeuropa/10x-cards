@@ -457,28 +457,28 @@ do sekretów produkcyjnych Cloudflare Pages / GitHub Actions przed wdrożeniem o
 
 #### Automatyczne
 
-- [x] 3.1 Lint przechodzi
-- [x] 3.2 Build przechodzi
-- [x] 3.3 Endpoint zwraca 401 bez poprawnego nagłówka Authorization
+- [x] 3.1 Lint przechodzi — 797d778
+- [x] 3.2 Build przechodzi — 797d778
+- [x] 3.3 Endpoint zwraca 401 bez poprawnego nagłówka Authorization — 797d778
 
 #### Ręczne
 
-- [x] 3.4 `dryRun=true` zwraca konto testowe bez faktycznego usunięcia
-- [x] 3.5 `dryRun=false` faktycznie usuwa konto testowe i jego fiszki
-- [x] 3.6 Konto aktywne nigdy nie pojawia się na liście `deleted`
-- [x] 3.7 Endpoint kontynuuje mimo błędu pojedynczego konta
+- [x] 3.4 `dryRun=true` zwraca konto testowe bez faktycznego usunięcia — 797d778
+- [x] 3.5 `dryRun=false` faktycznie usuwa konto testowe i jego fiszki — 797d778
+- [x] 3.6 Konto aktywne nigdy nie pojawia się na liście `deleted` — 797d778
+- [x] 3.7 Endpoint kontynuuje mimo błędu pojedynczego konta — 797d778
 
 ### Faza 4: E-mail ostrzegawczy i harmonogram (nice-to-have, zależne od Fazy 3)
 
 #### Automatyczne
 
-- [ ] 4.1 Lint przechodzi
-- [ ] 4.2 Build przechodzi
-- [ ] 4.3 `isInactiveForDeletion` i `isInWarningWindow` wzajemnie się wykluczają
+- [x] 4.1 Lint przechodzi
+- [x] 4.2 Build przechodzi
+- [x] 4.3 `isInactiveForDeletion` i `isInWarningWindow` wzajemnie się wykluczają
 
 #### Ręczne
 
-- [ ] 4.4 Konto w oknie 23-24 miesięcy otrzymuje e-mail w lokalnym Inbucket z poprawną treścią
-- [ ] 4.5 Zalogowanie się linkiem z e-maila usuwa konto z listy `warned` przy kolejnym uruchomieniu
-- [ ] 4.6 Ręczne uruchomienie `workflow_dispatch` kończy się sukcesem
-- [ ] 4.7 Harmonogram `cron` widoczny i poprawny w zakładce Actions
+- [x] 4.4 Konto w oknie 23-24 miesięcy otrzymuje e-mail w lokalnym Inbucket z poprawną treścią
+- [x] 4.5 Zalogowanie się linkiem z e-maila usuwa konto z listy `warned` przy kolejnym uruchomieniu
+- [x] 4.6 Ręczne uruchomienie `workflow_dispatch` kończy się sukcesem
+- [x] 4.7 Harmonogram `cron` widoczny i poprawny w zakładce Actions
