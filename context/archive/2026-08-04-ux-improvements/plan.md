@@ -209,43 +209,43 @@ Brak zmian schematu danych ani migracji — wszystkie trzy poprawki dotyczą wy�
 
 #### Automatyczne
 
-- [ ] 1.1 `npm run lint` przechodzi bez nowych błędów/ostrzeżeń
-- [ ] 1.2 `npm run build` kończy się sukcesem
+- [x] 1.1 `npm run lint` przechodzi bez nowych błędów/ostrzeżeń — dc62988
+- [x] 1.2 `npm run build` kończy się sukcesem — dc62988
 
 #### Ręczne
 
-- [ ] 1.3 Przyciski `outline` na `/study` czytelne w stanie domyślnym
-- [ ] 1.4 Przyciski `outline`/`ghost` na `/dashboard` (generator AI) czytelne w stanie domyślnym i po hover
-- [ ] 1.5 Przyciski `outline`/`ghost` w widoku kolekcji czytelne
-- [ ] 1.6 Brak regresji wizualnej tła/hover
+- [x] 1.3 Przyciski `outline` na `/study` czytelne w stanie domyślnym — dc62988
+- [x] 1.4 Przyciski `outline`/`ghost` na `/dashboard` (generator AI) czytelne w stanie domyślnym i po hover — dc62988
+- [x] 1.5 Przyciski `outline`/`ghost` w widoku kolekcji czytelne — dc62988
+- [x] 1.6 Brak regresji wizualnej tła/hover — dc62988
 
 ### Faza 2: „Zaakceptuj wszystkie” propozycje AI
 
 #### Automatyczne
 
-- [ ] 2.1 `npm run lint` przechodzi bez nowych błędów/ostrzeżeń
-- [ ] 2.2 `npm run build` kończy się sukcesem
-- [ ] 2.3 Brak błędów TypeScript
+- [x] 2.1 `npm run lint` przechodzi bez nowych błędów/ostrzeżeń — 38f478f
+- [x] 2.2 `npm run build` kończy się sukcesem — 38f478f
+- [x] 2.3 Brak błędów TypeScript — 38f478f
 
 #### Ręczne
 
-- [ ] 2.4 „Zaakceptuj wszystkie” zapisuje wszystkie propozycje pending i odświeża kolekcję
-- [ ] 2.5 Edytowana (niezapisana) propozycja zapisuje się z edytowaną treścią
-- [ ] 2.6 Odrzucona propozycja nie jest ponownie zapisywana
-- [ ] 2.7 Częściowy błąd zapisu: pozostałe propozycje zapisują się poprawnie, błędna pokazuje „Spróbuj ponownie”
-- [ ] 2.8 Przycisk wyłączony, gdy brak propozycji `pending`
+- [x] 2.4 „Zaakceptuj wszystkie” zapisuje wszystkie propozycje pending i odświeża kolekcję — 38f478f
+- [x] 2.5 Edytowana (niezapisana) propozycja zapisuje się z edytowaną treścią — 38f478f
+- [x] 2.6 Odrzucona propozycja nie jest ponownie zapisywana — 38f478f
+- [x] 2.7 Częściowy błąd zapisu: pozostałe propozycje zapisują się poprawnie, błędna pokazuje „Spróbuj ponownie” — 38f478f
+- [x] 2.8 Przycisk wyłączony, gdy brak propozycji `pending` — 38f478f
 
 ### Faza 3: Przerwanie sesji nauki
 
 #### Automatyczne
 
-- [ ] 3.1 `npm run lint` przechodzi bez nowych błędów/ostrzeżeń
-- [ ] 3.2 `npm run build` kończy się sukcesem
+- [x] 3.1 `npm run lint` przechodzi bez nowych błędów/ostrzeżeń — c7a726b
+- [x] 3.2 `npm run build` kończy się sukcesem — c7a726b
 
 #### Ręczne
 
-- [ ] 3.3 „Zakończ sesję” przed oceną jakiejkolwiek karty pokazuje „Oceniono 0 z N”
-- [ ] 3.4 „Anuluj” wraca do tej samej karty bez utraty stanu
-- [ ] 3.5 Potwierdzenie po ocenieniu kilku kart przekierowuje do `/dashboard`
-- [ ] 3.6 Oceny sprzed przerwania są trwałe (widoczne po powrocie do sesji)
-- [ ] 3.7 Przycisk działa niezależnie od stanu `revealed`
+- [x] 3.3 „Zakończ sesję” przed oceną jakiejkolwiek karty pokazuje „Oceniono 0 z N” — c7a726b
+- [x] 3.4 „Anuluj” wraca do tej samej karty bez utraty stanu — c7a726b
+- [x] 3.5 Potwierdzenie po ocenieniu kilku kart przekierowuje do `/dashboard` — c7a726b
+- [x] 3.6 Oceny sprzed przerwania są trwałe (widoczne po powrocie do sesji) — c7a726b
+- [x] 3.7 Przycisk działa niezależnie od stanu `revealed` — c7a726b
