@@ -428,57 +428,57 @@ do sekretów produkcyjnych Cloudflare Pages / GitHub Actions przed wdrożeniem o
 
 #### Automatyczne
 
-- [ ] 1.1 Lint przechodzi
-- [ ] 1.2 Build przechodzi
-- [ ] 1.3 TypeScript rozpoznaje `SUPABASE_SERVICE_ROLE_KEY` bez błędów typów
+- [x] 1.1 Lint przechodzi — c0628b9
+- [x] 1.2 Build przechodzi — c0628b9
+- [x] 1.3 TypeScript rozpoznaje `SUPABASE_SERVICE_ROLE_KEY` bez błędów typów — c0628b9
 
 #### Ręczne
 
-- [ ] 1.4 `createAdminClient()` zwraca `null` bez klucza skonfigurowanego
-- [ ] 1.5 `createAdminClient().auth.admin.listUsers()` działa z lokalnym kluczem service_role
+- [x] 1.4 `createAdminClient()` zwraca `null` bez klucza skonfigurowanego — c0628b9
+- [x] 1.5 `createAdminClient().auth.admin.listUsers()` działa z lokalnym kluczem service_role — c0628b9
 
 ### Faza 2: Samodzielne usunięcie konta (must-have)
 
 #### Automatyczne
 
-- [ ] 2.1 Lint przechodzi
-- [ ] 2.2 Build przechodzi
-- [ ] 2.3 Endpoint zwraca 401 bez sesji
+- [x] 2.1 Lint przechodzi — 1ecbd74
+- [x] 2.2 Build przechodzi — 1ecbd74
+- [x] 2.3 Endpoint zwraca 401 bez sesji — 1ecbd74
 
 #### Ręczne
 
-- [ ] 2.4 `/settings` widoczne z sekcją "Usuń konto"
-- [ ] 2.5 Przycisk potwierdzenia nieaktywny bez wpisania "USUŃ"
-- [ ] 2.6 Konto i fiszki znikają po potwierdzeniu, użytkownik wylogowany i przekierowany
-- [ ] 2.7 Logowanie starymi danymi po usunięciu kończy się błędem
-- [ ] 2.8 Niezalogowany użytkownik przekierowany z `/settings` na `/auth/signin`
+- [x] 2.4 `/settings` widoczne z sekcją "Usuń konto" — 1ecbd74
+- [x] 2.5 Przycisk potwierdzenia nieaktywny bez wpisania "USUŃ" — 1ecbd74
+- [x] 2.6 Konto i fiszki znikają po potwierdzeniu, użytkownik wylogowany i przekierowany — 1ecbd74
+- [x] 2.7 Logowanie starymi danymi po usunięciu kończy się błędem — 1ecbd74
+- [x] 2.8 Niezalogowany użytkownik przekierowany z `/settings` na `/auth/signin` — 1ecbd74
 
 ### Faza 3: Wykrywanie i usuwanie nieaktywnych kont (nice-to-have)
 
 #### Automatyczne
 
-- [ ] 3.1 Lint przechodzi
-- [ ] 3.2 Build przechodzi
-- [ ] 3.3 Endpoint zwraca 401 bez poprawnego nagłówka Authorization
+- [x] 3.1 Lint przechodzi — 797d778
+- [x] 3.2 Build przechodzi — 797d778
+- [x] 3.3 Endpoint zwraca 401 bez poprawnego nagłówka Authorization — 797d778
 
 #### Ręczne
 
-- [ ] 3.4 `dryRun=true` zwraca konto testowe bez faktycznego usunięcia
-- [ ] 3.5 `dryRun=false` faktycznie usuwa konto testowe i jego fiszki
-- [ ] 3.6 Konto aktywne nigdy nie pojawia się na liście `deleted`
-- [ ] 3.7 Endpoint kontynuuje mimo błędu pojedynczego konta
+- [x] 3.4 `dryRun=true` zwraca konto testowe bez faktycznego usunięcia — 797d778
+- [x] 3.5 `dryRun=false` faktycznie usuwa konto testowe i jego fiszki — 797d778
+- [x] 3.6 Konto aktywne nigdy nie pojawia się na liście `deleted` — 797d778
+- [x] 3.7 Endpoint kontynuuje mimo błędu pojedynczego konta — 797d778
 
 ### Faza 4: E-mail ostrzegawczy i harmonogram (nice-to-have, zależne od Fazy 3)
 
 #### Automatyczne
 
-- [ ] 4.1 Lint przechodzi
-- [ ] 4.2 Build przechodzi
-- [ ] 4.3 `isInactiveForDeletion` i `isInWarningWindow` wzajemnie się wykluczają
+- [x] 4.1 Lint przechodzi — 7dba7f6
+- [x] 4.2 Build przechodzi — 7dba7f6
+- [x] 4.3 `isInactiveForDeletion` i `isInWarningWindow` wzajemnie się wykluczają — 7dba7f6
 
 #### Ręczne
 
-- [ ] 4.4 Konto w oknie 23-24 miesięcy otrzymuje e-mail w lokalnym Inbucket z poprawną treścią
-- [ ] 4.5 Zalogowanie się linkiem z e-maila usuwa konto z listy `warned` przy kolejnym uruchomieniu
-- [ ] 4.6 Ręczne uruchomienie `workflow_dispatch` kończy się sukcesem
-- [ ] 4.7 Harmonogram `cron` widoczny i poprawny w zakładce Actions
+- [x] 4.4 Konto w oknie 23-24 miesięcy otrzymuje e-mail w lokalnym Inbucket z poprawną treścią — 7dba7f6
+- [x] 4.5 Zalogowanie się linkiem z e-maila usuwa konto z listy `warned` przy kolejnym uruchomieniu — 7dba7f6
+- [x] 4.6 Ręczne uruchomienie `workflow_dispatch` kończy się sukcesem — 7dba7f6
+- [x] 4.7 Harmonogram `cron` widoczny i poprawny w zakładce Actions — 7dba7f6

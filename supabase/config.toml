@@ -231,6 +231,14 @@ otp_expiry = 3600
 # subject = "You have been invited"
 # content_path = "./supabase/templates/invite.html"
 
+# Custom Magic Link template — reused for account-retention warning e-mails sent by
+# /api/admin/cleanup-inactive-accounts (see context/changes/account-deletion-retention).
+# NOTE: this template is shared with any future "regular" magic-link sign-in flow; if one
+# is added, the content below will need to distinguish between the two contexts.
+[auth.email.template.magic_link]
+subject = "Twoje konto 10xCards zostanie usunięte za 30 dni"
+content_path = "./supabase/templates/magic_link_retention_warning.html"
+
 # Uncomment to customize notification email template
 # [auth.email.notification.password_changed]
 # enabled = true

@@ -21,6 +21,8 @@ export default defineConfig({
     schema: {
       SUPABASE_URL: envField.string({ context: "server", access: "secret", optional: true }),
       SUPABASE_KEY: envField.string({ context: "server", access: "secret", optional: true }),
+      SUPABASE_SERVICE_ROLE_KEY: envField.string({ context: "server", access: "secret", optional: true }),
+      CLEANUP_ENDPOINT_SECRET: envField.string({ context: "server", access: "secret", optional: true }),
       OPENAI_API_KEY: envField.string({ context: "server", access: "secret", optional: true }),
       GITHUB_TOKEN: envField.string({ context: "server", access: "secret", optional: true }),
       GEMINI_API_KEY: envField.string({ context: "server", access: "secret", optional: true }),
