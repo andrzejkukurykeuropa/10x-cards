@@ -40,7 +40,7 @@ Klin produktu — jedyna cecha, która po usunięciu sprawia, że 10xCards staje
 | S-04 | `study-session` | otworzyć sesję nauki — widzieć pytanie fiszki, odsłonić odpowiedź, ocenić zapamiętanie wg skali FSRS (`ts-fsrs`); harmonogram SRS lub tryb „wszystkie fiszki" | S-01, F-04 | FR-010, FR-011, FR-012 | done |
 | S-05 | `ux-improvements` | zaakceptować wszystkie propozycje fiszek jednym kliknięciem, przerwać (zakończyć wcześniej) sesję nauki w dowolnym momencie oraz czytać tekst na białych przyciskach bez najeżdżania myszą (poprawki wizualne/UX z S-02–S-04) | S-02, S-03, S-04 | FR-004, FR-010 | done |
 | S-06 | `account-deletion-retention` | mieć konto automatycznie usunięte (wraz ze wszystkimi fiszkami i postępami nauki SRS/FSRS) po 24 miesiącach nieaktywności, zgodnie z zasadą minimalizacji przechowywania danych (RODO art. 5 ust. 1 lit. e); może też samodzielnie usunąć konto w dowolnym momencie | F-01, F-04 | Access Control (nowe: RODO / storage limitation) | done |
-| S-07 | `ui-improvements` | łatwo przejść z dowolnego ekranu do ustawień konta (widoczny przycisk/link do `/settings`) oraz zobaczyć prostą, dedykowaną stronę tytułową zamiast domyślnego szablonu Astro na `/` | S-01 | — | pending |
+| S-07 | `ui-improvements` | łatwo przejść z dowolnego ekranu do ustawień konta (widoczny przycisk/link do `/settings`) oraz zobaczyć prostą, dedykowaną stronę tytułową zamiast domyślnego szablonu Astro na `/` | S-01 | — | done |
 
 ## Strumienie
 
@@ -217,7 +217,7 @@ Fundamenty poniżej zakładają, że są one obecne i NIE odbudowują ich.
 
 ### S-07: Poprawki UI
 
-- **Status:** pending
+- **Status:** done
 - **Wynik:** (1) Zalogowany użytkownik ma łatwo dostępny, widoczny przycisk/link nawigacyjny prowadzący do strony `/settings` (np. w dashboardzie / głównym layoucie), zamiast konieczności ręcznego wpisywania adresu. (2) Strona główna (`/`) przestaje pokazywać domyślny szablon powitalny Astro (`src/components/Welcome.astro`) i zamiast tego wyświetla bardzo prostą, dedykowaną stronę tytułową 10xCards (nazwa produktu, krótki opis/tagline, link do logowania/rejestracji lub dashboardu).
 - **Change ID:** `ui-improvements`
 - **Odnośniki PRD:** —
@@ -254,5 +254,6 @@ Fundamenty poniżej zakładają, że są one obecne i NIE odbudowują ich.
 - **S-04: Sesja nauki z algorytmem SRS** — Archived 2026-08-02 → `context/archive/2026-08-02-study-session/`. Lesson: —.
 - **S-05: Zalogowany użytkownik może: (1) zaakceptować wszystkie wygenerowane propozycje fiszek jednym kliknięciem („Zaakceptuj wszystkie") zamiast pojedynczo dla każdej propozycji; (2) przerwać sesję nauki w dowolnym momencie (przycisk/link „Zakończ sesję", z powrotem do dashboardu/kolekcji, bez wymogu przejścia przez wszystkie fiszki); (3) czytać tekst na wszystkich przyciskach z białym/jasnym tłem — kolor tekstu ma wystarczający kontrast w stanie domyślnym, nie tylko po najechaniu myszą (hover). Poprawki dotyczą przepływów wprowadzonych w S-02, S-03 i S-04.** — Zarchiwizowano 2026-08-05 → `context/archive/2026-08-04-ux-improvements/`. Lesson: —.
 - **S-06: Zalogowany użytkownik może samodzielnie zainicjować trwałe usunięcie własnego konta wraz ze wszystkimi powiązanymi danymi w dowolnym momencie; system automatycznie usuwa konto i wszystkie powiązane dane po 24 miesiącach nieaktywności, zgodnie z zasadą minimalizacji przechowywania danych (RODO art. 5 ust. 1 lit. e)** — Archived 2026-08-08 → `context/archive/2026-08-04-account-deletion-retention/`. Lesson: —.
+- **S-07: łatwo przejść z dowolnego ekranu do ustawień konta (widoczny przycisk/link do `/settings`) oraz zobaczyć prostą, dedykowaną stronę tytułową zamiast domyślnego szablonu Astro na `/`** — Zarchiwizowano 2026-08-08 → `context/archive/2026-08-08-ui-improvements/`. Lesson: —.
 
 <!-- Wypełnia /10x-archive po ukończeniu każdego fragmentu. -->
