@@ -203,25 +203,25 @@ Zastąpić zawartość `Welcome.astro` (renderowaną na `/`) prostą, dedykowan�
 
 #### Automatyczne
 
-- [x] 2.1 Lint przechodzi: `npm run lint`
-- [x] 2.2 Build przechodzi: `npm run build`
+- [x] 2.1 Lint przechodzi: `npm run lint` — 2fc64bc
+- [x] 2.2 Build przechodzi: `npm run build` — 2fc64bc
 
 #### Ręczne
 
-- [ ] 2.3 Topbar z linkiem „Ustawienia” widoczny na `/dashboard`, `/study` i `/settings`
-- [ ] 2.4 Brak zduplikowanego przycisku „Sign out” na dashboardzie — wylogowanie działa wyłącznie przez Topbar
-- [ ] 2.5 Wylogowanie z dowolnej z tych stron działa poprawnie
+- [x] 2.3 Topbar z linkiem „Ustawienia” widoczny na `/dashboard`, `/study` i `/settings`
+- [x] 2.4 Brak zduplikowanego przycisku „Sign out” na dashboardzie — wylogowanie działa wyłącznie przez Topbar
+- [x] 2.5 Wylogowanie z dowolnej z tych stron działa poprawnie
 
 ### Faza 3: Nowa strona tytułowa 10xCards
 
 #### Automatyczne
 
-- [ ] 3.1 Lint przechodzi: `npm run lint`
-- [ ] 3.2 Build przechodzi: `npm run build`
+- [x] 3.1 Lint przechodzi: `npm run lint`
+- [x] 3.2 Build przechodzi: `npm run build`
 
 #### Ręczne
 
-- [ ] 3.3 `/` wyświetla nazwę „10xCards”, tagline i CTA Sign in/Sign up dla gościa
-- [ ] 3.4 Po zalogowaniu `/` wyświetla link do dashboardu zamiast Sign in/Sign up
-- [ ] 3.5 Brak orbów/gwiazd i kart funkcji startera na stronie
-- [ ] 3.6 Tytuł karty przeglądarki pokazuje „10xCards”
+- [x] 3.3 `/` wyświetla nazwę „10xCards”, tagline i CTA Sign in/Sign up dla gościa
+- [x] 3.4 Po zalogowaniu `/` wyświetla link do dashboardu zamiast Sign in/Sign up
+- [x] 3.5 Brak orbów/gwiazd i kart funkcji startera na stronie
+- [x] 3.6 Tytuł karty przeglądarki pokazuje „10xCards”

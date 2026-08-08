@@ -40,6 +40,7 @@ Klin produktu — jedyna cecha, która po usunięciu sprawia, że 10xCards staje
 | S-04 | `study-session` | otworzyć sesję nauki — widzieć pytanie fiszki, odsłonić odpowiedź, ocenić zapamiętanie wg skali FSRS (`ts-fsrs`); harmonogram SRS lub tryb „wszystkie fiszki" | S-01, F-04 | FR-010, FR-011, FR-012 | done |
 | S-05 | `ux-improvements` | zaakceptować wszystkie propozycje fiszek jednym kliknięciem, przerwać (zakończyć wcześniej) sesję nauki w dowolnym momencie oraz czytać tekst na białych przyciskach bez najeżdżania myszą (poprawki wizualne/UX z S-02–S-04) | S-02, S-03, S-04 | FR-004, FR-010 | done |
 | S-06 | `account-deletion-retention` | mieć konto automatycznie usunięte (wraz ze wszystkimi fiszkami i postępami nauki SRS/FSRS) po 24 miesiącach nieaktywności, zgodnie z zasadą minimalizacji przechowywania danych (RODO art. 5 ust. 1 lit. e); może też samodzielnie usunąć konto w dowolnym momencie | F-01, F-04 | Access Control (nowe: RODO / storage limitation) | done |
+| S-07 | `ui-improvements` | łatwo przejść z dowolnego ekranu do ustawień konta (widoczny przycisk/link do `/settings`) oraz zobaczyć prostą, dedykowaną stronę tytułową zamiast domyślnego szablonu Astro na `/` | S-01 | — | pending |
 
 ## Strumienie
 
@@ -52,6 +53,7 @@ Pomoc nawigacyjna — grupuje elementy, które dzielą łańcuch wymagań wstęp
 | C | Sesja nauki (SRS) | `F-01` → `F-03` → `F-04` → `S-04` | Niezależna od Strumienia B. F-04 to refaktor schematu SM-2 → FSRS wymagany przed S-04. |
 | D | Poprawki UX | `S-02`, `S-03`, `S-04` → `S-05` | Poprawki wizualne/UX na bazie ukończonych fragmentów A i C; brak nowych fundamentów. |
 | E | Zgodność z RODO (retencja danych) | `F-01`, `F-04` → `S-06` | Niezależna od Strumienia D; wymaga jedynie istniejących tabel `flashcards` (F-01) i pól FSRS (F-04) do usunięcia danych nauki. |
+| F | Poprawki UI | `S-01` → `S-07` | Niezależna od pozostałych strumieni; wymaga jedynie istniejącej nawigacji/dashboardu (S-01) jako miejsca na przycisk do ustawień. |
 
 ## Baza
 
@@ -212,6 +214,20 @@ Fundamenty poniżej zakładają, że są one obecne i NIE odbudowują ich.
   - Pytanie: Jak technicznie wykrywać „nieaktywność" — brak logowania (`last_sign_in_at` z Supabase Auth) czy brak jakiejkolwiek aktywności (w tym sesji nauki)? Owner: developer. Block: **nie** — decyzja implementacyjna, nie blokuje architektonicznie; prostszy wariant to `last_sign_in_at`.
   - Pytanie: Mechanizm automatycznego usuwania — scheduled job (Cloudflare Cron Trigger) czy manualny/administracyjny proces w MVP? Owner: developer. Block: **tak** dla pełnej automatyzacji — wymaga wyboru mechanizmu przed implementacją; można rozpocząć od joba uruchamianego ręcznie/administracyjnie jako krok pośredni.
   - Pytanie: Czy PRD wymaga formalnej aktualizacji o nowy FR (np. FR-014: „Użytkownik może usunąć konto") przed planowaniem tego fragmentu? Owner: developer. Block: **nie** — roadmapa może wyprzedzać PRD, ale zalecane dopisanie do PRD dla spójności dokumentacji.
+
+### S-07: Poprawki UI
+
+- **Status:** pending
+- **Wynik:** (1) Zalogowany użytkownik ma łatwo dostępny, widoczny przycisk/link nawigacyjny prowadzący do strony `/settings` (np. w dashboardzie / głównym layoucie), zamiast konieczności ręcznego wpisywania adresu. (2) Strona główna (`/`) przestaje pokazywać domyślny szablon powitalny Astro (`src/components/Welcome.astro`) i zamiast tego wyświetla bardzo prostą, dedykowaną stronę tytułową 10xCards (nazwa produktu, krótki opis/tagline, link do logowania/rejestracji lub dashboardu).
+- **Change ID:** `ui-improvements`
+- **Odnośniki PRD:** —
+- **Wymagania wstępne:** S-01 (istniejąca nawigacja/dashboard jako miejsce na przycisk do ustawień)
+- **Równolegle z:** —
+- **Blokady:** —
+- **Niewiadome:**
+  - Pytanie: Gdzie dokładnie umieścić przycisk/link do ustawień — w globalnym headerze/nawigacji widocznej na wszystkich chronionych stronach, czy tylko na dashboardzie? Owner: developer. Block: **nie** — decyzja UX do doprecyzowania podczas planowania.
+  - Pytanie: Czy nowa strona tytułowa na `/` ma być widoczna dla zalogowanych użytkowników (redirect do dashboardu) czy pokazywana zawsze, niezależnie od stanu sesji? Owner: developer. Block: **nie** — obecne zachowanie `PROTECTED_ROUTES` w `src/middleware.ts` można zachować bez zmian; `/` pozostaje publiczna.
+  - Pytanie: Czy usunąć plik `src/components/Welcome.astro` i powiązane assety domyślnego szablonu Astro całkowicie, czy tylko przestać go używać na `/`? Owner: developer. Block: **nie** — zalecane pełne usunięcie dla czystości repo, do potwierdzenia podczas planowania.
 
 ## Otwarte pytania mapy drogowej
 
