@@ -192,19 +192,19 @@ Zastąpić zawartość `Welcome.astro` (renderowaną na `/`) prostą, dedykowan�
 
 #### Automatyczne
 
-- [x] 1.1 Lint przechodzi: `npm run lint`
+- [x] 1.1 Lint przechodzi: `npm run lint` — 81dd06c
 
 #### Ręczne
 
-- [ ] 1.2 Link „Ustawienia” widoczny w Topbar na `/` po zalogowaniu i prowadzi do `/settings`
-- [ ] 1.3 Link „Ustawienia” nie pojawia się dla niezalogowanego użytkownika
+- [x] 1.2 Link „Ustawienia” widoczny w Topbar na `/` po zalogowaniu i prowadzi do `/settings`
+- [x] 1.3 Link „Ustawienia” nie pojawia się dla niezalogowanego użytkownika
 
 ### Faza 2: Integracja Topbar w dashboard/study/settings
 
 #### Automatyczne
 
-- [ ] 2.1 Lint przechodzi: `npm run lint`
-- [ ] 2.2 Build przechodzi: `npm run build`
+- [x] 2.1 Lint przechodzi: `npm run lint`
+- [x] 2.2 Build przechodzi: `npm run build`
 
 #### Ręczne
 
