@@ -14,7 +14,7 @@ jobs:
     steps:
       - name: Call cleanup-inactive-accounts endpoint
         run: |
-          curl --fail --show-error \
+          curl --fail --silent --show-error -o /dev/null \
             -X POST \
             -H "Authorization: Bearer ${{ secrets.CLEANUP_ENDPOINT_SECRET }}" \
-            "${{ secrets.PRODUCTION_URL }}/api/admin/cleanup-inactive-accounts"
+            "${{ secrets.PRODUCTION_URL }}/api/admin/cleanup-inactive-accounts?dryRun=false"

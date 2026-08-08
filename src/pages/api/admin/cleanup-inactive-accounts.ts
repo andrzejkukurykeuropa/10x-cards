@@ -13,6 +13,25 @@ interface CleanupError {
 }
 
 /**
+ * Constant-time string comparison to avoid a timing side-channel when checking the
+ * bearer secret. Uses the Web Crypto API (available in the Cloudflare Workers runtime),
+ * not Node's `crypto.timingSafeEqual`, so it works in production, not just locally.
+ */
+function timingSafeEqual(a: string, b: string): boolean {
+  const encoder = new TextEncoder();
+  const aBytes = encoder.encode(a);
+  const bBytes = encoder.encode(b);
+  if (aBytes.length !== bBytes.length) {
+    return false;
+  }
+  let diff = 0;
+  for (let i = 0; i < aBytes.length; i++) {
+    diff |= aBytes[i] ^ bBytes[i];
+  }
+  return diff === 0;
+}
+
+/**
  * Iterates all Supabase Auth users (paginated), classifies each via
  * `isInactiveForDeletion` / `isInWarningWindow`, and either reports (dryRun) or
  * deletes the inactive ones / sends a warning e-mail (magic link OTP) to accounts in
@@ -25,7 +44,7 @@ export const POST: APIRoute = async (context) => {
   }
 
   const authHeader = context.request.headers.get("Authorization");
-  if (authHeader !== `Bearer ${CLEANUP_ENDPOINT_SECRET}`) {
+  if (!timingSafeEqual(authHeader ?? "", `Bearer ${CLEANUP_ENDPOINT_SECRET}`)) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
   }
 
@@ -41,7 +60,7 @@ export const POST: APIRoute = async (context) => {
     return new Response(JSON.stringify({ error: "Service unavailable" }), { status: 503 });
   }
 
-  const dryRun = context.url.searchParams.get("dryRun") !== "false";
+  const dryRun = context.url.searchParams.get("dryRun") === "true";
 
   const deleted: string[] = [];
   const warned: string[] = [];
@@ -50,6 +69,11 @@ export const POST: APIRoute = async (context) => {
   let page = 1;
   const perPage = 50;
 
+  // NOTE: pagination is offset-based (page/perPage) while deletions happen inline within
+  // the same loop. Deleting an account can shift subsequent pages, so an account could
+  // in theory be skipped in a given run. This is accepted as self-healing: the job runs
+  // daily via the GitHub Actions schedule, so any skipped account is correctly picked up
+  // (and still correctly classified) on the next run.
   for (;;) {
     const { data, error } = await admin.auth.admin.listUsers({ page, perPage });
     if (error) {
@@ -67,8 +91,9 @@ export const POST: APIRoute = async (context) => {
       processed += 1;
 
       const lastSignInAt = candidate.last_sign_in_at ?? null;
+      const createdAt = candidate.created_at ?? null;
 
-      if (isInactiveForDeletion(lastSignInAt)) {
+      if (isInactiveForDeletion(lastSignInAt, createdAt)) {
         if (dryRun) {
           deleted.push(candidate.id);
           continue;
@@ -89,7 +114,15 @@ export const POST: APIRoute = async (context) => {
         continue;
       }
 
-      if (isInWarningWindow(lastSignInAt) && candidate.email) {
+      if (isInWarningWindow(lastSignInAt, createdAt) && candidate.email) {
+        const alreadyWarned = Boolean(candidate.user_metadata?.retention_warning_sent_at);
+        if (alreadyWarned) {
+          // A warning e-mail was already sent earlier in this 23-24 month window; skip
+          // re-sending it daily until the account either logs in (exits the window) or
+          // crosses into deletion.
+          continue;
+        }
+
         if (dryRun) {
           warned.push(candidate.id);
           continue;
@@ -102,6 +135,16 @@ export const POST: APIRoute = async (context) => {
           });
           if (otpError) {
             throw otpError;
+          }
+          const { error: markError } = await admin.auth.admin.updateUserById(candidate.id, {
+            user_metadata: { ...candidate.user_metadata, retention_warning_sent_at: new Date().toISOString() },
+          });
+          if (markError) {
+            // eslint-disable-next-line no-console
+            console.error(
+              `[api/admin/cleanup-inactive-accounts] updateUserById(${candidate.id}) mark-warned error:`,
+              markError
+            );
           }
           warned.push(candidate.id);
         } catch (err) {

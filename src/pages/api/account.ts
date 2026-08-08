@@ -25,6 +25,9 @@ export const DELETE: APIRoute = async (context) => {
   const supabase = createClient(context.request.headers, context.cookies);
   if (supabase) {
     await supabase.auth.signOut();
+  } else {
+    // eslint-disable-next-line no-console
+    console.error("[api/account] DELETE signOut skipped: session client unavailable (missing config)");
   }
 
   return new Response(null, { status: 204 });

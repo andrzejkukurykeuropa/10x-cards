@@ -1,9 +1,9 @@
 ---
 change_id: account-deletion-retention
 title: Account deletion and data retention (GDPR)
-status: implemented
+status: impl_reviewed
 created: 2026-08-04
-updated: 2026-08-05
+updated: 2026-08-08
 
 archived_at: null
 ---
