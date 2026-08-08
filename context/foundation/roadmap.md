@@ -38,7 +38,7 @@ Klin produktu — jedyna cecha, która po usunięciu sprawia, że 10xCards staje
 | S-02 | `ai-generation-flow` | wkleić tekst → zobaczyć propozycje AI → zaakceptować / edytować / odrzucić → zapisać do kolekcji | F-01, F-02 | US-01, FR-003, FR-004, FR-005 | done |
 | S-03 | `collection-edit-delete` | edytować i usuwać fiszki w kolekcji (nice-to-have) | S-02 | FR-007, FR-008 | done |
 | S-04 | `study-session` | otworzyć sesję nauki — widzieć pytanie fiszki, odsłonić odpowiedź, ocenić zapamiętanie wg skali FSRS (`ts-fsrs`); harmonogram SRS lub tryb „wszystkie fiszki" | S-01, F-04 | FR-010, FR-011, FR-012 | done |
-| S-05 | `ux-improvements` | zaakceptować wszystkie propozycje fiszek jednym kliknięciem, przerwać (zakończyć wcześniej) sesję nauki w dowolnym momencie oraz czytać tekst na białych przyciskach bez najeżdżania myszą (poprawki wizualne/UX z S-02–S-04) | S-02, S-03, S-04 | FR-004, FR-010 | draft |
+| S-05 | `ux-improvements` | zaakceptować wszystkie propozycje fiszek jednym kliknięciem, przerwać (zakończyć wcześniej) sesję nauki w dowolnym momencie oraz czytać tekst na białych przyciskach bez najeżdżania myszą (poprawki wizualne/UX z S-02–S-04) | S-02, S-03, S-04 | FR-004, FR-010 | done |
 | S-06 | `account-deletion-retention` | mieć konto automatycznie usunięte (wraz ze wszystkimi fiszkami i postępami nauki SRS/FSRS) po 24 miesiącach nieaktywności, zgodnie z zasadą minimalizacji przechowywania danych (RODO art. 5 ust. 1 lit. e); może też samodzielnie usunąć konto w dowolnym momencie | F-01, F-04 | Access Control (nowe: RODO / storage limitation) | done |
 
 ## Strumienie
@@ -185,7 +185,7 @@ Fundamenty poniżej zakładają, że są one obecne i NIE odbudowują ich.
 
 ### S-05: Poprawki wizualne i UX
 
-- **Status:** draft
+- **Status:** done
 - **Wynik:** Zalogowany użytkownik może: (1) zaakceptować wszystkie wygenerowane propozycje fiszek jednym kliknięciem („Zaakceptuj wszystkie") zamiast pojedynczo dla każdej propozycji; (2) przerwać sesję nauki w dowolnym momencie (przycisk/link „Zakończ sesję", z powrotem do dashboardu/kolekcji, bez wymogu przejścia przez wszystkie fiszki); (3) czytać tekst na wszystkich przyciskach z białym/jasnym tłem — kolor tekstu ma wystarczający kontrast w stanie domyślnym, nie tylko po najechaniu myszą (hover). Poprawki dotyczą przepływów wprowadzonych w S-02, S-03 i S-04.
 - **Change ID:** `ux-improvements`
 - **Odnośniki PRD:** FR-004 (przegląd i akceptacja propozycji AI), FR-010 (sesja nauki)
@@ -236,6 +236,7 @@ Fundamenty poniżej zakładają, że są one obecne i NIE odbudowują ich.
 - **F-03: (fundament) Tabela `flashcards` rozszerzona o pola harmonogramu powtórek (SRS): `due_date`, `easiness_factor`, `interval`, `repetitions`** — Archived 2026-07-08 → `context/archive/2026-07-08-srs-schema/`. Lesson: —.
 - **F-04: (fundament) Tabela `flashcards` zrefaktoryzowana ze schematu SM-2 (F-03) na schemat zgodny z biblioteką `ts-fsrs` (FSRS v6). Migracja SQL dodaje/zastępuje pola: `stability` (float), `difficulty` (float, 1–10), `state` (enum: New/Learning/Review/Relearning), `lapses` (int, domyślnie 0), `last_review` (timestamp, nullable). Pole `due_date` pozostaje (mapowane na `due` w `ts-fsrs`), `repetitions` pozostaje (mapowane na `reps`). Pole `easiness_factor` traci sens pod FSRS i jest usuwane/zastępowane przez `difficulty` + `stability`; `interval` zastępowane przez `scheduled_days` lub wyliczane z `stability`. Migracja zawiera wartości domyślne dla istniejących fiszek (nowe karty = stan „New" w FSRS). Gotowe do odczytu i zapisu przez S-04.** — Archived 2026-08-02 → `context/archive/2026-08-02-fsrs-schema-migration/`. Lesson: —.
 - **S-04: Sesja nauki z algorytmem SRS** — Archived 2026-08-02 → `context/archive/2026-08-02-study-session/`. Lesson: —.
+- **S-05: Zalogowany użytkownik może: (1) zaakceptować wszystkie wygenerowane propozycje fiszek jednym kliknięciem („Zaakceptuj wszystkie") zamiast pojedynczo dla każdej propozycji; (2) przerwać sesję nauki w dowolnym momencie (przycisk/link „Zakończ sesję", z powrotem do dashboardu/kolekcji, bez wymogu przejścia przez wszystkie fiszki); (3) czytać tekst na wszystkich przyciskach z białym/jasnym tłem — kolor tekstu ma wystarczający kontrast w stanie domyślnym, nie tylko po najechaniu myszą (hover). Poprawki dotyczą przepływów wprowadzonych w S-02, S-03 i S-04.** — Zarchiwizowano 2026-08-05 → `context/archive/2026-08-04-ux-improvements/`. Lesson: —.
 - **S-06: Zalogowany użytkownik może samodzielnie zainicjować trwałe usunięcie własnego konta wraz ze wszystkimi powiązanymi danymi w dowolnym momencie; system automatycznie usuwa konto i wszystkie powiązane dane po 24 miesiącach nieaktywności, zgodnie z zasadą minimalizacji przechowywania danych (RODO art. 5 ust. 1 lit. e)** — Archived 2026-08-08 → `context/archive/2026-08-04-account-deletion-retention/`. Lesson: —.
 
 <!-- Wypełnia /10x-archive po ukończeniu każdego fragmentu. -->

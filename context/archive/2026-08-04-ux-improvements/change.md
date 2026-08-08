@@ -1,10 +1,10 @@
 ---
 change_id: ux-improvements
 title: Poprawki UX: akceptuj wszystkie propozycje, przerwij sesję nauki, kontrast przycisków
-status: planned
+status: archived
 created: 2026-08-04
-updated: 2026-08-04
-archived_at: null
+updated: 2026-08-05
+archived_at: 2026-08-05T15:56:33Z
 ---
 
 ## Notes

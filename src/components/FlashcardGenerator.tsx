@@ -275,13 +275,15 @@ export default function FlashcardGenerator({ onComplete }: FlashcardGeneratorPro
 
       if (!res.ok) throw new Error(`Błąd zapisu ${res.status}`);
 
-      // Compute transition using latest state from ref (async-safe)
-      const latest = stateRef.current;
-      if (latest.status !== "reviewing") return;
-      const updated = latest.proposals.map((p) =>
-        p.id === id ? { ...p, disposition: "accepted" as const, question: q, answer: a } : p,
-      );
-      setState(toSummaryOrReviewing(updated));
+      // Use the functional updater form (not stateRef) so concurrent accepts (e.g. "Zaakceptuj
+      // wszystkie") apply against the truly latest state instead of a stale, out-of-order snapshot.
+      setState((prev) => {
+        if (prev.status !== "reviewing") return prev;
+        const updated = prev.proposals.map((p) =>
+          p.id === id ? { ...p, disposition: "accepted" as const, question: q, answer: a } : p,
+        );
+        return toSummaryOrReviewing(updated);
+      });
     } catch (err) {
       updateProposalPatch(id, {
         disposition: "pending",
@@ -291,6 +293,25 @@ export default function FlashcardGenerator({ onComplete }: FlashcardGeneratorPro
         editAnswer: a,
       });
     }
+  }
+
+  async function handleAcceptAll() {
+    const current = stateRef.current;
+    if (current.status !== "reviewing") return;
+    const pending = current.proposals.filter((p) => p.disposition === "pending");
+
+    const saves = pending
+      .filter((p) => !p.isEditing || (p.editQuestion.trim() && p.editAnswer.trim()))
+      .map((p) => {
+        const q = p.isEditing ? p.editQuestion : p.question;
+        const a = p.isEditing ? p.editAnswer : p.answer;
+        if (p.isEditing) {
+          updateProposalPatch(p.id, { isEditing: false });
+        }
+        return handleAccept(p.id, q, a);
+      });
+
+    await Promise.allSettled(saves);
   }
 
   function handleReject(id: string) {
@@ -380,10 +401,19 @@ export default function FlashcardGenerator({ onComplete }: FlashcardGeneratorPro
       {/* Reviewing state — proposals list */}
       {state.status === "reviewing" && (
         <div className="space-y-3">
-          <p className="text-sm text-white/60">
-            {state.proposals.filter((p) => p.disposition === "pending" || p.disposition === "saving").length} z{" "}
-            {state.proposals.length} propozycji do obsłużenia
-          </p>
+          <div className="flex items-center justify-between">
+            <p className="text-sm text-white/60">
+              {state.proposals.filter((p) => p.disposition === "pending" || p.disposition === "saving").length} z{" "}
+              {state.proposals.length} propozycji do obsłużenia
+            </p>
+            <Button
+              size="sm"
+              onClick={() => void handleAcceptAll()}
+              disabled={!state.proposals.some((p) => p.disposition === "pending")}
+            >
+              Zaakceptuj wszystkie
+            </Button>
+          </div>
           {state.proposals.map((proposal) => (
             <ProposalCard
               key={proposal.id}

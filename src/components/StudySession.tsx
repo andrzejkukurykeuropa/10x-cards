@@ -18,6 +18,7 @@ type SessionState =
       submitting: boolean;
       submitError: string | null;
       ratingCounts: Record<StudyRating, number>;
+      confirmingExit: boolean;
     }
   | { status: "summary"; reviewed: number; ratingCounts: Record<StudyRating, number> };
 
@@ -72,6 +73,7 @@ export default function StudySession() {
         submitting: false,
         submitError: null,
         ratingCounts: { ...EMPTY_RATING_COUNTS },
+        confirmingExit: false,
       });
     } catch (err) {
       setState({ status: "error", message: err instanceof Error ? err.message : "Nieznany błąd" });
@@ -80,6 +82,18 @@ export default function StudySession() {
 
   function handleReveal() {
     setState((prev) => (prev.status === "session" ? { ...prev, revealed: true } : prev));
+  }
+
+  function handleRequestExit() {
+    setState((prev) => (prev.status === "session" ? { ...prev, confirmingExit: true } : prev));
+  }
+
+  function handleCancelExit() {
+    setState((prev) => (prev.status === "session" ? { ...prev, confirmingExit: false } : prev));
+  }
+
+  function handleConfirmExit() {
+    window.location.href = "/dashboard";
   }
 
   async function handleRate(rating: StudyRating) {
@@ -219,42 +233,66 @@ export default function StudySession() {
 
   // status === "session"
   const card = state.queue[state.index];
+  const reviewedCount = Object.values(state.ratingCounts).reduce((sum, count) => sum + count, 0);
 
   return (
     <div className="space-y-4">
-      <p className="text-sm text-blue-100/60">
-        Karta {state.index + 1} z {state.queue.length}
-      </p>
-
-      <div className="rounded-xl border border-white/10 bg-white/5 p-6">
-        <p className="mb-1 text-xs font-medium tracking-wide text-blue-100/60 uppercase">Pytanie</p>
-        <p className="mb-4 text-white">{card.question}</p>
-
-        {state.revealed && (
-          <>
-            <hr className="my-4 border-white/10" />
-            <p className="mb-1 text-xs font-medium tracking-wide text-blue-100/60 uppercase">Odpowiedź</p>
-            <p className="text-white">{card.answer}</p>
-          </>
-        )}
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-blue-100/60">
+          Karta {state.index + 1} z {state.queue.length}
+        </p>
+        <Button size="sm" variant="ghost" onClick={handleRequestExit} disabled={state.submitting}>
+          Zakończ sesję
+        </Button>
       </div>
 
-      {state.submitError && (
-        <p className="text-center text-sm text-red-300">{state.submitError} — wybierz ocenę ponownie poniżej.</p>
-      )}
-
-      {!state.revealed ? (
-        <div className="flex justify-center">
-          <Button onClick={handleReveal}>Pokaż odpowiedź</Button>
+      {state.confirmingExit ? (
+        <div className="rounded-xl border border-white/10 bg-white/5 p-6 text-center">
+          <p className="mb-4 text-white">
+            Oceniono {reviewedCount} z {state.queue.length} fiszek. Na pewno zakończyć sesję?
+          </p>
+          <div className="flex justify-center gap-3">
+            <Button variant="destructive" onClick={handleConfirmExit} disabled={state.submitting}>
+              Zakończ
+            </Button>
+            <Button variant="outline" onClick={handleCancelExit}>
+              Anuluj
+            </Button>
+          </div>
         </div>
       ) : (
-        <div className="flex justify-center gap-3">
-          {(Object.keys(RATING_LABELS) as StudyRating[]).map((rating) => (
-            <Button key={rating} disabled={state.submitting} onClick={() => void handleRate(rating)}>
-              {RATING_LABELS[rating]}
-            </Button>
-          ))}
-        </div>
+        <>
+          <div className="rounded-xl border border-white/10 bg-white/5 p-6">
+            <p className="mb-1 text-xs font-medium tracking-wide text-blue-100/60 uppercase">Pytanie</p>
+            <p className="mb-4 text-white">{card.question}</p>
+
+            {state.revealed && (
+              <>
+                <hr className="my-4 border-white/10" />
+                <p className="mb-1 text-xs font-medium tracking-wide text-blue-100/60 uppercase">Odpowiedź</p>
+                <p className="text-white">{card.answer}</p>
+              </>
+            )}
+          </div>
+
+          {state.submitError && (
+            <p className="text-center text-sm text-red-300">{state.submitError} — wybierz ocenę ponownie poniżej.</p>
+          )}
+
+          {!state.revealed ? (
+            <div className="flex justify-center">
+              <Button onClick={handleReveal}>Pokaż odpowiedź</Button>
+            </div>
+          ) : (
+            <div className="flex justify-center gap-3">
+              {(Object.keys(RATING_LABELS) as StudyRating[]).map((rating) => (
+                <Button key={rating} disabled={state.submitting} onClick={() => void handleRate(rating)}>
+                  {RATING_LABELS[rating]}
+                </Button>
+              ))}
+            </div>
+          )}
+        </>
       )}
     </div>
   );
