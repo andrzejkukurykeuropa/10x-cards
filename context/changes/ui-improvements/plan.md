@@ -216,8 +216,8 @@ Zastąpić zawartość `Welcome.astro` (renderowaną na `/`) prostą, dedykowan�
 
 #### Automatyczne
 
-- [x] 3.1 Lint przechodzi: `npm run lint`
-- [x] 3.2 Build przechodzi: `npm run build`
+- [x] 3.1 Lint przechodzi: `npm run lint` — dafae0f
+- [x] 3.2 Build przechodzi: `npm run build` — dafae0f
 
 #### Ręczne
 
