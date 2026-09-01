@@ -1,11 +1,13 @@
 import type { APIRoute } from "astro";
 import { createGroq } from "@ai-sdk/groq";
-import { generateText } from "ai";
+import { generateObject } from "ai";
 import { z } from "zod";
 import { GROQ_API_KEY } from "astro:env/server";
 import { flashcardsOutputSchema } from "@/lib/ai-schemas";
 
 export const prerender = false;
+
+const MODEL_ID = "openai/gpt-oss-120b";
 
 const inputSchema = z.object({
   text: z.string().min(40).max(1000),
@@ -43,16 +45,14 @@ export const POST: APIRoute = async (context) => {
 
   try {
     const groq = createGroq({ apiKey: GROQ_API_KEY });
-    const { text: aiText } = await generateText({
-      model: groq("llama-3.3-70b-versatile"),
-      prompt: `${SYSTEM_PROMPT}\n\nText:\n${inputText}\n\nRespond with ONLY valid JSON matching this structure: {"flashcards":[{"question":"...","answer":"..."}]}`,
+    const { object } = await generateObject({
+      model: groq(MODEL_ID),
+      schema: flashcardsOutputSchema,
+      system: SYSTEM_PROMPT,
+      prompt: `Text:\n${inputText}`,
     });
 
-    const parsed = flashcardsOutputSchema.safeParse(JSON.parse(aiText));
-    if (!parsed.success) {
-      return new Response(JSON.stringify({ error: "AI returned invalid data" }), { status: 500 });
-    }
-    return new Response(JSON.stringify(parsed.data), {
+    return new Response(JSON.stringify(object), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
