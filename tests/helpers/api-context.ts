@@ -46,8 +46,9 @@ interface BuildApiContextOptions {
 /**
  * Builds a minimal, type-compatible stand-in for Astro's `APIContext` sufficient to
  * invoke `GET`/`POST`/`PATCH`/`DELETE` handlers from `src/pages/api/**` directly,
- * without booting the full Astro server. No handler in this repository reads any
- * other context field.
+ * without booting the full Astro server. Covers every context field this repository's
+ * handlers and middleware read: `request`, `cookies`, `locals`, `params`, `url`, and
+ * `redirect` (used by `signout.ts` and `src/middleware.ts`).
  */
 export function buildApiContext(options: BuildApiContextOptions): APIContext {
   const { method, url, headers, body, cookies = createCookieJar(), locals = { user: null }, params = {} } = options;
@@ -65,6 +66,11 @@ export function buildApiContext(options: BuildApiContextOptions): APIContext {
     locals,
     params,
     url: new URL(url),
+    // Mirrors Astro's `context.redirect(path, status?)`, used by `signout.ts` and the
+    // middleware — the only other `APIContext` field this repository's handlers read.
+    redirect(location: string, status = 302) {
+      return new Response(null, { status, headers: { Location: location } });
+    },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } as any as APIContext;
 }

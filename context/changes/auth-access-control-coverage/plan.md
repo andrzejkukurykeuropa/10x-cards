@@ -622,27 +622,27 @@ uruchamianej przez `npx supabase start`).
 
 #### Automatyczne
 
-- [x] 1.1 npm install kończy się bez błędów po dodaniu vitest
-- [x] 1.2 npm run test uruchamia się i kończy bez błędów konfiguracji Vite/astro:env
-- [x] 1.3 npx tsc --noEmit nie zgłasza błędów typów w nowych plikach tests/**
+- [x] 1.1 npm install kończy się bez błędów po dodaniu vitest — 1ae275d
+- [x] 1.2 npm run test uruchamia się i kończy bez błędów konfiguracji Vite/astro:env — 1ae275d
+- [x] 1.3 npx tsc --noEmit nie zgłasza błędów typów w nowych plikach tests/** — 1ae275d
 
 #### Ręczne
 
-- [ ] 1.4 signInAsTestUser(TEST_USER_A) zwraca niepusty cookieHeader, kolejne żądanie z tym nagłówkiem zwraca dane (nie 401)
+- [x] 1.4 signInAsTestUser(TEST_USER_A) zwraca niepusty cookieHeader, kolejne żądanie z tym nagłówkiem zwraca dane (nie 401) — 1ae275d
 
 ### Faza 2: Middleware i bramkowanie sesji (Ryzyko #1)
 
 #### Automatyczne
 
-- [ ] 2.1 tests/middleware.test.ts — wszystkie przypadki przechodzą
-- [ ] 2.2 tests/api/auth-gating.test.ts — wszystkie endpointy zwracają 401 bez sesji
-- [ ] 2.3 tests/api/auth-session-integrity.test.ts — oba przypadki przechodzą
+- [x] 2.1 tests/middleware.test.ts — wszystkie przypadki przechodzą
+- [x] 2.2 tests/api/auth-gating.test.ts — wszystkie endpointy zwracają 401 bez sesji
+- [x] 2.3 tests/api/auth-session-integrity.test.ts — oba przypadki przechodzą
 
 #### Ręczne
 
-- [ ] 2.4 Przegląd opisu testu prefiksu — jasno komunikuje "dokumentujemy obecne zachowanie"
-- [ ] 2.5 Lista endpointów w auth-gating.test.ts porównana ręcznie z src/pages/api/** — brak pominięcia
-- [ ] 2.6 Potwierdzenie w lokalnym Supabase Studio istnienia i potwierdzenia e-mail TEST_USER_A/B
+- [x] 2.4 Przegląd opisu testu prefiksu — jasno komunikuje "dokumentujemy obecne zachowanie"
+- [x] 2.5 Lista endpointów w auth-gating.test.ts porównana ręcznie z src/pages/api/** — brak pominięcia
+- [x] 2.6 Potwierdzenie w lokalnym Supabase Studio istnienia i potwierdzenia e-mail TEST_USER_A/B
 
 ### Faza 3: Izolacja danych między użytkownikami (Ryzyko #3)
 
