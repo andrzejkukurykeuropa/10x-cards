@@ -5,6 +5,7 @@ import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import cloudflare from "@astrojs/cloudflare";
+import process from "node:process";
 
 // https://astro.build/config
 export default defineConfig({
@@ -13,10 +14,16 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
-  adapter: cloudflare({
-    imageService: "passthrough",
-    sessionBinding: false,
-  }),
+  // The Cloudflare adapter's Vite plugin sets `resolve.external` on the worker environment,
+  // which conflicts with Vitest's `node` test environment when `getViteConfig` merges the
+  // full Astro config (see vitest.config.ts). Skip the adapter under `vitest` so `npm run test`
+  // can reuse the same Astro/Vite config without booting a Cloudflare Worker environment.
+  adapter: process.env.VITEST
+    ? undefined
+    : cloudflare({
+        imageService: "passthrough",
+        sessionBinding: false,
+      }),
   env: {
     schema: {
       SUPABASE_URL: envField.string({ context: "server", access: "secret", optional: true }),
