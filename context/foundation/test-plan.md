@@ -75,7 +75,7 @@ na dysku.
 
 | # | Nazwa fazy | Cel (jedna linia) | Ryzyka objęte | Typy testów | Status | Folder zmiany |
 |---|---|---|---|---|---|---|
-| 1 | Auth and access-control coverage | Obrona integralności logowania/sesji i izolacji danych per użytkownik na najtańszej warstwie | #1, #3 | integracyjne | planned | `context/changes/auth-access-control-coverage/` |
+| 1 | Auth and access-control coverage | Obrona integralności logowania/sesji i izolacji danych per użytkownik na najtańszej warstwie | #1, #3 | integracyjne | implementing | `context/changes/auth-access-control-coverage/` |
 | 2 | AI generation reliability | Wykrywanie cichych awarii w kontrakcie żądania/odpowiedzi generowania i streamingu | #2, #5 | integracyjne | not started | — |
 | 3 | Study/FSRS scheduling integrity | Obrona poprawności stanu przeglądu i kolejności kart w silnie zmiennym obszarze nauki | #4 | jednostkowe + integracyjne | not started | — |
 | 4 | Account-lifecycle safety net | Ograniczenie logiki selekcji zadania czyszczącego do uzgodnionego zakresu, z poszanowaniem negative-space w §7 | #6 | jednostkowe | not started | — |
@@ -125,7 +125,57 @@ zawiera "TBD — patrz §3 Faza N."
 - TBD — patrz §3 Faza 3 (wzorzec mapowania pól FSRS) oraz §3 Faza 4 (wzorzec przypadków brzegowych zapytania selekcji czyszczenia).
 
 ### 6.2 Dodawanie testu integracyjnego
-- TBD — patrz §3 Faza 1 dla wzorca odmowy dostępu/regresji dla endpointów autoryzacji i wspieranych przez RLS.
+
+Wzorzec ustalony w §3 Faza 1 (`context/changes/auth-access-control-coverage/`),
+zweryfikowany działającym zestawem 5 plików / 23 testów w `tests/`:
+
+1. **Lokalizacja pliku**: `tests/api/<obszar>.test.ts` dla testów endpointów
+   API, `tests/<nazwa>.test.ts` dla testów przekrojowych (np. middleware).
+   Runner: Vitest przez `getViteConfig()` (`vitest.config.ts`), żadna
+   dodatkowa konfiguracja aliasów/`astro:env` nie jest potrzebna.
+2. **Wywołanie handlera bezpośrednio**, bez uruchamiania serwera HTTP:
+   importuj eksportowaną funkcję (`GET`/`POST`/`PATCH`/`DELETE`) wprost z
+   `src/pages/api/**` i wywołaj ją z fałszywym kontekstem zbudowanym przez
+   `buildApiContext({ method, url, headers, body, params, cookies, locals })`
+   z `tests/helpers/api-context.ts`. Nie potrzeba `msw`/nasłuchującego portu.
+3. **Sesja przez prawdziwe logowanie**: gdy test wymaga uwierzytelnionego
+   użytkownika, użyj `signInAsTestUser(TEST_USER_A | TEST_USER_B)` z
+   `tests/helpers/test-session.ts` (stałe dane logowania w
+   `tests/helpers/test-users.ts`). Zwraca `{ cookieHeader, user }` — przekaż
+   `cookieHeader` jako nagłówek `Cookie` żądania ORAZ `user` jako
+   `locals.user` kontekstu; oba są wymagane, bo handlery czytają `locals.user`
+   do bramkowania 401/404, a warstwa Supabase odpytuje bazę wyłącznie na
+   podstawie ciasteczka sesji (nie `locals.user`) — patrz Krytyczne Szczegóły
+   Implementacji w planie Fazy 1.
+4. **Sprzątanie obowiązkowe**: każdy test, który tworzy dane w tabeli
+   dzielonej między plikami testowymi (np. `flashcards`), musi zarejestrować
+   utworzone ID i wywołać `cleanupFlashcards(ids)` (klient service-role,
+   omija RLS) w `afterEach`, niezależnie od wyniku testu — dwaj stali
+   użytkownicy testowi są dzieleni między plikami, więc tabela nie jest
+   nigdy zakładana jako pusta na starcie.
+5. **Kontrola pozytywna obowiązkowa** przy testowaniu odmowy dostępu: każdy
+   plik testujący "nie-właściciel dostaje 404" musi też zawrzeć przypadek
+   "właściciel dostaje 200/204" na tym samym zasobie — inaczej test
+   udowadnia tylko "B nic nie widzi", nie że mechanizm faktycznie
+   rozróżnia właściciela od nie-właściciela.
+
+**Przykład minimalnej asercji** (z `tests/api/flashcards-isolation.test.ts`):
+```ts
+const context = buildApiContext({
+  method: "PATCH",
+  url: `http://localhost/api/flashcards/${flashcardId}`,
+  headers: { "Content-Type": "application/json", Cookie: sessionB.cookieHeader },
+  body: JSON.stringify({ question: "Hijacked by B" }),
+  params: { id: flashcardId },
+  locals: { user: sessionB.user },
+});
+const response = await flashcardPatch(context);
+expect(response.status).toBe(404); // non-owner: indistinguishable from "not found"
+```
+
+Uruchomienie: `npx supabase start` (raz), następnie `npm run test` (lub
+`npx vitest run <plik>` dla pojedynczego pliku). Pełny przebieg od zera:
+`npx supabase db reset && npm run test`.
 
 ### 6.3 Dodawanie testu e2e
 - Nieuwzględnione w tym wdrożeniu — patrz §4.

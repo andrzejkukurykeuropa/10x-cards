@@ -648,22 +648,22 @@ uruchamianej przez `npx supabase start`).
 
 #### Automatyczne
 
-- [x] 3.1 tests/api/flashcards-isolation.test.ts — wszystkie przypadki przechodzą
-- [x] 3.2 Tabela flashcards bez osieroconych rekordów testowych po przebiegu
-- [x] 3.3 tests/api/study-isolation.test.ts — wszystkie przypadki przechodzą
+- [x] 3.1 tests/api/flashcards-isolation.test.ts — wszystkie przypadki przechodzą — 1be819d
+- [x] 3.2 Tabela flashcards bez osieroconych rekordów testowych po przebiegu — 1be819d
+- [x] 3.3 tests/api/study-isolation.test.ts — wszystkie przypadki przechodzą — 1be819d
 
 #### Ręczne
 
-- [x] 3.4 Podgląd tabeli flashcards w Supabase Studio po testach — brak rekordów testowych
-- [x] 3.5 Porównanie pól harmonogramu fiszki A przed/po próbie B — brak zmian
+- [x] 3.4 Podgląd tabeli flashcards w Supabase Studio po testach — brak rekordów testowych — 1be819d
+- [x] 3.5 Porównanie pól harmonogramu fiszki A przed/po próbie B — brak zmian — 1be819d
 
 ### Faza 4: Utrwalenie wzorców w podręczniku i finalizacja
 
 #### Automatyczne
 
-- [ ] 4.1 npx supabase db reset && npm run test — pełny przebieg zielony od zera
-- [ ] 4.2 npm run lint — brak nowych błędów lintera w tests/**
+- [x] 4.1 npx supabase db reset && npm run test — pełny przebieg zielony od zera
+- [x] 4.2 npm run lint — brak nowych błędów lintera w tests/**
 
 #### Ręczne
 
-- [ ] 4.3 Przegląd zaktualizowanej sekcji §6.2 test-plan.md — przepis wystarczający bez zgadywania
+- [x] 4.3 Przegląd zaktualizowanej sekcji §6.2 test-plan.md — przepis wystarczający bez zgadywania
