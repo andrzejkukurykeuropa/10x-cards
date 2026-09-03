@@ -2,6 +2,7 @@ import { createServerClient, parseCookieHeader } from "@supabase/ssr";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import type { User } from "@supabase/supabase-js";
 import { SUPABASE_URL, SUPABASE_KEY, SUPABASE_SERVICE_ROLE_KEY } from "astro:env/server";
+import { assertLocalSupabaseUrl } from "../setup/global-setup";
 
 /**
  * Logs in as the given test user through the exact same `@supabase/ssr` factory used
@@ -17,6 +18,7 @@ export async function signInAsTestUser(credentials: {
   if (!SUPABASE_URL || !SUPABASE_KEY) {
     throw new Error("SUPABASE_URL and SUPABASE_KEY must be set (check .env.test).");
   }
+  assertLocalSupabaseUrl(SUPABASE_URL);
 
   const cookieStore = new Map<string, string>();
 
@@ -61,6 +63,7 @@ export async function cleanupFlashcards(ids: string[]): Promise<void> {
   if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
     throw new Error("SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set (check .env.test).");
   }
+  assertLocalSupabaseUrl(SUPABASE_URL);
 
   const admin = createSupabaseClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
     auth: { autoRefreshToken: false, persistSession: false },

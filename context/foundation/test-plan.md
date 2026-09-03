@@ -75,7 +75,7 @@ na dysku.
 
 | # | Nazwa fazy | Cel (jedna linia) | Ryzyka objęte | Typy testów | Status | Folder zmiany |
 |---|---|---|---|---|---|---|
-| 1 | Auth and access-control coverage | Obrona integralności logowania/sesji i izolacji danych per użytkownik na najtańszej warstwie | #1, #3 | integracyjne | implementing | `context/changes/auth-access-control-coverage/` |
+| 1 | Auth and access-control coverage | Obrona integralności logowania/sesji i izolacji danych per użytkownik na najtańszej warstwie | #1, #3 | integracyjne | complete | `context/changes/auth-access-control-coverage/` |
 | 2 | AI generation reliability | Wykrywanie cichych awarii w kontrakcie żądania/odpowiedzi generowania i streamingu | #2, #5 | integracyjne | not started | — |
 | 3 | Study/FSRS scheduling integrity | Obrona poprawności stanu przeglądu i kolejności kart w silnie zmiennym obszarze nauki | #4 | jednostkowe + integracyjne | not started | — |
 | 4 | Account-lifecycle safety net | Ograniczenie logiki selekcji zadania czyszczącego do uzgodnionego zakresu, z poszanowaniem negative-space w §7 | #6 | jednostkowe | not started | — |

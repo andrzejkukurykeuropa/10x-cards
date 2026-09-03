@@ -608,6 +608,18 @@ tworzeni idempotentnie przez `globalSetup`, nigdy nie migrowani do
 środowiska produkcyjnego (żyją wyłącznie w lokalnej instancji Supabase
 uruchamianej przez `npx supabase start`).
 
+## Addendum (po przeglądzie implementacji, 2026-09-03)
+
+- **`astro.config.mjs` — nieplanowana, ale konieczna zmiana**: dodano
+  warunek `process.env.VITEST ? undefined : cloudflare({...})` wokół
+  adaptera Cloudflare. Nie było to wymienione w "Wymaganych zmianach" Fazy
+  1, ale okazało się konieczne: `getViteConfig()` (używane w
+  `vitest.config.ts`) ładuje pełną konfigurację Astro/Vite, a Vite plugin
+  adaptera Cloudflare ustawia `resolve.external` na środowisku workera, co
+  koliduje ze środowiskiem `node` Vitest. Zweryfikowano usuwając warunek i
+  ponownie uruchamiając `npm run test` — przebieg kończy się błędem bez tej
+  zmiany. Zatwierdzone jako świadoma adaptacja implementacyjna.
+
 ## Referencje
 
 - Powiązane badania: `context/changes/auth-access-control-coverage/research.md`

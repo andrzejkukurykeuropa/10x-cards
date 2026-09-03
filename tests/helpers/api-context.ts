@@ -1,4 +1,4 @@
-import type { APIContext } from "astro";
+import type { APIContext, AstroCookieSetOptions } from "astro";
 
 /**
  * Minimal in-memory cookie jar matching the interface `cookies.set()` expects when
@@ -14,7 +14,10 @@ export function createCookieJar(initial?: Record<string, string>) {
       const value = store.get(name);
       return value === undefined ? undefined : { name, value };
     },
-    set(name: string, value: string) {
+    // `options` (path/domain/maxAge/etc.) is accepted to match the real `cookies.set()`
+    // signature callers rely on (see src/lib/supabase.ts's setAll() callback) — this
+    // in-memory jar only needs the name/value pair, so options is intentionally unused.
+    set(name: string, value: string, _options?: AstroCookieSetOptions) {
       store.set(name, value);
     },
     delete(name: string) {
