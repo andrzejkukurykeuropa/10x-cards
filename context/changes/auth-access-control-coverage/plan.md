@@ -661,9 +661,9 @@ uruchamianej przez `npx supabase start`).
 
 #### Automatyczne
 
-- [x] 4.1 npx supabase db reset && npm run test — pełny przebieg zielony od zera
-- [x] 4.2 npm run lint — brak nowych błędów lintera w tests/**
+- [x] 4.1 npx supabase db reset && npm run test — pełny przebieg zielony od zera — c8ecce9
+- [x] 4.2 npm run lint — brak nowych błędów lintera w tests/** — c8ecce9
 
 #### Ręczne
 
-- [x] 4.3 Przegląd zaktualizowanej sekcji §6.2 test-plan.md — przepis wystarczający bez zgadywania
+- [x] 4.3 Przegląd zaktualizowanej sekcji §6.2 test-plan.md — przepis wystarczający bez zgadywania — c8ecce9
