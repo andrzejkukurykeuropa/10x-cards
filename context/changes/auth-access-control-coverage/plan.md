@@ -634,28 +634,28 @@ uruchamianej przez `npx supabase start`).
 
 #### Automatyczne
 
-- [x] 2.1 tests/middleware.test.ts — wszystkie przypadki przechodzą
-- [x] 2.2 tests/api/auth-gating.test.ts — wszystkie endpointy zwracają 401 bez sesji
-- [x] 2.3 tests/api/auth-session-integrity.test.ts — oba przypadki przechodzą
+- [x] 2.1 tests/middleware.test.ts — wszystkie przypadki przechodzą — cc29e01
+- [x] 2.2 tests/api/auth-gating.test.ts — wszystkie endpointy zwracają 401 bez sesji — cc29e01
+- [x] 2.3 tests/api/auth-session-integrity.test.ts — oba przypadki przechodzą — cc29e01
 
 #### Ręczne
 
-- [x] 2.4 Przegląd opisu testu prefiksu — jasno komunikuje "dokumentujemy obecne zachowanie"
-- [x] 2.5 Lista endpointów w auth-gating.test.ts porównana ręcznie z src/pages/api/** — brak pominięcia
-- [x] 2.6 Potwierdzenie w lokalnym Supabase Studio istnienia i potwierdzenia e-mail TEST_USER_A/B
+- [x] 2.4 Przegląd opisu testu prefiksu — jasno komunikuje "dokumentujemy obecne zachowanie" — cc29e01
+- [x] 2.5 Lista endpointów w auth-gating.test.ts porównana ręcznie z src/pages/api/** — brak pominięcia — cc29e01
+- [x] 2.6 Potwierdzenie w lokalnym Supabase Studio istnienia i potwierdzenia e-mail TEST_USER_A/B — cc29e01
 
 ### Faza 3: Izolacja danych między użytkownikami (Ryzyko #3)
 
 #### Automatyczne
 
-- [ ] 3.1 tests/api/flashcards-isolation.test.ts — wszystkie przypadki przechodzą
-- [ ] 3.2 Tabela flashcards bez osieroconych rekordów testowych po przebiegu
-- [ ] 3.3 tests/api/study-isolation.test.ts — wszystkie przypadki przechodzą
+- [x] 3.1 tests/api/flashcards-isolation.test.ts — wszystkie przypadki przechodzą
+- [x] 3.2 Tabela flashcards bez osieroconych rekordów testowych po przebiegu
+- [x] 3.3 tests/api/study-isolation.test.ts — wszystkie przypadki przechodzą
 
 #### Ręczne
 
-- [ ] 3.4 Podgląd tabeli flashcards w Supabase Studio po testach — brak rekordów testowych
-- [ ] 3.5 Porównanie pól harmonogramu fiszki A przed/po próbie B — brak zmian
+- [x] 3.4 Podgląd tabeli flashcards w Supabase Studio po testach — brak rekordów testowych
+- [x] 3.5 Porównanie pól harmonogramu fiszki A przed/po próbie B — brak zmian
 
 ### Faza 4: Utrwalenie wzorców w podręczniku i finalizacja
 
