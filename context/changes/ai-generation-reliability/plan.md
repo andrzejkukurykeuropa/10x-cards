@@ -931,25 +931,25 @@ pliki testów, helper, dummy `GROQ_API_KEY` w `.env.test`/`.example` i trzy
 
 #### Automatyczne
 
-- [x] 5.1 npx vitest run tests/components/FlashcardGenerator.test.tsx — 5.1–5.4 przechodzą w jsdom
-- [x] 5.2 npx tsc --noEmit — brak błędów typów w pliku .tsx
-- [x] 5.3 npm run lint — brak nowych błędów (jsx-a11y / react)
+- [x] 5.1 npx vitest run tests/components/FlashcardGenerator.test.tsx — 5.1–5.4 przechodzą w jsdom — db2ca96
+- [x] 5.2 npx tsc --noEmit — brak błędów typów w pliku .tsx — db2ca96
+- [x] 5.3 npm run lint — brak nowych błędów (jsx-a11y / react) — db2ca96
 
 #### Ręczne
 
-- [x] 5.4 Przegląd 5.2 i 5.3 — opisy o dokumentowaniu obecnej degradacji
-- [x] 5.5 Potwierdzić render w jsdom bez mocka @/components/ui/* (lub odnotować mock w §6.6)
+- [x] 5.4 Przegląd 5.2 i 5.3 — opisy o dokumentowaniu obecnej degradacji — db2ca96
+- [x] 5.5 Potwierdzić render w jsdom bez mocka @/components/ui/* (lub odnotować mock w §6.6) — db2ca96
 
 ### Faza 6: Podręcznik (§6.4, §6.6) i weryfikacja pełnego przebiegu
 
 #### Automatyczne
 
-- [ ] 6.1 npx supabase db reset && npm run test — pełny przebieg zielony od zera
-- [ ] 6.2 npm run lint — brak nowych błędów w tests/**
-- [ ] 6.3 grep -ri "stream" — brak nowo wprowadzonego słowa „streaming" w §6 ani w plikach testów
+- [x] 6.1 npx supabase db reset && npm run test — pełny przebieg zielony od zera
+- [x] 6.2 npm run lint — brak nowych błędów w tests/**
+- [x] 6.3 grep -ri "stream" — brak nowo wprowadzonego słowa „streaming" w §6 ani w plikach testów
 
 #### Ręczne
 
-- [ ] 6.4 Przegląd §6.4 — przepis wystarczający bez zgadywania
-- [ ] 6.5 Przegląd §6.6 — flaga „§4 wymaga --refresh" jednoznaczna
-- [ ] 6.6 §3 Faza 2 = complete; change.md zaktualizowany
+- [x] 6.4 Przegląd §6.4 — przepis wystarczający bez zgadywania
+- [x] 6.5 Przegląd §6.6 — flaga „§4 wymaga --refresh" jednoznaczna
+- [x] 6.6 §3 Faza 2 = complete; change.md zaktualizowany

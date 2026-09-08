@@ -7,7 +7,7 @@
 > Odświeżenie: uruchom ponownie `/10x-test-plan --refresh`, gdy plan jest
 > nieaktualny (patrz §8).
 >
-> Ostatnia aktualizacja: 2026-09-08 (backport §2/§3 z badania Fazy 2: usunięto nieaktualne założenie o streamingu)
+> Ostatnia aktualizacja: 2026-09-08 (Faza 2 wdrożenia complete: §6.4/§6.6 wypełnione; §4 „Stos" wymaga `--refresh` — jsdom/RTL wprowadzone przez warstwę testów komponentu)
 
 ## 1. Strategia
 
@@ -76,7 +76,7 @@ na dysku.
 | # | Nazwa fazy | Cel (jedna linia) | Ryzyka objęte | Typy testów | Status | Folder zmiany |
 |---|---|---|---|---|---|---|
 | 1 | Auth and access-control coverage | Obrona integralności logowania/sesji i izolacji danych per użytkownik na najtańszej warstwie | #1, #3 | integracyjne | complete | `context/changes/auth-access-control-coverage/` |
-| 2 | AI generation reliability | Wykrywanie cichych awarii w buforowanym kontrakcie żądania/odpowiedzi generowania: zwijanie każdego trybu awarii do jednego `500` i brak jakiegokolwiek timeoutu | #2, #5 | integracyjne | researched | `context/changes/ai-generation-reliability/` |
+| 2 | AI generation reliability | Wykrywanie cichych awarii w buforowanym kontrakcie żądania/odpowiedzi generowania: zwijanie każdego trybu awarii do jednego `500` i brak jakiegokolwiek timeoutu | #2, #5 | integracyjne | complete | `context/changes/ai-generation-reliability/` |
 | 3 | Study/FSRS scheduling integrity | Obrona poprawności stanu przeglądu i kolejności kart w silnie zmiennym obszarze nauki | #4 | jednostkowe + integracyjne | not started | — |
 | 4 | Account-lifecycle safety net | Ograniczenie logiki selekcji zadania czyszczącego do uzgodnionego zakresu, z poszanowaniem negative-space w §7 | #6 | jednostkowe | not started | — |
 | 5 | Quality-gates wiring | Zablokowanie jednostkowych + integracyjnych jako wymaganej bramy CI na każdym PR | przekrojowe | bramy | not started | — |
@@ -180,14 +180,83 @@ Uruchomienie: `npx supabase start` (raz), następnie `npm run test` (lub
 ### 6.3 Dodawanie testu e2e
 - Nieuwzględnione w tym wdrożeniu — patrz §4.
 
-### 6.4 Dodawanie testu dla nowego endpointu API
-- TBD — patrz §3 Faza 2 dla wzorca żądanie/odpowiedź + mockowanie dostawcy dla endpointów opartych na AI.
+### 6.4 Dodawanie testu dla nowego endpointu API opartego na AI
+
+Wzorzec ustalony w §3 Faza 2 (`context/changes/ai-generation-reliability/`),
+zweryfikowany plikami `tests/api/generate-flashcards*.test.ts` i
+`tests/components/FlashcardGenerator.test.tsx`. Endpoint generowania ma
+**buforowany kontrakt żądanie/odpowiedź**: `generateObject` zwraca jeden obiekt,
+handler serializuje go jako jedno ciało JSON.
+
+1. **Lokalizacja pliku**: `tests/api/<obszar>.test.ts` dla głównego kontraktu.
+   Osobny plik na każdą sytuację wymagającą mocka na poziomie ewaluacji modułu:
+   `<obszar>-config.test.ts` (bramka `astro:env/server`), `<obszar>-rate.test.ts`
+   (migawka braku rate-limitu, Ryzyko #5).
+2. **Granica mocka = dostawca, nie `ai`**: `vi.mock("@ai-sdk/groq", () => ({ createGroq: () => () => groqRef.model }))`
+   z mutowalną referencją `const groqRef = vi.hoisted(() => ({ model: undefined }))`
+   przełączaną per test. Mockując **tylko** dostawcę, prawdziwe `generateObject`
+   z `ai` nadal biegnie i wykonuje prawdziwą walidację zod — zły kształt daje
+   prawdziwy `NoObjectGeneratedError`. NIGDY nie mockuj `ai`/`generateObject`
+   (anty-wzorzec §2 #2: test nie ćwiczyłby granicy walidacji obiektu).
+3. **Builder mocka**: `tests/helpers/ai-mock.ts` — `buildMockModel({ text | error | hang })`
+   buduje `MockLanguageModelV3` z `ai/test` w trybie sukces / rzuca / wisi;
+   `flashcardsJson(n)` serializuje N poprawnych par; `makeApiCallError({ statusCode, isRetryable })`
+   i `makeAbortError()` to cienkie wrappery konstruktorów błędów AI SDK.
+4. **Bramka konfiguracji**: `vi.mock("astro:env/server", () => ({ GROQ_API_KEY: undefined }))`
+   na górze **dedykowanego** pliku — mock musi obowiązywać w momencie ewaluacji
+   modułu endpointu (endpoint importuje z tego modułu tylko `GROQ_API_KEY`).
+5. **Brak Supabase**: endpoint generowania czyta wyłącznie `context.locals.user` —
+   nie odpytuje bazy. Użyj fałszywego `locals: { user: { id: "00000000-…" } as User }`,
+   bez `signInAsTestUser`, bez `cleanupFlashcards`.
+6. **Brak bariery czasowej**: `buildMockModel({ hang: true })` + `vi.useFakeTimers()`
+   w `beforeEach` / `vi.useRealTimers()` w `afterEach` (izolowane do jednego
+   `describe`), potem `vi.advanceTimersByTimeAsync(600_000)` i asercja przez
+   `Promise.race` z natychmiastowym sentinelem, że handler wciąż wisi.
+7. **Konwencja „świadoma regresja"**: każdy test utrwalający obecne (niepożądane)
+   zachowanie — zwijanie wszystkich trybów awarii do jednego `500`, brak timeoutu,
+   nieograniczony kontrakt — ma w nazwie i komentarzu blokowym jawne
+   „**dokumentujemy** obecne zachowanie jako znane ryzyko, **nie wymagamy** go";
+   test jest zaprojektowany tak, by **złamał się**, gdy poprawka wejdzie.
+8. **Test komponentu przeglądu**: `tests/components/<Nazwa>.test.tsx`, pierwsza
+   linia `// @vitest-environment jsdom`; `render(...)` z `@testing-library/react`;
+   `vi.stubGlobal("fetch", vi.fn())` przywracane w `afterEach` (+ `cleanup()`).
+
+Uruchomienie: `npx vitest run <plik>` dla pojedynczego pliku; `npm run test`
+dla całości (testy AI nie wymagają Supabase, ale reszta zestawu tak).
 
 ### 6.5 Dodawanie testu dla nowej tabeli wspieranej przez Supabase RLS
 - TBD — patrz §3 Faza 1 dla wzorca sprawdzania własności dwóch tożsamości.
 
 ### 6.6 Notatki per faza wdrożenia
 (Wypełniane w miarę realizacji faz.)
+
+**Faza 1 — Auth and access-control coverage.** Zob. §6.2 (wzorzec testu
+integracyjnego) i §6.5. Zestaw: `tests/api/*` + `tests/middleware.test.ts`.
+
+**Faza 2 — AI generation reliability.** Zob. §6.4. Dostarczono:
+- `tests/helpers/ai-mock.ts` — reużywalny builder `MockLanguageModelV3` + seam
+  `@ai-sdk/groq`.
+- `tests/api/generate-flashcards.test.ts` — kontrakt żądanie/odpowiedź (2.1
+  kontrola pozytywna), zwijanie niezgodności ze schematem (2.2), awarii dostawcy
+  (2.3, retry 3× vs 1×), abortu (2.4), bariera walidacji wejścia (2.5), brak
+  bariery czasowej po stronie serwera (3.1, fake timers).
+- `tests/api/generate-flashcards-config.test.ts` — bramka `!GROQ_API_KEY` →
+  `500 {"error":"AI service not configured"}` (jedyny `500` z rozróżnialnym
+  ciałem); `vi.mock("astro:env/server")` na poziomie modułu.
+- `tests/api/generate-flashcards-rate.test.ts` — świadoma migawka MVP Ryzyka #5:
+  5 kolejnych + 3 współbieżne żądania z jednej tożsamości → wszystkie `200`,
+  zero rate-limitu. Test ma się **złamać** przy wprowadzeniu limitera.
+- `tests/components/FlashcardGenerator.test.tsx` — warstwa komponentu (jsdom):
+  kontrola pozytywna (5.1), degradacja do panelu błędu przy braku klucza
+  `flashcards` (5.2), miękkie zawieszenie przy pustej tablicy (5.3), spinner
+  bez anulowania przy zawieszonym `fetch` (5.4).
+- Konwencja „labeled regression" (2.2–2.4, 3.1, 4.1, 5.2–5.4): komentarz blokowy
+  + nazwa testu mówią „dokumentujemy, nie wymagamy"; poprawka złamie test celowo.
+- **Flaga dla §4 „Stos"**: ta faza wprowadziła warstwę testów komponentu
+  (`jsdom`, `@testing-library/react`, `@testing-library/dom` jako `devDependencies`)
+  oraz poszerzyła `vitest.config.ts` `include` o `.tsx` (`tests/**/*.test.{ts,tsx}`).
+  To jest zmiana stosu testowego poza zamrożoną §4 — **§4 wymaga
+  `/10x-test-plan --refresh`**, by odnotować jsdom/RTL w tabeli stosu.
 
 ## 7. Czego Celowo Nie Testujemy
 

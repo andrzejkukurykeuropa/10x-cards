@@ -94,7 +94,7 @@ export function makeApiCallError(opts: { statusCode: number; isRetryable: boolea
   });
 }
 
-/** An error shaped like a fetch/stream abort — `ai` lets `name: "AbortError"` pass through untouched. */
+/** An error shaped like an aborted fetch — `ai` lets `name: "AbortError"` pass through untouched. */
 export function makeAbortError(): Error {
   const error = new Error("The operation was aborted");
   error.name = "AbortError";
