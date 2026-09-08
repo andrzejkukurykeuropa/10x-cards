@@ -880,28 +880,28 @@ pliki testów, helper, dummy `GROQ_API_KEY` w `.env.test`/`.example` i trzy
 
 #### Automatyczne
 
-- [x] 1.1 npm install kończy się bez błędów po dodaniu jsdom + RTL
-- [x] 1.2 npx vitest run tests/api/generate-flashcards.test.ts — test dymny przechodzi (seam @ai-sdk/groq działa, generateObject prawdziwe)
-- [x] 1.3 npx tsc --noEmit — brak błędów typów w ai-mock.ts i nowym pliku testu
-- [x] 1.4 npm run lint — brak nowych błędów w tests/**
+- [x] 1.1 npm install kończy się bez błędów po dodaniu jsdom + RTL — ec37797
+- [x] 1.2 npx vitest run tests/api/generate-flashcards.test.ts — test dymny przechodzi (seam @ai-sdk/groq działa, generateObject prawdziwe) — ec37797
+- [x] 1.3 npx tsc --noEmit — brak błędów typów w ai-mock.ts i nowym pliku testu — ec37797
+- [x] 1.4 npm run lint — brak nowych błędów w tests/** — ec37797
 
 #### Ręczne
 
-- [ ] 1.5 Przegląd ai-mock.ts — builder wyraża wszystkie trzy tryby bez duplikacji
-- [ ] 1.6 Potwierdzić brak prawdziwych żądań sieciowych do Groq
+- [x] 1.5 Przegląd ai-mock.ts — builder wyraża wszystkie trzy tryby bez duplikacji — ec37797
+- [x] 1.6 Potwierdzić brak prawdziwych żądań sieciowych do Groq — ec37797
 
 ### Faza 2: Kontrakt żądanie/odpowiedź generowania (Ryzyko #2)
 
 #### Automatyczne
 
-- [ ] 2.1 npx vitest run tests/api/generate-flashcards.test.ts — przypadki 2.1–2.5 przechodzą
-- [ ] 2.2 npm run lint — brak nowych błędów w pliku
-- [ ] 2.3 Prawdziwe generateObject w grafie — 2.2 przechodzi bez ręcznego rzucania NoObjectGeneratedError
+- [x] 2.1 npx vitest run tests/api/generate-flashcards.test.ts — przypadki 2.1–2.5 przechodzą
+- [x] 2.2 npm run lint — brak nowych błędów w pliku
+- [x] 2.3 Prawdziwe generateObject w grafie — 2.2 przechodzi bez ręcznego rzucania NoObjectGeneratedError
 
 #### Ręczne
 
-- [ ] 2.4 Przegląd opisów 2.2–2.4 — jawne „dokumentujemy zwijanie błędów jako znane ryzyko"
-- [ ] 2.5 Potwierdzić, że 2.1 asertuje kształt ciała, nie tylko status 200
+- [x] 2.4 Przegląd opisów 2.2–2.4 — jawne „dokumentujemy zwijanie błędów jako znane ryzyko"
+- [x] 2.5 Potwierdzić, że 2.1 asertuje kształt ciała, nie tylko status 200
 
 ### Faza 3: Brak bariery czasowej i bramka konfiguracji (Ryzyko #2)
 
