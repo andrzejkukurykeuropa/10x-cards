@@ -77,7 +77,7 @@ na dysku.
 |---|---|---|---|---|---|---|
 | 1 | Auth and access-control coverage | Obrona integralności logowania/sesji i izolacji danych per użytkownik na najtańszej warstwie | #1, #3 | integracyjne | complete | `context/changes/auth-access-control-coverage/` |
 | 2 | AI generation reliability | Wykrywanie cichych awarii w buforowanym kontrakcie żądania/odpowiedzi generowania: zwijanie każdego trybu awarii do jednego `500` i brak jakiegokolwiek timeoutu | #2, #5 | integracyjne | complete | `context/changes/ai-generation-reliability/` |
-| 3 | Study/FSRS scheduling integrity | Obrona poprawności stanu przeglądu i kolejności kart w silnie zmiennym obszarze nauki | #4 | jednostkowe + integracyjne | not started | — |
+| 3 | Study/FSRS scheduling integrity | Obrona poprawności stanu przeglądu i kolejności kart w silnie zmiennym obszarze nauki | #4 | jednostkowe + integracyjne | change opened | `context/changes/study-fsrs-scheduling-integrity/` |
 | 4 | Account-lifecycle safety net | Ograniczenie logiki selekcji zadania czyszczącego do uzgodnionego zakresu, z poszanowaniem negative-space w §7 | #6 | jednostkowe | not started | — |
 | 5 | Quality-gates wiring | Zablokowanie jednostkowych + integracyjnych jako wymaganej bramy CI na każdym PR | przekrojowe | bramy | not started | — |
 
