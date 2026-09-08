@@ -1,9 +1,9 @@
 ---
 change_id: ai-generation-reliability
 title: AI generation reliability
-status: implementing
+status: implemented
 created: 2026-09-08
-updated: 2026-09-08
+updated: 2026-09-09
 archived_at: null
 ---
 

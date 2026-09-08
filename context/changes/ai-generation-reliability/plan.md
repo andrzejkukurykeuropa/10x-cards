@@ -944,12 +944,12 @@ pliki testów, helper, dummy `GROQ_API_KEY` w `.env.test`/`.example` i trzy
 
 #### Automatyczne
 
-- [x] 6.1 npx supabase db reset && npm run test — pełny przebieg zielony od zera
-- [x] 6.2 npm run lint — brak nowych błędów w tests/**
-- [x] 6.3 grep -ri "stream" — brak nowo wprowadzonego słowa „streaming" w §6 ani w plikach testów
+- [x] 6.1 npx supabase db reset && npm run test — pełny przebieg zielony od zera — 7869417
+- [x] 6.2 npm run lint — brak nowych błędów w tests/** — 7869417
+- [x] 6.3 grep -ri "stream" — brak nowo wprowadzonego słowa „streaming" w §6 ani w plikach testów — 7869417
 
 #### Ręczne
 
-- [x] 6.4 Przegląd §6.4 — przepis wystarczający bez zgadywania
-- [x] 6.5 Przegląd §6.6 — flaga „§4 wymaga --refresh" jednoznaczna
-- [x] 6.6 §3 Faza 2 = complete; change.md zaktualizowany
+- [x] 6.4 Przegląd §6.4 — przepis wystarczający bez zgadywania — 7869417
+- [x] 6.5 Przegląd §6.6 — flaga „§4 wymaga --refresh" jednoznaczna — 7869417
+- [x] 6.6 §3 Faza 2 = complete; change.md zaktualizowany — 7869417
