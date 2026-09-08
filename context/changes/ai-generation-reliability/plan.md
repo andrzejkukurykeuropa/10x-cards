@@ -919,26 +919,26 @@ pliki testów, helper, dummy `GROQ_API_KEY` w `.env.test`/`.example` i trzy
 
 #### Automatyczne
 
-- [x] 4.1 npx vitest run tests/api/generate-flashcards-rate.test.ts — 5/5 żądań 200, wariant współbieżny przechodzi
-- [x] 4.2 npm run lint — czysto
+- [x] 4.1 npx vitest run tests/api/generate-flashcards-rate.test.ts — 5/5 żądań 200, wariant współbieżny przechodzi — edc7d15
+- [x] 4.2 npm run lint — czysto — edc7d15
 
 #### Ręczne
 
-- [x] 4.3 Przegląd komentarza blokowego — czytelne, że to LUKA, nie kontrakt
-- [x] 4.4 Potwierdzić aktualność linku prd.md:110-112
+- [x] 4.3 Przegląd komentarza blokowego — czytelne, że to LUKA, nie kontrakt — edc7d15
+- [x] 4.4 Potwierdzić aktualność linku prd.md:110-112 — edc7d15
 
 ### Faza 5: Odporność UI przeglądu na zniekształcony payload (Ryzyko #2)
 
 #### Automatyczne
 
-- [ ] 5.1 npx vitest run tests/components/FlashcardGenerator.test.tsx — 5.1–5.4 przechodzą w jsdom
-- [ ] 5.2 npx tsc --noEmit — brak błędów typów w pliku .tsx
-- [ ] 5.3 npm run lint — brak nowych błędów (jsx-a11y / react)
+- [x] 5.1 npx vitest run tests/components/FlashcardGenerator.test.tsx — 5.1–5.4 przechodzą w jsdom
+- [x] 5.2 npx tsc --noEmit — brak błędów typów w pliku .tsx
+- [x] 5.3 npm run lint — brak nowych błędów (jsx-a11y / react)
 
 #### Ręczne
 
-- [ ] 5.4 Przegląd 5.2 i 5.3 — opisy o dokumentowaniu obecnej degradacji
-- [ ] 5.5 Potwierdzić render w jsdom bez mocka @/components/ui/* (lub odnotować mock w §6.6)
+- [x] 5.4 Przegląd 5.2 i 5.3 — opisy o dokumentowaniu obecnej degradacji
+- [x] 5.5 Potwierdzić render w jsdom bez mocka @/components/ui/* (lub odnotować mock w §6.6)
 
 ### Faza 6: Podręcznik (§6.4, §6.6) i weryfikacja pełnego przebiegu
 
