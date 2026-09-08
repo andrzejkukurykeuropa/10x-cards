@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { User } from "@supabase/supabase-js";
 import type { LanguageModelV3 } from "@ai-sdk/provider";
 import { buildMockModel, flashcardsJson, makeApiCallError, makeAbortError } from "../helpers/ai-mock";
@@ -175,6 +175,36 @@ describe("POST /api/generate-flashcards — buffered request/response contract (
       expect(response.status).toBe(422);
       expect(await response.json()).toEqual({ error: "Invalid JSON body" });
       expect(currentModel().doGenerateCalls).toHaveLength(0);
+    });
+  });
+
+  // 3.1 — DELIBERATE REGRESSION. There is NO server-side timeout barrier: no
+  // `abortSignal`, no `timeout` on `generateObject`, no Worker CPU/wall limit in
+  // wrangler config. When the provider hangs, the endpoint handler hangs with it —
+  // the "spinner forever" of test-plan §2 #2, from the server side. We are PINNING
+  // the current absence of a time barrier: a future `abortSignal: AbortSignal.timeout(...)`
+  // in the endpoint SHOULD break this test — that is the intended signal that the
+  // fix landed. Fake timers so the test doesn't actually wait; "10 minutes" is a
+  // proxy for "no application layer interrupts", not a formal proof of infinity.
+  describe("3.1 no server-side timeout barrier (deliberate regression)", () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it("hung provider → handler still pending after a simulated 10 minutes", async () => {
+      groqRef.model = buildMockModel({ hang: true });
+
+      const handlerPromise = Promise.resolve(generateFlashcards(withText(INPUT_TEXT)));
+      // Swallow a late rejection so it never surfaces as unhandled after the test ends.
+      handlerPromise.catch(() => undefined);
+
+      await vi.advanceTimersByTimeAsync(600_000);
+
+      const outcome = await Promise.race([handlerPromise.then(() => "settled"), Promise.resolve("still-pending")]);
+      expect(outcome).toBe("still-pending");
     });
   });
 });

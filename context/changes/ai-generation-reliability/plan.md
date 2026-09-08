@@ -894,26 +894,26 @@ pliki testów, helper, dummy `GROQ_API_KEY` w `.env.test`/`.example` i trzy
 
 #### Automatyczne
 
-- [x] 2.1 npx vitest run tests/api/generate-flashcards.test.ts — przypadki 2.1–2.5 przechodzą
-- [x] 2.2 npm run lint — brak nowych błędów w pliku
-- [x] 2.3 Prawdziwe generateObject w grafie — 2.2 przechodzi bez ręcznego rzucania NoObjectGeneratedError
+- [x] 2.1 npx vitest run tests/api/generate-flashcards.test.ts — przypadki 2.1–2.5 przechodzą — 31dc9eb
+- [x] 2.2 npm run lint — brak nowych błędów w pliku — 31dc9eb
+- [x] 2.3 Prawdziwe generateObject w grafie — 2.2 przechodzi bez ręcznego rzucania NoObjectGeneratedError — 31dc9eb
 
 #### Ręczne
 
-- [x] 2.4 Przegląd opisów 2.2–2.4 — jawne „dokumentujemy zwijanie błędów jako znane ryzyko"
-- [x] 2.5 Potwierdzić, że 2.1 asertuje kształt ciała, nie tylko status 200
+- [x] 2.4 Przegląd opisów 2.2–2.4 — jawne „dokumentujemy zwijanie błędów jako znane ryzyko" — 31dc9eb
+- [x] 2.5 Potwierdzić, że 2.1 asertuje kształt ciała, nie tylko status 200 — 31dc9eb
 
 ### Faza 3: Brak bariery czasowej i bramka konfiguracji (Ryzyko #2)
 
 #### Automatyczne
 
-- [ ] 3.1 npx vitest run tests/api/generate-flashcards*.test.ts — 3.1 i 3.2 przechodzą; fake timers nie wyciekają
-- [ ] 3.2 npm run lint — czysto
+- [x] 3.1 npx vitest run tests/api/generate-flashcards*.test.ts — 3.1 i 3.2 przechodzą; fake timers nie wyciekają
+- [x] 3.2 npm run lint — czysto
 
 #### Ręczne
 
-- [ ] 3.3 Przegląd 3.1 — komentarz o utrwalaniu braku bariery czasowej
-- [ ] 3.4 Przegląd 3.2 — komentarz zestawiający oba 500 (config vs AI-failed)
+- [x] 3.3 Przegląd 3.1 — komentarz o utrwalaniu braku bariery czasowej
+- [x] 3.4 Przegląd 3.2 — komentarz zestawiający oba 500 (config vs AI-failed)
 
 ### Faza 4: Nieograniczony kontrakt generowania (Ryzyko #5)
 
