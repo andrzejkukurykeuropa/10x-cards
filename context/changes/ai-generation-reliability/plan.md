@@ -907,25 +907,25 @@ pliki testów, helper, dummy `GROQ_API_KEY` w `.env.test`/`.example` i trzy
 
 #### Automatyczne
 
-- [x] 3.1 npx vitest run tests/api/generate-flashcards*.test.ts — 3.1 i 3.2 przechodzą; fake timers nie wyciekają
-- [x] 3.2 npm run lint — czysto
+- [x] 3.1 npx vitest run tests/api/generate-flashcards*.test.ts — 3.1 i 3.2 przechodzą; fake timers nie wyciekają — b56ca96
+- [x] 3.2 npm run lint — czysto — b56ca96
 
 #### Ręczne
 
-- [x] 3.3 Przegląd 3.1 — komentarz o utrwalaniu braku bariery czasowej
-- [x] 3.4 Przegląd 3.2 — komentarz zestawiający oba 500 (config vs AI-failed)
+- [x] 3.3 Przegląd 3.1 — komentarz o utrwalaniu braku bariery czasowej — b56ca96
+- [x] 3.4 Przegląd 3.2 — komentarz zestawiający oba 500 (config vs AI-failed) — b56ca96
 
 ### Faza 4: Nieograniczony kontrakt generowania (Ryzyko #5)
 
 #### Automatyczne
 
-- [ ] 4.1 npx vitest run tests/api/generate-flashcards-rate.test.ts — 5/5 żądań 200, wariant współbieżny przechodzi
-- [ ] 4.2 npm run lint — czysto
+- [x] 4.1 npx vitest run tests/api/generate-flashcards-rate.test.ts — 5/5 żądań 200, wariant współbieżny przechodzi
+- [x] 4.2 npm run lint — czysto
 
 #### Ręczne
 
-- [ ] 4.3 Przegląd komentarza blokowego — czytelne, że to LUKA, nie kontrakt
-- [ ] 4.4 Potwierdzić aktualność linku prd.md:110-112
+- [x] 4.3 Przegląd komentarza blokowego — czytelne, że to LUKA, nie kontrakt
+- [x] 4.4 Potwierdzić aktualność linku prd.md:110-112
 
 ### Faza 5: Odporność UI przeglądu na zniekształcony payload (Ryzyko #2)
 
