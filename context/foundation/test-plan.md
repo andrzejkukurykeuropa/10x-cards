@@ -122,7 +122,60 @@ gdy odpowiednia faza wdrożenia zostanie zrealizowana; wcześniej podsekcja
 zawiera "TBD — patrz §3 Faza N."
 
 ### 6.1 Dodawanie testu jednostkowego
-- TBD — patrz §3 Faza 3 (wzorzec mapowania pól FSRS) oraz §3 Faza 4 (wzorzec przypadków brzegowych zapytania selekcji czyszczenia).
+
+Wzorzec ustalony w §3 Faza 3 (`context/changes/study-fsrs-scheduling-integrity/`),
+zweryfikowany plikiem `tests/lib/fsrs.test.ts` (22 testy). Warstwa dla czystej
+logiki w `src/lib/**` — bez Supabase, bez sieci, bez mocka.
+
+1. **Lokalizacja pliku**: `tests/lib/<moduł>.test.ts`, jeden plik na moduł
+   `src/lib` / `src/lib/services` (np. `tests/lib/fsrs.test.ts` dla
+   `src/lib/services/fsrs.ts`). Runner: Vitest przez `getViteConfig()`; `include`
+   w `vitest.config.ts` już obejmuje `tests/**`. Środowisko `node` (domyślne w
+   configu) — nie dodawaj `// @vitest-environment jsdom` do testu modułu logiki.
+2. **Import wprost, zero mocka**: importuj testowane funkcje z `@/lib/...` i
+   ćwicz je na prawdziwych zależnościach. Jeśli moduł opakowuje bibliotekę
+   (`fsrs.ts` → `ts-fsrs`), biblioteka biegnie naprawdę — **nie** `vi.mock`.
+3. **Determinizm przez jawne wejście**: przekazuj każdą niedeterministyczną
+   wartość (np. `now: Date`) jako argument z ustaloną stałą, nigdy nie polegaj na
+   `new Date()` w teście. Dla `ts-fsrs`: `enable_fuzz: false` w konfiguracji
+   schedulera ⇒ interwały są w pełni deterministyczne.
+4. **Asertuj WŁAŚCIWOŚĆ, którą algorytm gwarantuje z definicji — nie wartość,
+   którą liczy nasz kod.** To jest reguła krytyczna tej warstwy (anty-wzorzec §2
+   #4: „skopiowana kalkulacja produkcyjna"). Nie odtwarzaj wzoru biblioteki i nie
+   uruchamiaj jej ponownie w teście, żeby wyprodukować „oczekiwaną" liczbę.
+   Dozwolone asercje to: kierunek zmiany (`stability` rośnie po udanym
+   przeglądzie), relacje/monotonia (`again ≤ hard ≤ good ≤ easy`), granulacja
+   (interwał jest całkowitą liczbą dni ≥ 1, nie minut), liczności (`repetitions`
+   +1 dokładnie, `lapses` +1 przy `again`), nazwy i typy pól wyjściowych
+   (`repetitions` nie `reps`; `state` to string-etykieta, nie enum), przynależność
+   do zakresu (`difficulty` w `[1, 10]`). Każda z nich łapie błędne okablowanie
+   (zamiana pól, zły grade mapping, zła jednostka interwału, zmieniona flaga
+   `enable_short_term`) bez replikowania biblioteki.
+5. **Ograniczenia konfiguracji ESLint w testach**: `!` (non-null assertion) i
+   `x as T` (przy `T` zawężającym null) są **zabronione**. Do zawężenia
+   `string | null` z DTO/wiersza użyj małego helpera rzucającego wyjątek
+   (`function toMs(iso: string | null): number { if (iso === null) throw ...;
+   return new Date(iso).getTime(); }`) zamiast asercji. Pole `elapsed_days` z
+   `ts-fsrs` jest `@deprecated` — jeśli test go dotyka, użyj
+   `// eslint-disable-next-line @typescript-eslint/no-deprecated` z komentarzem.
+
+**Przykład** (z `tests/lib/fsrs.test.ts` — niezależna asercja jednostki
+interwału bez odtwarzania wzoru FSRS):
+```ts
+const result = scheduleReview(FRESH_ROW, "good", NOW);
+// due_date jest o scheduled_days *dni* od now, a nie o scheduled_days *minut*
+// (to jest asercja okablowania enable_short_term:false, nie re-kalkulacja):
+const daysFromNow = Math.round((toMs(result.due_date) - NOW.getTime()) / 86_400_000);
+expect(daysFromNow).toBe(result.scheduled_days);
+expect(Number.isInteger(result.scheduled_days)).toBe(true);
+expect(result.scheduled_days).toBeGreaterThanOrEqual(1);
+```
+
+Uruchomienie: `npx vitest run tests/lib/<moduł>.test.ts` dla pojedynczego pliku
+(nie wymaga `npx supabase start`); `npm run test` dla całości.
+
+§3 Faza 4 (wzorzec przypadków brzegowych zapytania selekcji czyszczenia
+nieaktywnych kont) — wciąż `TBD`.
 
 ### 6.2 Dodawanie testu integracyjnego
 
