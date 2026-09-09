@@ -7,7 +7,7 @@
 > Odświeżenie: uruchom ponownie `/10x-test-plan --refresh`, gdy plan jest
 > nieaktualny (patrz §8).
 >
-> Ostatnia aktualizacja: 2026-09-08 (Faza 2 wdrożenia complete: §6.4/§6.6 wypełnione; §4 „Stos" wymaga `--refresh` — jsdom/RTL wprowadzone przez warstwę testów komponentu)
+> Ostatnia aktualizacja: 2026-09-09 (Faza 4 wdrożenia implementing → complete: `tests/lib/inactive-accounts.test.ts` dostarczony, §6.1/§6.6 wypełnione; §4 „Stos" wciąż wymaga `--refresh` za jsdom/RTL + `tests/lib/` z Faz 2–3, ale Faza 4 nic nowego nie dodała; dług lintu nadal blokuje §3 Faza 5 — patrz §6.6)
 
 ## 1. Strategia
 
@@ -77,8 +77,8 @@ na dysku.
 |---|---|---|---|---|---|---|
 | 1 | Auth and access-control coverage | Obrona integralności logowania/sesji i izolacji danych per użytkownik na najtańszej warstwie | #1, #3 | integracyjne | complete | `context/changes/auth-access-control-coverage/` |
 | 2 | AI generation reliability | Wykrywanie cichych awarii w buforowanym kontrakcie żądania/odpowiedzi generowania: zwijanie każdego trybu awarii do jednego `500` i brak jakiegokolwiek timeoutu | #2, #5 | integracyjne | complete | `context/changes/ai-generation-reliability/` |
-| 3 | Study/FSRS scheduling integrity | Obrona poprawności stanu przeglądu i kolejności kart w silnie zmiennym obszarze nauki | #4 | jednostkowe + integracyjne | change opened | `context/changes/study-fsrs-scheduling-integrity/` |
-| 4 | Account-lifecycle safety net | Ograniczenie logiki selekcji zadania czyszczącego do uzgodnionego zakresu, z poszanowaniem negative-space w §7 | #6 | jednostkowe | not started | — |
+| 3 | Study/FSRS scheduling integrity | Obrona poprawności stanu przeglądu i kolejności kart w silnie zmiennym obszarze nauki | #4 | jednostkowe + integracyjne | complete | `context/changes/study-fsrs-scheduling-integrity/` |
+| 4 | Account-lifecycle safety net | Ograniczenie logiki selekcji zadania czyszczącego do uzgodnionego zakresu, z poszanowaniem negative-space w §7 | #6 | jednostkowe | implementing | `context/changes/account-lifecycle-safety-net/` |
 | 5 | Quality-gates wiring | Zablokowanie jednostkowych + integracyjnych jako wymaganej bramy CI na każdym PR | przekrojowe | bramy | not started | — |
 
 **Słownictwo statusów** (stałe): `not started` → `change opened` →
@@ -174,8 +174,45 @@ expect(result.scheduled_days).toBeGreaterThanOrEqual(1);
 Uruchomienie: `npx vitest run tests/lib/<moduł>.test.ts` dla pojedynczego pliku
 (nie wymaga `npx supabase start`); `npm run test` dla całości.
 
-§3 Faza 4 (wzorzec przypadków brzegowych zapytania selekcji czyszczenia
-nieaktywnych kont) — wciąż `TBD`.
+**Wzorzec przypadków brzegowych „zapytania selekcji"** (ustalony w §3 Faza 4,
+`context/changes/account-lifecycle-safety-net/`, zweryfikowany plikiem
+`tests/lib/inactive-accounts.test.ts` — 37 testów). Dotyczy czystych
+klasyfikatorów w `src/lib/**`, które liczą progi czasowe przez arytmetykę
+kalendarzową (`Date#setMonth`) — „zapytanie selekcji" zadania czyszczącego nie
+jest zapytaniem SQL, tylko dwiema czystymi funkcjami.
+
+1. **Lokalizacja i uruchomienie**: `tests/lib/<moduł>.test.ts` (jak w §6.1
+   powyżej); `npx vitest run tests/lib/inactive-accounts.test.ts`.
+2. **Przypięcie strefy czasowej**: `process.env.TZ = "UTC";` jako pierwsza
+   instrukcja po importach, z komentarzem. Node 22 re-odczytuje `process.env.TZ`
+   przy każdej operacji `Date`, więc klasyfikatory liczące próg przez `setMonth`
+   na lokalnych polach `Date` stają się deterministyczne bez `setupFiles` ani
+   zmian w `vitest.config.ts`. **To NIE jest zmiana stosu — §4 nie wymaga
+   `--refresh` po tej fazie.**
+3. **Zamrożony `NOW`** na poziomie modułu (`new Date("2026-06-15T12:00:00.000Z")`
+   — środek dnia, środek miesiąca, miesiące docelowe bez poślizgu długości),
+   przekazywany jawnie jako ostatni argument do **każdego** wywołania SUT.
+4. **Helper konstruujący wejścia, nie re-implementujący SUT**: `monthsBefore(now,
+   months, dayShift)` produkuje znacznik ISO cofnięty o miesiące/dni; ułamkowe
+   miesiące rozbijaj na całe miesiące + ~30-dniową część (`setMonth` ucina
+   ułamek do zera). Helper tylko buduje znacznik — SUT porównuje instanty.
+5. **Centralna asercja właściwości — siatka wzajemnej wykluczalności**: dla
+   siatki wartości wokół obu granic (`[12, 22, 22.8, 23, 23.5, 24, 24.5, 30]`
+   miesięcy) zbuduj krotkę `[isInactiveForDeletion(x), isInWarningWindow(x)]` i
+   asertuj: **nigdy oba `true`**, najwyżej jeden `true`. Dla wejść wyraźnie w
+   każdej strefie — dokładnie jedno z `{usuń, ostrzeż, żadne}`. Ta grupa łamie
+   się przy każdej rozjeździe stałych progów (`DELETION_THRESHOLD_MONTHS` /
+   `WARNING_THRESHOLD_MONTHS`) otwierającej lukę lub nakładkę między oknami.
+6. **Charakteryzacja fail-closed ≠ świadoma regresja**: gdy klasyfikator celowo
+   „w razie wątpliwości usuwa" (`null`/`null` referencja, `NaN` znacznik →
+   `isInactiveForDeletion` `true`), oznacz to komentarzem blokowym jawnie jako
+   **celowy wybór projektowy** (tu: fix F1) — w odróżnieniu od „świadomej
+   regresji" z §6.4 pkt 7, **nie** oczekujemy, że poprawka to odwróci.
+7. **Tolerancja arytmetyki kalendarzowej**: grupa „koniec miesiąca / 29 lutego"
+   (`NOW` w 31. dniu lub 29 lutego) asertuje wyłącznie kierunek z marginesem
+   wielu miesięcy — poślizg `setMonth` ±1–3 dni jest udokumentowany jako
+   akceptowany (spójny z tolerancją dzienną cronu self-healing), nigdy
+   porównania co do dnia ani re-odtwarzania `setMonth` w asercji.
 
 ### 6.2 Dodawanie testu integracyjnego
 
@@ -369,6 +406,44 @@ powyżej) §3 Faza 3 dodała katalog `tests/lib/` — warstwę testów jednostko
 czystej logiki `src/lib/**` (§6.1), środowisko `node`, bez Supabase/mocka. To
 kolejna zmiana poza zamrożoną §4; **§4 nadal wymaga `/10x-test-plan --refresh`**
 (ta faza tego nie uruchamia).
+
+**Faza 4 — Account-lifecycle safety net (Ryzyko #6).** Zob. §6.1 (warstwa
+jednostkowa, w tym wzorzec przypadków brzegowych „zapytania selekcji"). Zestaw:
+`tests/lib/inactive-accounts.test.ts` (37 testów, osiem grup `describe`) — czyste
+klasyfikatory `isInactiveForDeletion` / `isInWarningWindow` z
+`src/lib/inactive-accounts.ts` biegną bez mocka, `now` wstrzykiwany, `TZ=UTC`
+przypięte w pliku. Pokryte: kontrola pozytywna (aktywne konto), kierunek i
+granica 24 mies. (należy do „usuń"), półotwarte okno ostrzeżeń `(24, 23]`,
+**siatka wzajemnej wykluczalności** (centralna asercja — nigdy oba klasyfikatory
+`true`; łamie się przy rozjeździe stałych progów), symetria fallbacku
+`created_at`, charakteryzacja fail-closed (F1 — celowy wybór, **nie** świadoma
+regresja), tolerancja arytmetyki kalendarzowej (koniec miesiąca / 29 lutego),
+idempotencja przy ponownym wywołaniu.
+
+- **Endpoint `src/pages/api/admin/cleanup-inactive-accounts.ts` pozostaje bez
+  testu celowo** — pętla `listUsers`, `deleteUser`, `signInWithOtp`, gałąź
+  `dryRun` i efekt uboczny usuwania end-to-end są jawnie w §7 negative-space
+  (wywiad Fazy 2, Q5).
+- **Luka cyklu życia markera `retention_warning_sent_at`** (marker nigdy nie
+  czyszczony przy logowaniu → drugie ostrzeżenie stłumione po ponownej
+  nieaktywności) jest odnotowana jako kandydat na osobny `/10x-new` (naprawa
+  produkcyjna w endpointcie), **nie jako test** — leży poza czystą funkcją.
+- **§4 „Stos" NIE wymaga `--refresh` po tej fazie** — Faza 4 nie dodała narzędzi,
+  `devDependencies` ani `setupFiles`; przypięcie strefy to jedna linia w pliku
+  testowym.
+
+**Dług lintu blokujący §3 Faza 5 (Quality-gates wiring).** Na 2026-09-09
+`npm run lint` jest **czerwony** (49 błędów) z powodu pre-istniejących naruszeń
+w plikach spoza zakresu testowego: `src/components/AccountDeletion.tsx`,
+`src/components/ui/checkbox.tsx`, `src/components/ui/dialog.tsx`,
+`src/lib/inactive-accounts.ts`, `src/pages/api/admin/cleanup-inactive-accounts.ts`,
+`src/pages/api/generate-flashcards.ts`. Nowe pliki testowe są czyste
+(`npx eslint tests/**` → 0). Faza 5 chce podłączyć `lint` + `unit + integration`
+jako **wymaganą bramę CI** — wymaga to najpierw wyzerowania tego długu
+(46/49 błędów jest auto-fixowalnych przez `npm run lint:fix`; 3 ręczne:
+`no-unnecessary-condition` ×2 w `cleanup-inactive-accounts.ts`, `no-deprecated`
+`generateObject` w `generate-flashcards.ts`). Śledzone w
+`context/changes/study-fsrs-scheduling-integrity/follow-ups/review-fixes.md` (F1).
 
 ## 7. Czego Celowo Nie Testujemy
 
