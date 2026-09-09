@@ -447,8 +447,19 @@ okablowała bramę CI. Dostarczono:
   wyrównane `22` → `22.14.0` (zgodnie z `.nvmrc`).
 - Check `ci` ustawiony jako **required status check** na regule ochrony gałęzi
   `master` (`required_status_checks.contexts: ["ci"]`, `strict: true`,
-  `enforce_admins: true`) — PR z czerwonym lintem lub czerwonym testem
-  jednostkowym nie może zostać zmergowany.
+  `enforce_admins: false`) — PR z czerwonym lintem lub czerwonym testem
+  jednostkowym nie może zostać zmergowany. `enforce_admins: false` (nie `true`,
+  wbrew pierwotnej rekomendacji planu): repo prowadzi solo-dev workflow z
+  commitami prosto na `master` (cały łańcuch `/10x-implement`), a
+  `enforce_admins: true` blokowałby każdy bezpośredni push (wymuszałby PR na
+  każdy commit dokumentacyjny). Brama i tak egzekwuje cel Fazy 5 — czerwony `ci`
+  blokuje **merge PR-a** (potwierdzone testowym PR #8); admin zachowuje
+  bezpośredni push na `master` z ostrzeżeniem „Bypassed rule violations".
+- **Repo przełączone na public** (`gh repo edit --visibility public`): branch
+  protection i rulesets są niedostępne na prywatnym repo w darmowym planie
+  GitHub (HTTP 403 „Upgrade to GitHub Pro"). Bez tego przełączenia bramy nie
+  dałoby się uczynić wymaganą. Tylko `.env.example` / `.env.test.example` są
+  śledzone; `.env` / `.dev.vars` / `.env.test` nigdy nie były commitowane.
 - Migracja `generateObject` → `generateText` + `Output.object` w
   `src/pages/api/generate-flashcards.ts` (zdjęcie `@typescript-eslint/no-deprecated`
   bez `eslint-disable`) + wyzerowanie pre-istniejącego długu lintu (49→0:
