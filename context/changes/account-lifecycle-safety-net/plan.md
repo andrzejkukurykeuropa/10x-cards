@@ -379,15 +379,15 @@ Brak — żadnych zmian schematu, danych ani kodu produkcyjnego.
 
 #### Automatyczne
 
-- [x] 1.1 Testy przechodzą: `npx vitest run tests/lib/inactive-accounts.test.ts`
-- [x] 1.2 Nowy plik czysty w ESLint: `npx eslint tests/lib/inactive-accounts.test.ts` → 0 błędów
-- [x] 1.3 Suita `tests/lib/` nadal zielona: `npx vitest run tests/lib/`
-- [x] 1.4 Reszta zestawu bez regresji: `npm run test`
-- [x] 1.5 `test-plan.md` §6.1 bez `TBD` dla Fazy 4; §6.6 ma akapit „Faza 4"
+- [x] 1.1 Testy przechodzą: `npx vitest run tests/lib/inactive-accounts.test.ts` — ff09314
+- [x] 1.2 Nowy plik czysty w ESLint: `npx eslint tests/lib/inactive-accounts.test.ts` → 0 błędów — ff09314
+- [x] 1.3 Suita `tests/lib/` nadal zielona: `npx vitest run tests/lib/` — ff09314
+- [x] 1.4 Reszta zestawu bez regresji: `npm run test` — ff09314
+- [x] 1.5 `test-plan.md` §6.1 bez `TBD` dla Fazy 4; §6.6 ma akapit „Faza 4" — ff09314
 
 #### Ręczne
 
-- [x] 1.6 Test wzajemnej wykluczalności łamie się przy ręcznej zmianie `WARNING_THRESHOLD_MONTHS` → `24` i wraca po cofnięciu
-- [x] 1.7 Komentarz grupy „fail-closed" czyta się jako „celowy wybór", nie „usterka"
-- [x] 1.8 §6.1 czyta się jako instrukcja użyteczna dla osoby spoza sesji
-- [ ] 1.9 `change.md` → `status: implemented`, `updated` zaktualizowane
+- [x] 1.6 Test wzajemnej wykluczalności łamie się przy ręcznej zmianie `WARNING_THRESHOLD_MONTHS` → `24` i wraca po cofnięciu — ff09314
+- [x] 1.7 Komentarz grupy „fail-closed" czyta się jako „celowy wybór", nie „usterka" — ff09314
+- [x] 1.8 §6.1 czyta się jako instrukcja użyteczna dla osoby spoza sesji — ff09314
+- [x] 1.9 `change.md` → `status: implemented`, `updated` zaktualizowane
