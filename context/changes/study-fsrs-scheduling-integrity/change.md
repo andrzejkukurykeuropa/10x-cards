@@ -1,7 +1,7 @@
 ---
 change_id: study-fsrs-scheduling-integrity
 title: Study/FSRS scheduling integrity test coverage
-status: implementing
+status: implemented
 created: 2026-09-09
 updated: 2026-09-09
 archived_at: null

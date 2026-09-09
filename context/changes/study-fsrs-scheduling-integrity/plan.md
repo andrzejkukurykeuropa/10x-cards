@@ -623,16 +623,16 @@ Brak. Faza nie dotyka schematu ani danych. Testy zakładają obecny stan migracj
 
 #### Automatyczne
 
-- [x] 3.1 Nowy plik istnieje: `test -f tests/components/StudySession.test.tsx`
-- [x] 3.2 Pierwsza linia to `// @vitest-environment jsdom`
-- [x] 3.3 Testy przechodzą: `npx vitest run tests/components/StudySession.test.tsx`
-- [x] 3.4 Cały zestaw przechodzi: `npm run test`
-- [x] 3.5 Lint przechodzi: `npm run lint`
-- [x] 3.6 `git diff --stat` bez zmian w `src/**`
+- [x] 3.1 Nowy plik istnieje: `test -f tests/components/StudySession.test.tsx` — 1ab61d2
+- [x] 3.2 Pierwsza linia to `// @vitest-environment jsdom` — 1ab61d2
+- [x] 3.3 Testy przechodzą: `npx vitest run tests/components/StudySession.test.tsx` — 1ab61d2
+- [x] 3.4 Cały zestaw przechodzi: `npm run test` — 1ab61d2
+- [x] 3.5 Lint przechodzi: `npm run lint` — 1ab61d2
+- [x] 3.6 `git diff --stat` bez zmian w `src/**` — 1ab61d2
 
 #### Ręczne
 
-- [x] 3.7 Test 3.2 obserwuje efekt dla użytkownika (banner / zgubiona ocena), nie tylko „dwa fetch"
-- [x] 3.8 Wstrzyknięty synchroniczny guard w `handleRate` łamie 3.2, nie łamie 3.1/3.3; cofnięty
-- [x] 3.9 3.1 i 3.3 przechodzą stabilnie przy 10 kolejnych uruchomieniach (brak flake)
-- [x] 3.10 §6.6 czyta się jako kompletna książka kucharska dla Ryzyka #4; flaga `--refresh` dla §4 odnotowana
+- [x] 3.7 Test 3.2 obserwuje efekt dla użytkownika (banner / zgubiona ocena), nie tylko „dwa fetch" — 1ab61d2
+- [x] 3.8 Wstrzyknięty synchroniczny guard w `handleRate` łamie 3.2, nie łamie 3.1/3.3; cofnięty — 1ab61d2
+- [x] 3.9 3.1 i 3.3 przechodzą stabilnie przy 10 kolejnych uruchomieniach (brak flake) — 1ab61d2
+- [x] 3.10 §6.6 czyta się jako kompletna książka kucharska dla Ryzyka #4; flaga `--refresh` dla §4 odnotowana — 1ab61d2
