@@ -579,6 +579,24 @@ Brak. Faza nie dotyka schematu ani danych. Testy zakładają obecny stan migracj
 - Historyczne pitfalle „wired correctly": `context/archive/2026-08-02-study-session/plan.md:64-77`
   (F2/F3/F4/F5 w `reviews/impl-review.md`)
 
+## Addenda (przegląd implementacji, 2026-09-09)
+
+**A1 — Sprostowanie: `again` na karcie w stanie `Review` pozostaje `Review`, nie
+`Relearning`.** Tekst tego planu w kilku miejscach (Przegląd §D.2 „→ Relearning";
+Faza 1 grupa asercji „`again` na karcie w stanie `Review`" → „`state === "Relearning"`";
+Faza 2 case 2.3 → „zwrócony `state === "Relearning"`"; Strategia testowania →
+„Przypadek brzegowy: `again` ... → `Relearning`") jest **niepoprawny**. Zgodnie z
+`research.md` §A (odnośniki `ts-fsrs` `index.mjs:1216-1218, 1272-1278`) i „Analizą
+stanu obecnego" tego planu (model 2-stanowy `New → Review`): przy
+`enable_short_term: false` scheduler to `LongTermScheduler`, który dla **każdego**
+grade utrwala `State.Review` — `Learning`/`Relearning` nigdy nie trafiają do bazy.
+„Cofnięcie" harmonogramu przy realnym `again` jest obserwowalne przez `lapses` +1
+i krótszy `due_date`, **nie** przez zmianę `state`. Zaimplementowane testy
+(`tests/lib/fsrs.test.ts` asertuje `state === "Review"`; `tests/api/study-review.test.ts`
+2.3 nie asertuje `state` w ogóle) są poprawne; wiążący jest ten addendum, nie
+oryginalny tekst asercji. `context/foundation/test-plan.md` §6.6 opisuje to już
+poprawnie.
+
 ## Postęp
 
 > Konwencja: `- [ ]` oczekujące, `- [x]` wykonane. Dodaj ` — <commit sha>` po zatwierdzeniu kroku.
