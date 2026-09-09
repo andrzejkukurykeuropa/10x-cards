@@ -1,7 +1,7 @@
 ---
 change_id: quality-gates-wiring
 title: Wire lint + unit/integration as a required CI gate on every PR
-status: implementing
+status: implemented
 created: 2026-09-09
 updated: 2026-09-10
 archived_at: null

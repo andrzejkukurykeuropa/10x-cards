@@ -627,15 +627,15 @@ branch-protection dla marginalnego zysku, skoro integracja i tak nie jest w CI.
 
 #### Automatyczne
 
-- [ ] 3.1 CI job pokazuje kroki `lint → test:unit → build` wszystkie zielone na świeżym przebiegu
-- [ ] 3.2 `gh api .../branches/master/protection` zwraca `required_status_checks.contexts` zawierające `"ci"`
-- [ ] 3.3 Przebieg CI na `origin/master` po pushu jest zielony
-- [x] 3.4 Lokalnie: `npm run lint && npm run test:unit && npm run build` zielone
+- [x] 3.1 CI job pokazuje kroki `lint → test:unit → build` wszystkie zielone na świeżym przebiegu — ad6166c (run 34414080721)
+- [x] 3.2 `gh api .../branches/master/protection` zwraca `required_status_checks.contexts` zawierające `"ci"` — ad6166c (repo przełączone na public, by odblokować branch protection na darmowym planie)
+- [x] 3.3 Przebieg CI na `origin/master` po pushu jest zielony — ad6166c (run 34414080721)
+- [x] 3.4 Lokalnie: `npm run lint && npm run test:unit && npm run build` zielone — ad6166c
 
 #### Ręczne
 
-- [ ] 3.5 Testowy PR z celowym błędem lintu: check `ci` failed, merge zablokowany
-- [ ] 3.6 Po cofnięciu błędu: check zielony, merge odblokowany; PR zamknięty bez merge
-- [ ] 3.7 `test-plan.md` §3 Faza 5 = `complete`, §5 i §6.6 sprostowane, czyta się spójnie
-- [ ] 3.8 `change.md` status zaktualizowany
-- [ ] 3.9 Preview-deploy Cloudflare czerwonej gałęzi PR nadal powstaje (brama blokuje merge, nie deploy)
+- [x] 3.5 Testowy PR z celowym błędem lintu: check `ci` failed, merge zablokowany — PR #8: `ci` fail, mergeStateStatus BLOCKED
+- [x] 3.6 Po cofnięciu błędu: check zielony, merge odblokowany; PR zamknięty bez merge — PR #8: revert → `ci` pass, mergeStateStatus CLEAN, zamknięty bez merge, gałąź usunięta
+- [x] 3.7 `test-plan.md` §3 Faza 5 = `complete`, §5 i §6.6 sprostowane, czyta się spójnie — ad6166c
+- [x] 3.8 `change.md` status zaktualizowany
+- [x] 3.9 Preview-deploy Cloudflare czerwonej gałęzi PR nadal powstaje (brama blokuje merge, nie deploy) — architektonicznie: `ci` to check GitHub Actions bramkujący przycisk merge; Cloudflare Pages deployuje przez własny webhook Git, nie czyta statusu check. Brak weryfikacji w dashboardzie Cloudflare w tej sesji.
