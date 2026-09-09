@@ -11,7 +11,8 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:unit": "vitest run --config vitest.config.unit.ts"
   },
   "dependencies": {
     "@ai-sdk/google": "^3.0.83",

@@ -599,29 +599,29 @@ branch-protection dla marginalnego zysku, skoro integracja i tak nie jest w CI.
 
 #### Automatyczne
 
-- [x] 1.1 `npm run lint` → 0 błędów
-- [x] 1.2 Pełny zestaw testów przechodzi: `npx supabase start` + `npm run test`
-- [x] 1.3 Testy AI-generation bez regresji: `npx vitest run tests/api/generate-flashcards*.test.ts tests/components/FlashcardGenerator.test.tsx`
-- [x] 1.4 Build przechodzi: `npm run build`
+- [x] 1.1 `npm run lint` → 0 błędów — 15cd10e
+- [x] 1.2 Pełny zestaw testów przechodzi: `npx supabase start` + `npm run test` — 15cd10e
+- [x] 1.3 Testy AI-generation bez regresji: `npx vitest run tests/api/generate-flashcards*.test.ts tests/components/FlashcardGenerator.test.tsx` — 15cd10e
+- [x] 1.4 Build przechodzi: `npm run build` — 15cd10e
 
 #### Ręczne
 
-- [x] 1.5 `git diff` na plikach auto-fixu zawiera wyłącznie zmiany formatowania
-- [x] 1.6 Smoke test `/api/generate-flashcards` (dev + prawdziwy `GROQ_API_KEY`): kształt odpowiedzi identyczny jak przed migracją
-- [x] 1.7 Brak regresji w przeglądzie propozycji w UI
+- [x] 1.5 `git diff` na plikach auto-fixu zawiera wyłącznie zmiany formatowania — 15cd10e
+- [x] 1.6 Smoke test `/api/generate-flashcards` (dev + prawdziwy `GROQ_API_KEY`): kształt odpowiedzi identyczny jak przed migracją — 15cd10e
+- [x] 1.7 Brak regresji w przeglądzie propozycji w UI — 15cd10e
 
 ### Faza 2: Osobny config testów jednostkowych
 
 #### Automatyczne
 
-- [ ] 2.1 `npm run test:unit` → dokładnie 59 testów, wszystkie zielone
-- [ ] 2.2 `npm run test:unit` przechodzi z odsuniętym `.env.test` i bez działającego Supabase
-- [ ] 2.3 Pełny zestaw nietknięty: `npx supabase start` + `npm run test` nadal przechodzi
-- [ ] 2.4 Lint nadal zielony: `npm run lint`
+- [x] 2.1 `npm run test:unit` → dokładnie 59 testów, wszystkie zielone
+- [x] 2.2 `npm run test:unit` przechodzi z odsuniętym `.env.test` i bez działającego Supabase
+- [x] 2.3 Pełny zestaw nietknięty: `npx supabase start` + `npm run test` nadal przechodzi
+- [x] 2.4 Lint nadal zielony: `npm run lint`
 
 #### Ręczne
 
-- [ ] 2.5 `npm run test:unit` kończy się w kilka sekund, bez wzmianki o `global-setup.ts` / tworzeniu użytkowników testowych
+- [x] 2.5 `npm run test:unit` kończy się w kilka sekund, bez wzmianki o `global-setup.ts` / tworzeniu użytkowników testowych
 
 ### Faza 3: Okablowanie bramy CI + branch protection + aktualizacja planu testów
 
