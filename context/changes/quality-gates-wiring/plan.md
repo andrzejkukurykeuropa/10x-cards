@@ -614,14 +614,14 @@ branch-protection dla marginalnego zysku, skoro integracja i tak nie jest w CI.
 
 #### Automatyczne
 
-- [x] 2.1 `npm run test:unit` → dokładnie 59 testów, wszystkie zielone
-- [x] 2.2 `npm run test:unit` przechodzi z odsuniętym `.env.test` i bez działającego Supabase
-- [x] 2.3 Pełny zestaw nietknięty: `npx supabase start` + `npm run test` nadal przechodzi
-- [x] 2.4 Lint nadal zielony: `npm run lint`
+- [x] 2.1 `npm run test:unit` → dokładnie 59 testów, wszystkie zielone — db01c5f
+- [x] 2.2 `npm run test:unit` przechodzi z odsuniętym `.env.test` i bez działającego Supabase — db01c5f
+- [x] 2.3 Pełny zestaw nietknięty: `npx supabase start` + `npm run test` nadal przechodzi — db01c5f
+- [x] 2.4 Lint nadal zielony: `npm run lint` — db01c5f
 
 #### Ręczne
 
-- [x] 2.5 `npm run test:unit` kończy się w kilka sekund, bez wzmianki o `global-setup.ts` / tworzeniu użytkowników testowych
+- [x] 2.5 `npm run test:unit` kończy się w kilka sekund, bez wzmianki o `global-setup.ts` / tworzeniu użytkowników testowych — db01c5f
 
 ### Faza 3: Okablowanie bramy CI + branch protection + aktualizacja planu testów
 
@@ -630,7 +630,7 @@ branch-protection dla marginalnego zysku, skoro integracja i tak nie jest w CI.
 - [ ] 3.1 CI job pokazuje kroki `lint → test:unit → build` wszystkie zielone na świeżym przebiegu
 - [ ] 3.2 `gh api .../branches/master/protection` zwraca `required_status_checks.contexts` zawierające `"ci"`
 - [ ] 3.3 Przebieg CI na `origin/master` po pushu jest zielony
-- [ ] 3.4 Lokalnie: `npm run lint && npm run test:unit && npm run build` zielone
+- [x] 3.4 Lokalnie: `npm run lint && npm run test:unit && npm run build` zielone
 
 #### Ręczne
 

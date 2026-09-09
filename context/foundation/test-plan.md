@@ -7,7 +7,7 @@
 > Odświeżenie: uruchom ponownie `/10x-test-plan --refresh`, gdy plan jest
 > nieaktualny (patrz §8).
 >
-> Ostatnia aktualizacja: 2026-09-09 (Faza 4 wdrożenia implementing → complete: `tests/lib/inactive-accounts.test.ts` dostarczony, §6.1/§6.6 wypełnione; §4 „Stos" wciąż wymaga `--refresh` za jsdom/RTL + `tests/lib/` z Faz 2–3, ale Faza 4 nic nowego nie dodała; dług lintu nadal blokuje §3 Faza 5 — patrz §6.6)
+> Ostatnia aktualizacja: 2026-09-10 (§3 Faza 5 „Quality-gates wiring" domknięta: Status → `complete`. Dług lintu wyzerowany (49→0), `vitest.config.unit.ts` + skrypt `test:unit` (zakres `tests/lib/**`, bez `globalSetup`), krok `npm run test:unit` w jobie `ci` między `lint` a `build`, check `ci` jako required status check na `master`. §5 sprostowane: brak osobnej bramy typecheck (złożona w `lint`); brama jednostkowa okablowana w CI, integracyjna nadal local-only. §4 „Stos" wciąż wymaga `--refresh` za jsdom/RTL + `tests/lib/` z Faz 2–3 oraz `vitest.config.unit.ts` — nie blokowało Fazy 5.)
 
 ## 1. Strategia
 
@@ -78,8 +78,8 @@ na dysku.
 | 1 | Auth and access-control coverage | Obrona integralności logowania/sesji i izolacji danych per użytkownik na najtańszej warstwie | #1, #3 | integracyjne | complete | `context/changes/auth-access-control-coverage/` |
 | 2 | AI generation reliability | Wykrywanie cichych awarii w buforowanym kontrakcie żądania/odpowiedzi generowania: zwijanie każdego trybu awarii do jednego `500` i brak jakiegokolwiek timeoutu | #2, #5 | integracyjne | complete | `context/changes/ai-generation-reliability/` |
 | 3 | Study/FSRS scheduling integrity | Obrona poprawności stanu przeglądu i kolejności kart w silnie zmiennym obszarze nauki | #4 | jednostkowe + integracyjne | complete | `context/changes/study-fsrs-scheduling-integrity/` |
-| 4 | Account-lifecycle safety net | Ograniczenie logiki selekcji zadania czyszczącego do uzgodnionego zakresu, z poszanowaniem negative-space w §7 | #6 | jednostkowe | implementing | `context/changes/account-lifecycle-safety-net/` |
-| 5 | Quality-gates wiring | Zablokowanie jednostkowych + integracyjnych jako wymaganej bramy CI na każdym PR | przekrojowe | bramy | not started | — |
+| 4 | Account-lifecycle safety net | Ograniczenie logiki selekcji zadania czyszczącego do uzgodnionego zakresu, z poszanowaniem negative-space w §7 | #6 | jednostkowe | complete | `context/changes/account-lifecycle-safety-net/` |
+| 5 | Quality-gates wiring | Zablokowanie jednostkowych + integracyjnych jako wymaganej bramy CI na każdym PR | przekrojowe | bramy | complete | `context/changes/quality-gates-wiring/` |
 
 **Słownictwo statusów** (stałe): `not started` → `change opened` →
 `researched` → `planned` → `implementing` → `complete`.
@@ -109,9 +109,10 @@ testowej `none`.
 
 | Brama | Gdzie | Wymagana? | Wykrywa |
 |---|---|---|---|
-| lint + typecheck | lokalnie + CI | wymagana (już okablowana) | dryf składniowy/typów |
-| build | CI | wymagana (już okablowana) | błędy przerywające build |
-| jednostkowe + integracyjne | lokalnie + CI | wymagana po §3 Faza 1 | regresje logiki i kontroli dostępu |
+| lint (z regułami type-aware) | lokalnie + CI | wymagana, okablowana (krok `npm run lint` w jobie `ci`; check `ci` jest required na `master`) | dryf składniowy/typów — **brak osobnej bramy typecheck**; egzekwowanie typów jest złożone w `lint` (`strictTypeChecked` + `stylisticTypeChecked` + `projectService`). `astro check` nie jest wywoływany nigdzie; `npm run build` nie uruchamia `tsc`. |
+| build | CI | wymagana (już okablowana; krok `npm run build` w jobie `ci`) | błędy przerywające build |
+| jednostkowe | lokalnie + CI | wymagana, okablowana w CI (§3 Faza 5 — krok `npm run test:unit` w jobie `ci` po `lint` przed `build`; required status check `ci` na `master`) | regresje czystej logiki `tests/lib/**` (59 testów: `fsrs` + `inactive-accounts`) — bez Supabase, przez `vitest.config.unit.ts` |
+| integracyjne | lokalnie | local-only — wymaga `npx supabase start`; **nieokablowana w CI w tym wdrożeniu** (§3 „Czego NIE robimy": żywy Supabase + znany flaky `study-review.test.ts` 2.4) | regresje kontraktów endpointów i izolacji danych — uruchom `npx supabase start && npm run test` przed pushem |
 | e2e na ścieżkach krytycznych | — | nieplanowana w tym wdrożeniu | — |
 | smoke test przed produkcją | — | nieplanowany w tym wdrożeniu | — |
 
@@ -432,17 +433,60 @@ idempotencja przy ponownym wywołaniu.
   `devDependencies` ani `setupFiles`; przypięcie strefy to jedna linia w pliku
   testowym.
 
-**Dług lintu blokujący §3 Faza 5 (Quality-gates wiring).** Na 2026-09-09
-`npm run lint` jest **czerwony** (49 błędów) z powodu pre-istniejących naruszeń
-w plikach spoza zakresu testowego: `src/components/AccountDeletion.tsx`,
+**Faza 5 — Quality-gates wiring (przekrojowe).** Zob. §5 (tabela bram). Faza nie
+dodała nowego kodu testowego — przepakowała istniejące 59 testów jednostkowych i
+okablowała bramę CI. Dostarczono:
+- `vitest.config.unit.ts` + skrypt `test:unit`
+  (`vitest run --config vitest.config.unit.ts`) — zakres `tests/lib/**/*.test.ts`,
+  **bez `globalSetup`**, `environment: node`. Biegnie 59 testów (`fsrs` 22 +
+  `inactive-accounts` 37) w ~kilka sekund bez `.env.test` i bez działającego
+  Supabase. Oryginalny `vitest.config.ts` (z `globalSetup`) nietknięty — `npm run
+  test` nadal odpala pełny zestaw.
+- Krok `- run: npm run test:unit` w `.github/workflows/ci.yml` jobie `ci`, między
+  `npm run lint` a `npm run build` (najtańszy sygnał pierwszy). `node-version`
+  wyrównane `22` → `22.14.0` (zgodnie z `.nvmrc`).
+- Check `ci` ustawiony jako **required status check** na regule ochrony gałęzi
+  `master` (`required_status_checks.contexts: ["ci"]`, `strict: true`,
+  `enforce_admins: true`) — PR z czerwonym lintem lub czerwonym testem
+  jednostkowym nie może zostać zmergowany.
+- Migracja `generateObject` → `generateText` + `Output.object` w
+  `src/pages/api/generate-flashcards.ts` (zdjęcie `@typescript-eslint/no-deprecated`
+  bez `eslint-disable`) + wyzerowanie pre-istniejącego długu lintu (49→0:
+  `lint:fix` dla 46 formatowań, dwa martwe null-guardy w
+  `cleanup-inactive-accounts.ts`).
+
+**Flaga dla §4 „Stos" (rozszerzenie).** Faza 5 dodała drugi plik konfiguracji
+Vitest (`vitest.config.unit.ts`) obok istniejącego `vitest.config.ts`. To kolejna
+zmiana stosu testowego poza zamrożoną §4 do odnotowania przy `/10x-test-plan
+--refresh` (razem z jsdom/RTL z Faz 2–3 i katalogiem `tests/lib/`); ta faza
+`--refresh` nie uruchamia.
+
+**Wzorzec „jak działa brama CI w tym projekcie".** Job `ci`
+(`.github/workflows/ci.yml`) biegnie `lint → test:unit → build` na każdym `push`
+i `pull_request` do `master`. `ci` jest **wymaganym** checkiem na `master` —
+czerwony lint lub czerwony test jednostkowy blokuje przycisk merge PR. Nazwa
+checku to `ci` (nazwa joba), bo `test:unit` jest **krokiem** joba `ci`, nie
+osobnym jobem; jeśli job kiedyś zostanie przemianowany lub rozdzielony, branch
+protection trzeba zaktualizować w tym samym kroku, inaczej czeka na nieistniejącą
+nazwę i blokuje wszystkie merge. Testy integracyjne/komponentowe **NIE** są w CI
+(wymagają `npx supabase start`) — uruchom je lokalnie
+(`npx supabase start && npm run test`) przed pushem. Brama blokuje **merge**, nie
+deploy: Cloudflare Pages deployuje preview czerwonej gałęzi PR niezależnie od
+GitHub Actions; produkcja i tak zawsze dostaje tylko to, co zmergowane.
+
+Znany flaky `tests/api/study-review.test.ts` 2.4 (warstwa integracyjna) **nie
+blokuje** — integracja nie jest w bramie CI. Jest follow-upem na zmianie
+study-fsrs (rekomendacja: asercja inwariantu „brak lost update" lub test wyścigu
+na warstwie DB), nie w zakresie Fazy 5.
+
+**Dług lintu blokujący §3 Faza 5 — ZAMKNIĘTE (2026-09-10).** Na 2026-09-09
+`npm run lint` był **czerwony** (49 błędów) z powodu pre-istniejących naruszeń w
+plikach spoza zakresu testowego (`src/components/AccountDeletion.tsx`,
 `src/components/ui/checkbox.tsx`, `src/components/ui/dialog.tsx`,
 `src/lib/inactive-accounts.ts`, `src/pages/api/admin/cleanup-inactive-accounts.ts`,
-`src/pages/api/generate-flashcards.ts`. Nowe pliki testowe są czyste
-(`npx eslint tests/**` → 0). Faza 5 chce podłączyć `lint` + `unit + integration`
-jako **wymaganą bramę CI** — wymaga to najpierw wyzerowania tego długu
-(46/49 błędów jest auto-fixowalnych przez `npm run lint:fix`; 3 ręczne:
-`no-unnecessary-condition` ×2 w `cleanup-inactive-accounts.ts`, `no-deprecated`
-`generateObject` w `generate-flashcards.ts`). Śledzone w
+`src/pages/api/generate-flashcards.ts`). Wyzerowany w §3 Faza 5 (46 przez
+`npm run lint:fix`, 3 ręczne fixy bez `eslint-disable`) — `npm run lint` → 0.
+Śledzone było w
 `context/changes/study-fsrs-scheduling-integrity/follow-ups/review-fixes.md` (F1).
 
 ## 7. Czego Celowo Nie Testujemy
