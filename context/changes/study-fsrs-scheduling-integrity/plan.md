@@ -588,36 +588,36 @@ Brak. Faza nie dotyka schematu ani danych. Testy zakładają obecny stan migracj
 
 #### Automatyczne
 
-- [x] 1.1 Nowy plik istnieje: `test -f tests/lib/fsrs.test.ts`
-- [x] 1.2 Testy jednostkowe przechodzą: `npx vitest run tests/lib/fsrs.test.ts`
-- [x] 1.3 Cały zestaw nadal przechodzi: `npm run test`
-- [x] 1.4 Lint przechodzi: `npm run lint`
-- [x] 1.5 `git diff --stat` pokazuje tylko `tests/lib/fsrs.test.ts` i `context/**` (żadnego `src/**`)
+- [x] 1.1 Nowy plik istnieje: `test -f tests/lib/fsrs.test.ts` — aaf2e7c
+- [x] 1.2 Testy jednostkowe przechodzą: `npx vitest run tests/lib/fsrs.test.ts` — aaf2e7c
+- [x] 1.3 Cały zestaw nadal przechodzi: `npm run test` — aaf2e7c
+- [x] 1.4 Lint przechodzi: `npm run lint` — aaf2e7c
+- [x] 1.5 `git diff --stat` pokazuje tylko `tests/lib/fsrs.test.ts` i `context/**` (żadnego `src/**`) — aaf2e7c
 
 #### Ręczne
 
-- [x] 1.6 Wstrzyknięta regresja w `fsrs.ts` (`reps + 1` lub brak `enable_short_term:false`) faktycznie łamie test; cofnięta
-- [x] 1.7 Komentarze w teście oddzielają „asercja właściwości" od „re-kalkulacji wzoru"
-- [x] 1.8 §6.1 czyta się jako instrukcja użyteczna dla osoby spoza sesji
+- [x] 1.6 Wstrzyknięta regresja w `fsrs.ts` (`reps + 1` lub brak `enable_short_term:false`) faktycznie łamie test; cofnięta — aaf2e7c
+- [x] 1.7 Komentarze w teście oddzielają „asercja właściwości" od „re-kalkulacji wzoru" — aaf2e7c
+- [x] 1.8 §6.1 czyta się jako instrukcja użyteczna dla osoby spoza sesji — aaf2e7c
 
 ### Faza 2: Integracja — round-trip `review.ts` + odbicie w `queue.ts`
 
 #### Automatyczne
 
-- [ ] 2.1 Nowy plik istnieje: `test -f tests/api/study-review.test.ts`
-- [ ] 2.2 Testy przechodzą: `npx vitest run tests/api/study-review.test.ts` (przy `npx supabase start`)
-- [ ] 2.3 Cały zestaw przechodzi: `npm run test`
-- [ ] 2.4 Lint przechodzi: `npm run lint`
-- [ ] 2.5 `git diff --stat` bez zmian w `src/**`
-- [ ] 2.6 `tests/api/study-isolation.test.ts` niezmieniony (`git diff --exit-code -- tests/api/study-isolation.test.ts`)
+- [x] 2.1 Nowy plik istnieje: `test -f tests/api/study-review.test.ts`
+- [x] 2.2 Testy przechodzą: `npx vitest run tests/api/study-review.test.ts` (przy `npx supabase start`)
+- [x] 2.3 Cały zestaw przechodzi: `npm run test`
+- [x] 2.4 Lint przechodzi: `npm run lint`
+- [x] 2.5 `git diff --stat` bez zmian w `src/**`
+- [x] 2.6 `tests/api/study-isolation.test.ts` niezmieniony (`git diff --exit-code -- tests/api/study-isolation.test.ts`)
 
 #### Ręczne
 
-- [ ] 2.7 `npx supabase db reset && npm run test` — pełny czysty przebieg zielony
-- [ ] 2.8 Test 2.3 opisany „dokumentujemy … nie wymagamy" i łamałby się przy kontroli idempotencji
-- [ ] 2.9 Test 2.4 rozróżnia właściwy przypadek (`[200, 409]`) — nie jest regresją
-- [ ] 2.10 `tests/api/study-review.test.ts` uruchomiony dwukrotnie bez `db reset` — nadal zielony
-- [ ] 2.11 Test 2.5 asertuje przynależność zbioru, nie sekwencję
+- [x] 2.7 `npx supabase db reset && npm run test` — pełny czysty przebieg zielony
+- [x] 2.8 Test 2.3 opisany „dokumentujemy … nie wymagamy" i łamałby się przy kontroli idempotencji
+- [x] 2.9 Test 2.4 rozróżnia właściwy przypadek (`[200, 409]`) — nie jest regresją
+- [x] 2.10 `tests/api/study-review.test.ts` uruchomiony dwukrotnie bez `db reset` — nadal zielony
+- [x] 2.11 Test 2.5 asertuje przynależność zbioru, nie sekwencję
 
 ### Faza 3: Komponent — wyścig double-click `StudySession.tsx` (§E.1)
 

@@ -226,6 +226,18 @@ const response = await flashcardPatch(context);
 expect(response.status).toBe(404); // non-owner: indistinguishable from "not found"
 ```
 
+6. **Scenariusze mutacji stanu współdzielonego** (ustalone w §3 Faza 3,
+   `tests/api/study-review.test.ts`): gdy test nie tylko tworzy wiersz, ale
+   wielokrotnie go modyfikuje (np. kilka `POST /api/study/review` na tej samej
+   karcie), obowiązują dodatkowe reguły. Rejestruj utworzone `id` do `createdIds`
+   **natychmiast po `201`** — przed jakąkolwiek asercją mutacji — żeby `afterEach`
+   / `cleanupFlashcards` posprzątał nawet gdy asercja w środku testu rzuci.
+   Wszystkie asercje wyłącznie **id-scoped** (`rows.find((r) => r.id === id)`,
+   `new Set(returned).…`), nigdy „tabela ma N wierszy" — `fileParallelism` nie jest
+   wyłączone, a stali użytkownicy są dzieleni między pliki. Do wymuszenia
+   równoległości (test lost-update / CAS) użyj `Promise.all([review(id, …),
+   review(id, …)])` i sortuj statusy przed asercją (`[200, 409]`).
+
 Uruchomienie: `npx supabase start` (raz), następnie `npm run test` (lub
 `npx vitest run <plik>` dla pojedynczego pliku). Pełny przebieg od zera:
 `npx supabase db reset && npm run test`.
@@ -310,6 +322,34 @@ integracyjnego) i §6.5. Zestaw: `tests/api/*` + `tests/middleware.test.ts`.
   oraz poszerzyła `vitest.config.ts` `include` o `.tsx` (`tests/**/*.test.{ts,tsx}`).
   To jest zmiana stosu testowego poza zamrożoną §4 — **§4 wymaga
   `/10x-test-plan --refresh`**, by odnotować jsdom/RTL w tabeli stosu.
+
+**Faza 3 — Study/FSRS scheduling integrity (Ryzyko #4).** Zob. §6.1 (warstwa
+jednostkowa) i §6.2 (warstwa integracyjna, w tym pkt 6 — mutacja stanu
+współdzielonego). Prawdziwy `ts-fsrs` biegnie w każdej warstwie — scheduler nie
+jest mockowany; oczekiwany harmonogram to niezależnie wyprowadzone właściwości
+(kierunek, relacje, przynależność), nigdy re-uruchomienie `scheduler.next` w
+teście (anty-wzorzec §2 #4). Dostarczono:
+- `tests/lib/fsrs.test.ts` (§6.1) — okablowanie `src/lib/services/fsrs.ts`:
+  mapowanie pól (`reps` ⟷ `repetitions`, enum stanu ⟷ etykieta DB), grade mapping,
+  granulacja dzienna (`enable_short_term: false`), monotonia
+  `again ≤ hard ≤ good ≤ easy`, `repetitions` +1 dokładnie, `lapses` +1 przy
+  `again`, `stability` rośnie przy `good`/`easy` na `Review`, `flashcardToCardInput`
+  (`NULL due_date` → `now`, stałe `elapsed_days`/`learning_steps`, `last_review:
+  null` → `undefined`).
+- `tests/api/study-review.test.ts` (§6.2) — round-trip `POST /api/study/review`
+  + odbicie w `GET /api/study/queue`:
+  - 2.1 kontrola pozytywna — przegląd utrwala pola harmonogramu właściwej karty
+    (potwierdzone ponownym `GET queue`).
+  - 2.2 zaplanowana karta opuszcza `mode=due`, pozostaje w `mode=all`.
+  - 2.3 **(świadoma regresja §D.2)** — sekwencyjny replay zakończonego przeglądu
+    re-graduje kartę: `200` (nie 4xx), `lapses` +1, `due_date` cofnięte. Złamie
+    się, gdy endpoint dostanie kontrolę idempotencji / `due_date > now`.
+  - 2.4 kontrola pozytywna §D.1 — równoległy double-submit (`Promise.all`) →
+    `[200, 409]`, jeden przegląd zastosowany (CAS na `last_review` działa).
+  - 2.5 **(świadoma regresja F5)** — `GET /api/study/queue` bez `.order()`:
+    asercja tylko przynależności zbioru, brak asercji kolejności. Złamie się, gdy
+    dojdzie deterministyczne sortowanie + paginacja.
+  - 2.6 szybkie guardy — `404` na nieznany UUID, `422` na złą ocenę.
 
 ## 7. Czego Celowo Nie Testujemy
 
