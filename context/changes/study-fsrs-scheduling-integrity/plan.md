@@ -604,35 +604,35 @@ Brak. Faza nie dotyka schematu ani danych. Testy zakładają obecny stan migracj
 
 #### Automatyczne
 
-- [x] 2.1 Nowy plik istnieje: `test -f tests/api/study-review.test.ts`
-- [x] 2.2 Testy przechodzą: `npx vitest run tests/api/study-review.test.ts` (przy `npx supabase start`)
-- [x] 2.3 Cały zestaw przechodzi: `npm run test`
-- [x] 2.4 Lint przechodzi: `npm run lint`
-- [x] 2.5 `git diff --stat` bez zmian w `src/**`
-- [x] 2.6 `tests/api/study-isolation.test.ts` niezmieniony (`git diff --exit-code -- tests/api/study-isolation.test.ts`)
+- [x] 2.1 Nowy plik istnieje: `test -f tests/api/study-review.test.ts` — 3896df3
+- [x] 2.2 Testy przechodzą: `npx vitest run tests/api/study-review.test.ts` (przy `npx supabase start`) — 3896df3
+- [x] 2.3 Cały zestaw przechodzi: `npm run test` — 3896df3
+- [x] 2.4 Lint przechodzi: `npm run lint` — 3896df3
+- [x] 2.5 `git diff --stat` bez zmian w `src/**` — 3896df3
+- [x] 2.6 `tests/api/study-isolation.test.ts` niezmieniony (`git diff --exit-code -- tests/api/study-isolation.test.ts`) — 3896df3
 
 #### Ręczne
 
-- [x] 2.7 `npx supabase db reset && npm run test` — pełny czysty przebieg zielony
-- [x] 2.8 Test 2.3 opisany „dokumentujemy … nie wymagamy" i łamałby się przy kontroli idempotencji
-- [x] 2.9 Test 2.4 rozróżnia właściwy przypadek (`[200, 409]`) — nie jest regresją
-- [x] 2.10 `tests/api/study-review.test.ts` uruchomiony dwukrotnie bez `db reset` — nadal zielony
-- [x] 2.11 Test 2.5 asertuje przynależność zbioru, nie sekwencję
+- [x] 2.7 `npx supabase db reset && npm run test` — pełny czysty przebieg zielony — 3896df3
+- [x] 2.8 Test 2.3 opisany „dokumentujemy … nie wymagamy" i łamałby się przy kontroli idempotencji — 3896df3
+- [x] 2.9 Test 2.4 rozróżnia właściwy przypadek (`[200, 409]`) — nie jest regresją — 3896df3
+- [x] 2.10 `tests/api/study-review.test.ts` uruchomiony dwukrotnie bez `db reset` — nadal zielony — 3896df3
+- [x] 2.11 Test 2.5 asertuje przynależność zbioru, nie sekwencję — 3896df3
 
 ### Faza 3: Komponent — wyścig double-click `StudySession.tsx` (§E.1)
 
 #### Automatyczne
 
-- [ ] 3.1 Nowy plik istnieje: `test -f tests/components/StudySession.test.tsx`
-- [ ] 3.2 Pierwsza linia to `// @vitest-environment jsdom`
-- [ ] 3.3 Testy przechodzą: `npx vitest run tests/components/StudySession.test.tsx`
-- [ ] 3.4 Cały zestaw przechodzi: `npm run test`
-- [ ] 3.5 Lint przechodzi: `npm run lint`
-- [ ] 3.6 `git diff --stat` bez zmian w `src/**`
+- [x] 3.1 Nowy plik istnieje: `test -f tests/components/StudySession.test.tsx`
+- [x] 3.2 Pierwsza linia to `// @vitest-environment jsdom`
+- [x] 3.3 Testy przechodzą: `npx vitest run tests/components/StudySession.test.tsx`
+- [x] 3.4 Cały zestaw przechodzi: `npm run test`
+- [x] 3.5 Lint przechodzi: `npm run lint`
+- [x] 3.6 `git diff --stat` bez zmian w `src/**`
 
 #### Ręczne
 
-- [ ] 3.7 Test 3.2 obserwuje efekt dla użytkownika (banner / zgubiona ocena), nie tylko „dwa fetch"
-- [ ] 3.8 Wstrzyknięty synchroniczny guard w `handleRate` łamie 3.2, nie łamie 3.1/3.3; cofnięty
-- [ ] 3.9 3.1 i 3.3 przechodzą stabilnie przy 10 kolejnych uruchomieniach (brak flake)
-- [ ] 3.10 §6.6 czyta się jako kompletna książka kucharska dla Ryzyka #4; flaga `--refresh` dla §4 odnotowana
+- [x] 3.7 Test 3.2 obserwuje efekt dla użytkownika (banner / zgubiona ocena), nie tylko „dwa fetch"
+- [x] 3.8 Wstrzyknięty synchroniczny guard w `handleRate` łamie 3.2, nie łamie 3.1/3.3; cofnięty
+- [x] 3.9 3.1 i 3.3 przechodzą stabilnie przy 10 kolejnych uruchomieniach (brak flake)
+- [x] 3.10 §6.6 czyta się jako kompletna książka kucharska dla Ryzyka #4; flaga `--refresh` dla §4 odnotowana

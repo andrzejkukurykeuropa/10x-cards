@@ -350,6 +350,25 @@ teście (anty-wzorzec §2 #4). Dostarczono:
     asercja tylko przynależności zbioru, brak asercji kolejności. Złamie się, gdy
     dojdzie deterministyczne sortowanie + paginacja.
   - 2.6 szybkie guardy — `404` na nieznany UUID, `422` na złą ocenę.
+- `tests/components/StudySession.test.tsx` (jsdom, `// @vitest-environment jsdom`,
+  wzorzec z §6.4 pkt 8) — kliencka połowa Ryzyka #4 dla najgorętszego pliku
+  obszaru; `fetch` stubowany (routing po URL na `/api/study/queue` +
+  `/api/study/review`), scheduler nie biegnie:
+  - 3.1 kontrola pozytywna — pojedyncze kliknięcie oceny: dokładnie jeden `POST`,
+    przejście do następnej karty, brak bannera błędu.
+  - 3.2 **(świadoma regresja §E.1)** — dwa kliknięcia w jednym ticku (natywny
+    `dispatchEvent` w jednym `act`, nie dwa `fireEvent`): oba przechodzą guard i
+    strzelają `POST`, drugie dostaje `409` → fałszywy banner błędu na już-następnej
+    karcie. Złamie się, gdy `handleRate` dostanie synchroniczny guard (`useRef`
+    ustawiany przed pierwszym `await`).
+  - 3.3 kontrola pozytywna — banner po `500` znika po udanym ponowieniu oceny
+    (mechanizm bannera działa — kontrast z fałszywym bannerem w 3.2).
+
+**Flaga dla §4 „Stos" (rozszerzenie).** Poza jsdom/RTL (odnotowane w „Faza 2"
+powyżej) §3 Faza 3 dodała katalog `tests/lib/` — warstwę testów jednostkowych
+czystej logiki `src/lib/**` (§6.1), środowisko `node`, bez Supabase/mocka. To
+kolejna zmiana poza zamrożoną §4; **§4 nadal wymaga `/10x-test-plan --refresh`**
+(ta faza tego nie uruchamia).
 
 ## 7. Czego Celowo Nie Testujemy
 
