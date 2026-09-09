@@ -18,7 +18,7 @@ const WARNING_THRESHOLD_MONTHS = 23;
 export function isInactiveForDeletion(
   lastSignInAt: string | null,
   createdAt: string | null = null,
-  now: Date = new Date()
+  now: Date = new Date(),
 ): boolean {
   const reference = lastSignInAt ?? createdAt;
   if (reference === null) {
@@ -50,7 +50,7 @@ export function isInactiveForDeletion(
 export function isInWarningWindow(
   lastSignInAt: string | null,
   createdAt: string | null = null,
-  now: Date = new Date()
+  now: Date = new Date(),
 ): boolean {
   const reference = lastSignInAt ?? createdAt;
   if (reference === null) {

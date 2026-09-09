@@ -84,7 +84,7 @@ export default function AccountDeletion({ email }: AccountDeletionProps) {
               onChange={(event) => {
                 setConfirmationText(event.target.value);
               }}
-              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
+              className="border-input bg-background focus-visible:border-ring focus-visible:ring-ring/50 w-full rounded-md border px-3 py-2 text-sm shadow-xs outline-none focus-visible:ring-[3px]"
               autoComplete="off"
               disabled={isDeleting}
             />
@@ -104,7 +104,7 @@ export default function AccountDeletion({ email }: AccountDeletionProps) {
             </label>
           </div>
 
-          {error && <p className="text-sm text-destructive">{error}</p>}
+          {error && <p className="text-destructive text-sm">{error}</p>}
         </div>
 
         <DialogFooter>

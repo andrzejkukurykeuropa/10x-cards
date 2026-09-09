@@ -91,7 +91,7 @@ export const POST: APIRoute = async (context) => {
       processed += 1;
 
       const lastSignInAt = candidate.last_sign_in_at ?? null;
-      const createdAt = candidate.created_at ?? null;
+      const createdAt = candidate.created_at;
 
       if (isInactiveForDeletion(lastSignInAt, createdAt)) {
         if (dryRun) {
@@ -115,7 +115,7 @@ export const POST: APIRoute = async (context) => {
       }
 
       if (isInWarningWindow(lastSignInAt, createdAt) && candidate.email) {
-        const alreadyWarned = Boolean(candidate.user_metadata?.retention_warning_sent_at);
+        const alreadyWarned = Boolean(candidate.user_metadata.retention_warning_sent_at);
         if (alreadyWarned) {
           // A warning e-mail was already sent earlier in this 23-24 month window; skip
           // re-sending it daily until the account either logs in (exits the window) or
@@ -143,7 +143,7 @@ export const POST: APIRoute = async (context) => {
             // eslint-disable-next-line no-console
             console.error(
               `[api/admin/cleanup-inactive-accounts] updateUserById(${candidate.id}) mark-warned error:`,
-              markError
+              markError,
             );
           }
           warned.push(candidate.id);

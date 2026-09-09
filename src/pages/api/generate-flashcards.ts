@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import { createGroq } from "@ai-sdk/groq";
-import { generateObject } from "ai";
+import { generateText, Output } from "ai";
 import { z } from "zod";
 import { GROQ_API_KEY } from "astro:env/server";
 import { flashcardsOutputSchema } from "@/lib/ai-schemas";
@@ -45,18 +45,22 @@ export const POST: APIRoute = async (context) => {
 
   try {
     const groq = createGroq({ apiKey: GROQ_API_KEY });
-    const { object } = await generateObject({
+    const { output } = await generateText({
       model: groq(MODEL_ID),
-      schema: flashcardsOutputSchema,
+      output: Output.object({ schema: flashcardsOutputSchema }),
       system: SYSTEM_PROMPT,
       prompt: `Text:\n${inputText}`,
     });
 
-    return new Response(JSON.stringify(object), {
+    return new Response(JSON.stringify(output), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
   } catch (err) {
+    // `Output.object` still runs the real zod validation: a schema mismatch or non-JSON
+    // model reply throws `NoObjectGeneratedError` here, exactly as `generateObject` did.
+    // Edge nuance: a `finishReason: "length"` completion makes the `.output` getter throw
+    // `NoOutputGeneratedError` instead — both error classes collapse to the 500 below.
     const msg = err instanceof Error ? err.message : String(err);
     // eslint-disable-next-line no-console
     console.error("[generate-flashcards] error:", msg);
