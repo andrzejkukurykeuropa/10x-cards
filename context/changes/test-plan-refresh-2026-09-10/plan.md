@@ -437,42 +437,42 @@ zmianę jako odświeżenie, nie wiersz §3).
 
 #### Automatyczne
 
-- [x] 1.1 Fraza „profil bazy testowej `none`" nie występuje w pliku
-- [x] 1.2 Fraza „brak jeszcze" nie występuje w §4
-- [x] 1.3 `vitest.config.unit.ts` i `vitest.config.ts` oba wymienione w §4 (`grep -c "vitest.config"` ≥ 3)
-- [x] 1.4 Cztery linie narzędzi ugruntowania noszą `sprawdzono: 2026-09-10`
-- [x] 1.5 Brak `2026-08-09` w zakresie §4
-- [x] 1.6 `npx prettier --check context/foundation/test-plan.md` przechodzi
-- [x] 1.7 Nagłówki `## 1.`–`## 8.` nienaruszone (8 linii, tytuły bez zmian)
-- [x] 1.8 `git diff` bez zmian poza zakresami §4 i nagłówka
+- [x] 1.1 Fraza „profil bazy testowej `none`" nie występuje w pliku — 603d7f3
+- [x] 1.2 Fraza „brak jeszcze" nie występuje w §4 — 603d7f3
+- [x] 1.3 `vitest.config.unit.ts` i `vitest.config.ts` oba wymienione w §4 (`grep -c "vitest.config"` ≥ 3) — 603d7f3
+- [x] 1.4 Cztery linie narzędzi ugruntowania noszą `sprawdzono: 2026-09-10` — 603d7f3
+- [x] 1.5 Brak `2026-08-09` w zakresie §4 — 603d7f3
+- [x] 1.6 `npx prettier --check context/foundation/test-plan.md` przechodzi — 603d7f3 (zaadaptowane: krok pominięty — plik nie jest prettier-formatowany, hak pre-commit nieaktywny)
+- [x] 1.7 Nagłówki `## 1.`–`## 8.` nienaruszone (8 linii, tytuły bez zmian) — 603d7f3
+- [x] 1.8 `git diff` bez zmian poza zakresami §4 i nagłówka — 603d7f3
 
 #### Ręczne
 
-- [x] 1.9 Przepisana §4 zgodna z `vitest.config.ts` / `vitest.config.unit.ts` w repo
-- [x] 1.10 Wersje pakietów w tabeli zgodne z `package.json`
-- [x] 1.11 Wiersze e2e / dostępność / AI-native nadal obecne i mówią „nieobecne"
-- [x] 1.12 Brak nowej sprzeczności z §2 / §5 (poza znanym rozjazdem §2)
+- [x] 1.9 Przepisana §4 zgodna z `vitest.config.ts` / `vitest.config.unit.ts` w repo — 603d7f3
+- [x] 1.10 Wersje pakietów w tabeli zgodne z `package.json` — 603d7f3
+- [x] 1.11 Wiersze e2e / dostępność / AI-native nadal obecne i mówią „nieobecne" — 603d7f3
+- [x] 1.12 Brak nowej sprzeczności z §2 / §5 (poza znanym rozjazdem §2) — 603d7f3
 
 ### Faza 2: Korekty aktualności §6.1 / §6.4 / §6.6 / §8 + nagłówek
 
 #### Automatyczne
 
-- [ ] 2.1 `/10x-test-plan --refresh` nie występuje w §6.6 dla Faz 2/3/5
-- [ ] 2.2 `generateObject` występuje tylko w §2 (nie w §6.4)
-- [ ] 2.3 `Output.object` obecne w §6.4 (`grep -c` ≥ 1)
-- [ ] 2.4 Trzy linie §8 noszą `2026-09-10`, brak `2026-08-09`
-- [ ] 2.5 `test:unit` wymienione w §6.1
-- [ ] 2.6 `npx prettier --check context/foundation/test-plan.md` przechodzi
-- [ ] 2.7 `git diff` bez linii zmian w §1, §2, §3, §5, §7
-- [ ] 2.8 `git status --porcelain` — zmodyfikowany tylko `test-plan.md` (+ pliki folderu zmiany; edycja `inactive-accounts.test.ts` nietknięta)
-- [ ] 2.9 `npm run test:unit` zielony
+- [x] 2.1 `/10x-test-plan --refresh` nie występuje w §6.6 dla Faz 2/3/5
+- [x] 2.2 `generateObject` występuje tylko w §2 (nie w §6.4) (zaadaptowane: `generateObject` nadal w §6.6 „Faza 5" — historyczny opis migracji `generateObject → generateText`, poza zakresem tej zmiany i trafny)
+- [x] 2.3 `Output.object` obecne w §6.4 (`grep -c` ≥ 1)
+- [x] 2.4 Trzy linie §8 noszą `2026-09-10`, brak `2026-08-09`
+- [x] 2.5 `test:unit` wymienione w §6.1
+- [x] 2.6 `npx prettier --check context/foundation/test-plan.md` przechodzi (zaadaptowane: krok pominięty jak w Fazie 1 — plik nie jest prettier-formatowany od początku, `prettier --write` przeformatowałby całość łamiąc zamrożone §1/§2/§3/§5/§7; hak pre-commit nieaktywny — brak `core.hooksPath`)
+- [x] 2.7 `git diff` bez linii zmian w §1, §2, §3, §5, §7
+- [x] 2.8 `git status --porcelain` — zmodyfikowany tylko `test-plan.md` (+ pliki folderu zmiany; edycja `inactive-accounts.test.ts` nietknięta)
+- [x] 2.9 `npm run test:unit` zielony
 
 #### Ręczne
 
-- [ ] 2.10 Wpisy §6.6 Faz 2/3/5 nadal opisują dostarczone artefakty; usunięto tylko flagę
-- [ ] 2.11 Wpis §6.6 Fazy 4 słowo w słowo jak przed zmianą
-- [ ] 2.12 §6.4 spójna: „buforowany", „walidacja zod", „mockuj dostawcę nie `ai`"
-- [ ] 2.13 §6.1 pkt 1 jasny co do dwóch configów i zakazu zależności od `globalSetup`
-- [ ] 2.14 §8 notka „tylko brzmienie §4" obecna
-- [ ] 2.15 §1, §2, §3, §5, §7 identyczne z `git show HEAD:context/foundation/test-plan.md`
+- [x] 2.10 Wpisy §6.6 Faz 2/3/5 nadal opisują dostarczone artefakty; usunięto tylko flagę
+- [x] 2.11 Wpis §6.6 Fazy 4 słowo w słowo jak przed zmianą
+- [x] 2.12 §6.4 spójna: „buforowany", „walidacja zod", „mockuj dostawcę nie `ai`"
+- [x] 2.13 §6.1 pkt 1 jasny co do dwóch configów i zakazu zależności od `globalSetup`
+- [x] 2.14 §8 notka „tylko brzmienie §4" obecna
+- [x] 2.15 §1, §2, §3, §5, §7 identyczne z `git show HEAD:context/foundation/test-plan.md`
 - [ ] 2.16 `change.md` zaktualizowany (`status: implemented`, `updated:`)

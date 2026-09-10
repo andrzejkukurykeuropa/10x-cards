@@ -7,7 +7,7 @@
 > Odświeżenie: uruchom ponownie `/10x-test-plan --refresh`, gdy plan jest
 > nieaktualny (patrz §8).
 >
-> Ostatnia aktualizacja: 2026-09-10 (§3 Faza 5 „Quality-gates wiring" domknięta: Status → `complete`. Dług lintu wyzerowany (49→0), `vitest.config.unit.ts` + skrypt `test:unit` (zakres `tests/lib/**`, bez `globalSetup`), krok `npm run test:unit` w jobie `ci` między `lint` a `build`, check `ci` jako required status check na `master`. §5 sprostowane: brak osobnej bramy typecheck (złożona w `lint`); brama jednostkowa okablowana w CI, integracyjna nadal local-only. §4 „Stos" wciąż wymaga `--refresh` za jsdom/RTL + `tests/lib/` z Faz 2–3 oraz `vitest.config.unit.ts` — nie blokowało Fazy 5.)
+> Ostatnia aktualizacja: 2026-09-10 (§3 Faza 5 „Quality-gates wiring" domknięta: Status → `complete`. Dług lintu wyzerowany (49→0), `vitest.config.unit.ts` + skrypt `test:unit` (zakres `tests/lib/**`, bez `globalSetup`), krok `npm run test:unit` w jobie `ci` między `lint` a `build`, check `ci` jako required status check na `master`. §5 sprostowane: brak osobnej bramy typecheck (złożona w `lint`); brama jednostkowa okablowana w CI, integracyjna nadal local-only. Odświeżenie doc-only 2026-09-10: §4 „Stos" przepisana do profilu `meaningful` (Vitest, dwa configi, jsdom/RTL/dotenv), tabela narzędzi ugruntowania ostemplowana, flagi §6.6 (Fazy 2/3/5) domknięte, §6.4 uzgodniona z migracją `generateText` + `Output.object`, §8 zdatowana. §1–§3, §5, §7 nietknięte.)
 
 ## 1. Strategia
 
@@ -152,9 +152,14 @@ logiki w `src/lib/**` — bez Supabase, bez sieci, bez mocka.
 
 1. **Lokalizacja pliku**: `tests/lib/<moduł>.test.ts`, jeden plik na moduł
    `src/lib` / `src/lib/services` (np. `tests/lib/fsrs.test.ts` dla
-   `src/lib/services/fsrs.ts`). Runner: Vitest przez `getViteConfig()`; `include`
-   w `vitest.config.ts` już obejmuje `tests/**`. Środowisko `node` (domyślne w
-   configu) — nie dodawaj `// @vitest-environment jsdom` do testu modułu logiki.
+   `src/lib/services/fsrs.ts`). Runner: Vitest przez `getViteConfig()`.
+   `tests/lib/**` jest objęte przez **oba** configi — `vitest.config.ts`
+   (`tests/**/*.test.{ts,tsx}`, z `globalSetup`) i `vitest.config.unit.ts`
+   (`tests/lib/**/*.test.ts`, bez `globalSetup`) — więc test `tests/lib/` musi
+   biec czysto pod `npm run test` **i** `npm run test:unit` i **nie może zależeć
+   od efektów ubocznych `globalSetup`** (Supabase, `.env.test`). Środowisko
+   `node` (domyślne w obu configach) — nie dodawaj `// @vitest-environment jsdom`
+   do testu modułu logiki.
 2. **Import wprost, zero mocka**: importuj testowane funkcje z `@/lib/...` i
    ćwicz je na prawdziwych zależnościach. Jeśli moduł opakowuje bibliotekę
    (`fsrs.ts` → `ts-fsrs`), biblioteka biegnie naprawdę — **nie** `vi.mock`.
@@ -194,8 +199,10 @@ expect(Number.isInteger(result.scheduled_days)).toBe(true);
 expect(result.scheduled_days).toBeGreaterThanOrEqual(1);
 ```
 
-Uruchomienie: `npx vitest run tests/lib/<moduł>.test.ts` dla pojedynczego pliku
-(nie wymaga `npx supabase start`); `npm run test` dla całości.
+Uruchomienie: `npm run test:unit` dla całej szybkiej warstwy (kanoniczne
+polecenie — `vitest.config.unit.ts`, bez `globalSetup`, biegnie w bramie CI);
+`npx vitest run tests/lib/<moduł>.test.ts` dla pojedynczego pliku (nie wymaga
+`npx supabase start`); `npm run test` dla pełnego zestawu.
 
 **Wzorzec przypadków brzegowych „zapytania selekcji"** (ustalony w §3 Faza 4,
 `context/changes/account-lifecycle-safety-net/`, zweryfikowany plikiem
@@ -310,8 +317,8 @@ Uruchomienie: `npx supabase start` (raz), następnie `npm run test` (lub
 Wzorzec ustalony w §3 Faza 2 (`context/changes/ai-generation-reliability/`),
 zweryfikowany plikami `tests/api/generate-flashcards*.test.ts` i
 `tests/components/FlashcardGenerator.test.tsx`. Endpoint generowania ma
-**buforowany kontrakt żądanie/odpowiedź**: `generateObject` zwraca jeden obiekt,
-handler serializuje go jako jedno ciało JSON.
+**buforowany kontrakt żądanie/odpowiedź**: buforowany `generateText` z
+`Output.object` zwraca jeden obiekt, handler serializuje go jako jedno ciało JSON.
 
 1. **Lokalizacja pliku**: `tests/api/<obszar>.test.ts` dla głównego kontraktu.
    Osobny plik na każdą sytuację wymagającą mocka na poziomie ewaluacji modułu:
@@ -319,10 +326,11 @@ handler serializuje go jako jedno ciało JSON.
    (migawka braku rate-limitu, Ryzyko #5).
 2. **Granica mocka = dostawca, nie `ai`**: `vi.mock("@ai-sdk/groq", () => ({ createGroq: () => () => groqRef.model }))`
    z mutowalną referencją `const groqRef = vi.hoisted(() => ({ model: undefined }))`
-   przełączaną per test. Mockując **tylko** dostawcę, prawdziwe `generateObject`
-   z `ai` nadal biegnie i wykonuje prawdziwą walidację zod — zły kształt daje
-   prawdziwy `NoObjectGeneratedError`. NIGDY nie mockuj `ai`/`generateObject`
-   (anty-wzorzec §2 #2: test nie ćwiczyłby granicy walidacji obiektu).
+   przełączaną per test. Mockując **tylko** dostawcę, prawdziwe `generateText` +
+   `Output.object` z `ai` nadal biegnie i wykonuje prawdziwą walidację zod — zły
+   kształt daje prawdziwy `NoObjectGeneratedError`. NIGDY nie mockuj
+   `ai`/`generateText`/`Output` (anty-wzorzec §2 #2: test nie ćwiczyłby granicy
+   walidacji obiektu).
 3. **Builder mocka**: `tests/helpers/ai-mock.ts` — `buildMockModel({ text | error | hang })`
    buduje `MockLanguageModelV3` z `ai/test` w trybie sukces / rzuca / wisi;
    `flashcardsJson(n)` serializuje N poprawnych par; `makeApiCallError({ statusCode, isRetryable })`
@@ -377,11 +385,11 @@ integracyjnego) i §6.5. Zestaw: `tests/api/*` + `tests/middleware.test.ts`.
   bez anulowania przy zawieszonym `fetch` (5.4).
 - Konwencja „labeled regression" (2.2–2.4, 3.1, 4.1, 5.2–5.4): komentarz blokowy
   + nazwa testu mówią „dokumentujemy, nie wymagamy"; poprawka złamie test celowo.
-- **Flaga dla §4 „Stos"**: ta faza wprowadziła warstwę testów komponentu
+- **Wpływ na §4 „Stos"**: ta faza wprowadziła warstwę testów komponentu
   (`jsdom`, `@testing-library/react`, `@testing-library/dom` jako `devDependencies`)
   oraz poszerzyła `vitest.config.ts` `include` o `.tsx` (`tests/**/*.test.{ts,tsx}`).
-  To jest zmiana stosu testowego poza zamrożoną §4 — **§4 wymaga
-  `/10x-test-plan --refresh`**, by odnotować jsdom/RTL w tabeli stosu.
+  Ta zmiana stosu testowego jest odnotowana w §4 od odświeżenia 2026-09-10 —
+  tabela stosu wymienia jsdom/RTL w wierszu „komponentowe".
 
 **Faza 3 — Study/FSRS scheduling integrity (Ryzyko #4).** Zob. §6.1 (warstwa
 jednostkowa) i §6.2 (warstwa integracyjna, w tym pkt 6 — mutacja stanu
@@ -424,11 +432,11 @@ teście (anty-wzorzec §2 #4). Dostarczono:
   - 3.3 kontrola pozytywna — banner po `500` znika po udanym ponowieniu oceny
     (mechanizm bannera działa — kontrast z fałszywym bannerem w 3.2).
 
-**Flaga dla §4 „Stos" (rozszerzenie).** Poza jsdom/RTL (odnotowane w „Faza 2"
+**Wpływ na §4 „Stos" (rozszerzenie).** Poza jsdom/RTL (odnotowane w „Faza 2"
 powyżej) §3 Faza 3 dodała katalog `tests/lib/` — warstwę testów jednostkowych
-czystej logiki `src/lib/**` (§6.1), środowisko `node`, bez Supabase/mocka. To
-kolejna zmiana poza zamrożoną §4; **§4 nadal wymaga `/10x-test-plan --refresh`**
-(ta faza tego nie uruchamia).
+czystej logiki `src/lib/**` (§6.1), środowisko `node`, bez Supabase/mocka. Ta
+warstwa jest odnotowana w §4 od odświeżenia 2026-09-10 (wiersz „jednostkowe" w
+tabeli stosu).
 
 **Faza 4 — Account-lifecycle safety net (Ryzyko #6).** Zob. §6.1 (warstwa
 jednostkowa, w tym wzorzec przypadków brzegowych „zapytania selekcji"). Zestaw:
@@ -488,11 +496,11 @@ okablowała bramę CI. Dostarczono:
   `lint:fix` dla 46 formatowań, dwa martwe null-guardy w
   `cleanup-inactive-accounts.ts`).
 
-**Flaga dla §4 „Stos" (rozszerzenie).** Faza 5 dodała drugi plik konfiguracji
-Vitest (`vitest.config.unit.ts`) obok istniejącego `vitest.config.ts`. To kolejna
-zmiana stosu testowego poza zamrożoną §4 do odnotowania przy `/10x-test-plan
---refresh` (razem z jsdom/RTL z Faz 2–3 i katalogiem `tests/lib/`); ta faza
-`--refresh` nie uruchamia.
+**Wpływ na §4 „Stos" (rozszerzenie).** Faza 5 dodała drugi plik konfiguracji
+Vitest (`vitest.config.unit.ts`) obok istniejącego `vitest.config.ts`.
+Rozróżnienie dwóch configów (jednostkowy bez `globalSetup` vs integracyjny z)
+jest odnotowane w §4 od odświeżenia 2026-09-10 jako nagłówkowa różnica warstw —
+razem z jsdom/RTL z Faz 2–3 i katalogiem `tests/lib/`.
 
 **Wzorzec „jak działa brama CI w tym projekcie".** Job `ci`
 (`.github/workflows/ci.yml`) biegnie `lint → test:unit → build` na każdym `push`
@@ -532,9 +540,9 @@ założenie się zmieni.
 
 ## 8. Rejestr Aktualności
 
-- Strategia (§1–§5) ostatnio przejrzana: 2026-08-09
-- Wersje stosu ostatnio zweryfikowane: 2026-08-09
-- Referencje narzędzi natywnych dla AI ostatnio zweryfikowane: 2026-08-09 (żadna nie zaproponowana w tym wdrożeniu)
+- Strategia (§1–§5) ostatnio przejrzana: 2026-09-10 (tylko brzmienie §4; ryzyka §1–§3 i §7 bez zmian)
+- Wersje stosu ostatnio zweryfikowane: 2026-09-10 (stos testowy udokumentowany — profil `meaningful`, Vitest z dwoma configami)
+- Referencje narzędzi natywnych dla AI ostatnio zweryfikowane: 2026-09-10 (żadna nie zaproponowana w tym wdrożeniu)
 
 Odśwież (`/10x-test-plan --refresh`), gdy:
 
