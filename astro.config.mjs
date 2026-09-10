@@ -22,7 +22,6 @@ export default defineConfig({
     ? undefined
     : cloudflare({
         imageService: "passthrough",
-        sessionBinding: false,
       }),
   env: {
     schema: {
