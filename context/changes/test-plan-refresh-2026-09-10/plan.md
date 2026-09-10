@@ -457,22 +457,22 @@ zmianę jako odświeżenie, nie wiersz §3).
 
 #### Automatyczne
 
-- [x] 2.1 `/10x-test-plan --refresh` nie występuje w §6.6 dla Faz 2/3/5
-- [x] 2.2 `generateObject` występuje tylko w §2 (nie w §6.4) (zaadaptowane: `generateObject` nadal w §6.6 „Faza 5" — historyczny opis migracji `generateObject → generateText`, poza zakresem tej zmiany i trafny)
-- [x] 2.3 `Output.object` obecne w §6.4 (`grep -c` ≥ 1)
-- [x] 2.4 Trzy linie §8 noszą `2026-09-10`, brak `2026-08-09`
-- [x] 2.5 `test:unit` wymienione w §6.1
-- [x] 2.6 `npx prettier --check context/foundation/test-plan.md` przechodzi (zaadaptowane: krok pominięty jak w Fazie 1 — plik nie jest prettier-formatowany od początku, `prettier --write` przeformatowałby całość łamiąc zamrożone §1/§2/§3/§5/§7; hak pre-commit nieaktywny — brak `core.hooksPath`)
-- [x] 2.7 `git diff` bez linii zmian w §1, §2, §3, §5, §7
-- [x] 2.8 `git status --porcelain` — zmodyfikowany tylko `test-plan.md` (+ pliki folderu zmiany; edycja `inactive-accounts.test.ts` nietknięta)
-- [x] 2.9 `npm run test:unit` zielony
+- [x] 2.1 `/10x-test-plan --refresh` nie występuje w §6.6 dla Faz 2/3/5 — d6e8016
+- [x] 2.2 `generateObject` występuje tylko w §2 (nie w §6.4) (zaadaptowane: `generateObject` nadal w §6.6 „Faza 5" — historyczny opis migracji `generateObject → generateText`, poza zakresem tej zmiany i trafny) — d6e8016
+- [x] 2.3 `Output.object` obecne w §6.4 (`grep -c` ≥ 1) — d6e8016
+- [x] 2.4 Trzy linie §8 noszą `2026-09-10`, brak `2026-08-09` — d6e8016
+- [x] 2.5 `test:unit` wymienione w §6.1 — d6e8016
+- [x] 2.6 `npx prettier --check context/foundation/test-plan.md` przechodzi (zaadaptowane: krok pominięty jak w Fazie 1 — plik nie jest prettier-formatowany od początku, `prettier --write` przeformatowałby całość łamiąc zamrożone §1/§2/§3/§5/§7; hak pre-commit nieaktywny — brak `core.hooksPath`) — d6e8016
+- [x] 2.7 `git diff` bez linii zmian w §1, §2, §3, §5, §7 — d6e8016
+- [x] 2.8 `git status --porcelain` — zmodyfikowany tylko `test-plan.md` (+ pliki folderu zmiany; edycja `inactive-accounts.test.ts` nietknięta) — d6e8016
+- [x] 2.9 `npm run test:unit` zielony — d6e8016
 
 #### Ręczne
 
-- [x] 2.10 Wpisy §6.6 Faz 2/3/5 nadal opisują dostarczone artefakty; usunięto tylko flagę
-- [x] 2.11 Wpis §6.6 Fazy 4 słowo w słowo jak przed zmianą
-- [x] 2.12 §6.4 spójna: „buforowany", „walidacja zod", „mockuj dostawcę nie `ai`"
-- [x] 2.13 §6.1 pkt 1 jasny co do dwóch configów i zakazu zależności od `globalSetup`
-- [x] 2.14 §8 notka „tylko brzmienie §4" obecna
-- [x] 2.15 §1, §2, §3, §5, §7 identyczne z `git show HEAD:context/foundation/test-plan.md`
-- [ ] 2.16 `change.md` zaktualizowany (`status: implemented`, `updated:`)
+- [x] 2.10 Wpisy §6.6 Faz 2/3/5 nadal opisują dostarczone artefakty; usunięto tylko flagę — d6e8016
+- [x] 2.11 Wpis §6.6 Fazy 4 słowo w słowo jak przed zmianą — d6e8016
+- [x] 2.12 §6.4 spójna: „buforowany", „walidacja zod", „mockuj dostawcę nie `ai`" — d6e8016
+- [x] 2.13 §6.1 pkt 1 jasny co do dwóch configów i zakazu zależności od `globalSetup` — d6e8016
+- [x] 2.14 §8 notka „tylko brzmienie §4" obecna — d6e8016
+- [x] 2.15 §1, §2, §3, §5, §7 identyczne z `git show HEAD:context/foundation/test-plan.md` — d6e8016
+- [x] 2.16 `change.md` zaktualizowany (`status: implemented`, `updated:`)

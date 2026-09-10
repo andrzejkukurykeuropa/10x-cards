@@ -1,7 +1,7 @@
 ---
 change_id: test-plan-refresh-2026-09-10
 title: Refresh test-plan §4/§8/§6.6 to reflect the Vitest suite added by the rollout
-status: implementing
+status: implemented
 created: 2026-09-10
 updated: 2026-09-10
 archived_at: null
