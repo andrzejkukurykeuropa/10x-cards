@@ -94,9 +94,12 @@ describe("isInWarningWindow — półotwarte okno (24 mies, 23 mies]", () => {
 });
 
 describe("wzajemna wykluczalność — siatka wokół obu granic", () => {
-  // Centralny test fazy (research OQ3, plan-brief.md:82): każda przyszła zmiana
-  // `DELETION_THRESHOLD_MONTHS` / `WARNING_THRESHOLD_MONTHS`, która otworzyłaby lukę
-  // albo nakładkę między oknami, łamie tę grupę.
+  // Ta pętla pilnuje NAKŁADKI okien (research OQ3, plan-brief.md:82): dla siatki
+  // wartości wokół obu granic żadne wejście nie może trafić do obu klasyfikatorów
+  // naraz. Rozjazd stałych progów otwierający LUKĘ (wejście, które powinno „ostrzec",
+  // wpada w „żadne") jest łapany przez asercję punktową niżej (linia z {usuń, ostrzeż,
+  // żadne}) oraz grupy G3 i G7 — mutacja `WARNING_THRESHOLD_MONTHS`→24 wywala właśnie
+  // tamte, nie tę pętlę.
   for (const m of [12, 22, 22.8, 23, 23.5, 24, 24.5, 30]) {
     it(`m=${m}: nigdy oba klasyfikatory true; najwyżej jeden true`, () => {
       const activity = monthsBefore(NOW, m);

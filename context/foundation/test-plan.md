@@ -86,24 +86,46 @@ na dysku.
 
 ## 4. Stos
 
-W tym projekcie nie istnieje dziś żadne narzędzie testowe —
-`package.json` nie ma runnera testów, nie ma pliku konfiguracji testów ani
-żadnych plików `*.test.*`/`*.spec.*` w całym repozytorium. To profil bazy
-testowej `none`.
+Profil bazy testowej: `meaningful`. Runner to **Vitest `^4.1.11`**,
+uruchamiany przez `getViteConfig()` z `astro/config` — testy dostają graf
+modułów Astro, więc `astro:env/*` i alias `@/*` działają bez dodatkowej
+konfiguracji. Suite dzieli się na **dwie warstwy o odrębnych plikach
+konfiguracji**:
+
+- **Jednostkowa** — `vitest.config.unit.ts` (`environment: node`, `include:
+  tests/lib/**/*.test.ts`, **bez `globalSetup`**). Czysta logika `src/lib/**`
+  bez Supabase, bez sieci, bez mocka. Skrypt `npm run test:unit`; biegnie w
+  bramie CI (§5). ~59 testów. Wzorzec dodawania: §6.1.
+- **Integracyjna** — `vitest.config.ts` (`environment: node`, `include:
+  tests/**/*.test.{ts,tsx}`, `globalSetup: tests/setup/global-setup.ts`,
+  `testTimeout: 15000`). Wywołania handlerów API wprost + testy komponentów
+  (jsdom włączany per-plik). `globalSetup` ładuje `.env.test` przez `dotenv`
+  i wymaga lokalnego Supabase — `assertLocalSupabaseUrl()` odrzuca host inny
+  niż `127.0.0.1`/`localhost` — oraz seeduje dwóch stałych użytkowników
+  testowych. Skrypt `npm run test` (pełna suite; wymaga `npx supabase start`
+  + `.env.test`); **local-only**, poza bramą CI. Wzorce: §6.2, §6.4.
+
+Test w `tests/lib/**` jest objęty przez **oba** configi, więc nie może
+zależeć od efektów ubocznych `globalSetup`. Suite liczy ~111 testów / 13
+plików łącznie — opisuj warstwy, nie totale (totale dryfują co fazę).
 
 | Warstwa | Narzędzie | Wersja | Notatka |
 |---|---|---|---|
-| jednostkowe + integracyjne | brak jeszcze — patrz Faza 1 | — | Astro 6 + runtime Cloudflare Workers; Vitest jest domyślnym wyborem dla projektów Astro/Vite i działa z tą samą konfiguracją `astro:env` |
-| mockowanie API | brak jeszcze — patrz Faza 2 | — | Mockuj dostawcę AI (`ai` SDK) i klienta Supabase na granicy sieci, nie wewnętrznie |
-| e2e | brak jeszcze — nieuwzględnione w tym wdrożeniu | — | Żadna faza obecnie nie proponuje e2e; klasyczne + integracyjne pokrycie natywne dla AI oceniono jako wystarczające dla skali MVP |
-| dostępność | brak jeszcze — nieuwzględnione w tym wdrożeniu | — | Poza zakresem tego wdrożenia; wrócić, jeśli pojawią się regresje UI |
+| jednostkowe | Vitest (`vitest.config.unit.ts`) | `^4.1.11` | `environment: node`, `include: tests/lib/**/*.test.ts`, bez `globalSetup`; skrypt `test:unit`; bez Supabase/mocka; w bramie CI (§5). Wzorzec: §6.1 |
+| integracyjne | Vitest (`vitest.config.ts`) | `^4.1.11` | `environment: node`, `include: tests/**/*.test.{ts,tsx}`, `globalSetup: tests/setup/global-setup.ts`, `testTimeout: 15000`; wymaga `npx supabase start` + `.env.test`; local-only. Wzorzec: §6.2 |
+| komponentowe | jsdom + `@testing-library/react` + `@testing-library/dom` | `^30.0.1` / `^16.3.3` / `^10.4.1` | Część warstwy integracyjnej (config `vitest.config.ts`); środowisko włączane per-plik przez `// @vitest-environment jsdom`. Wzorzec: §6.4 pkt 8 |
+| ładowanie env testów | `dotenv` | `^17.4.2` | Ładuje `.env.test` (`override: true`) w `globalSetup` warstwy integracyjnej |
+| mockowanie API (dostawca AI) | seam `@ai-sdk/groq`; `MockLanguageModelV3` z `ai/test` | `@ai-sdk/groq ^3.0.42`, `ai ^6.0.208` | Mockuj **dostawcę** (`vi.mock("@ai-sdk/groq")`), nigdy `ai` — prawdziwa walidacja `Output.object`/zod ma biec. Helper: `tests/helpers/ai-mock.ts`. Wzorzec: §6.4 |
+| mockowanie Supabase | brak — prawdziwy lokalny Supabase | — | `msw`/mock HTTP niezainstalowany; testy integracyjne biją w instancję `npx supabase start` |
+| e2e | brak — nieuwzględnione w tym wdrożeniu | — | Żadna faza nie zaproponowała e2e; klasyczne + integracyjne pokrycie oceniono jako wystarczające dla skali MVP |
+| dostępność | brak — nieuwzględnione w tym wdrożeniu | — | Poza zakresem tego wdrożenia; wrócić, jeśli pojawią się regresje UI |
 | (opcjonalnie) natywne dla AI | nieocenione w tym wdrożeniu | n/a | Nie zaproponowano warstwy natywnej dla AI; koszt × sygnał nie uzasadnił jej przy obecnej skali |
 
 **Narzędzia ugruntowania stosu (bieżąca sesja):**
-- Dokumentacja: niedostępne w bieżącej sesji — brak MCP dokumentacji/Context7; powyższa rekomendacja opiera się wyłącznie na inspekcji lokalnych manifestów; sprawdzono: 2026-08-09
-- Wyszukiwanie: niedostępne w bieżącej sesji — brak MCP Exa.ai/wyszukiwania webowego; sprawdzono: 2026-08-09
-- Runtime/przeglądarka: nieużyte — brak narzędzia przeglądarki/Playwright MCP w tej sesji; sprawdzono: 2026-08-09
-- Dostawca/platforma: nieużyte — brak MCP GitHub/Cloudflare/Supabase w tej sesji; sprawdzono: 2026-08-09
+- Dokumentacja: niedostępne w bieżącej sesji — brak MCP dokumentacji/Context7; sprawdzono: 2026-09-10
+- Wyszukiwanie: dostępne w bieżącej sesji — `WebSearch` + `WebFetch` użyteczne; sprawdzono: 2026-09-10
+- Runtime/przeglądarka: nieużyte — brak narzędzia przeglądarki/Playwright MCP w tej sesji; sprawdzono: 2026-09-10
+- Dostawca/platforma: nieużyte — brak MCP GitHub/Cloudflare/Supabase w tej sesji (`gh` CLI z Bash nie jest narzędziem ugruntowania MCP); sprawdzono: 2026-09-10
 
 ## 5. Bramy Jakości
 
