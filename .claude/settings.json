@@ -1,0 +1,21 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "F=$(jq -r '.tool_input.file_path // empty'); case \"$F\" in *.ts|*.tsx|*.astro) npx eslint --fix --cache --cache-location node_modules/.cache/eslint \"$F\" ;; *) exit 0 ;; esac",
+            "timeout": 30
+          },
+          {
+            "type": "command",
+            "command": "npx tsc --noEmit",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}
