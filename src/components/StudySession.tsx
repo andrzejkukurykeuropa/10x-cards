@@ -23,10 +23,10 @@ type SessionState =
   | { status: "summary"; reviewed: number; ratingCounts: Record<StudyRating, number> };
 
 const RATING_LABELS: Record<StudyRating, string> = {
-  again: "Again",
-  hard: "Hard",
-  good: "Good",
-  easy: "Easy",
+  again: "Powtórz",
+  hard: "Trudne",
+  good: "Dobre",
+  easy: "Łatwe",
 };
 
 const EMPTY_RATING_COUNTS: Record<StudyRating, number> = { again: 0, hard: 0, good: 0, easy: 0 };
