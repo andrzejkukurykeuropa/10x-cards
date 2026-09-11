@@ -32,3 +32,6 @@ pnpm-debug.log*
 .vscode/mcp.json
 
 dev.vars
+
+# Playwright CLI session logs (10x-e2e skill)
+.playwright-cli/
