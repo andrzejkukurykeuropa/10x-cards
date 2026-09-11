@@ -7,7 +7,7 @@
 > Odświeżenie: uruchom ponownie `/10x-test-plan --refresh`, gdy plan jest
 > nieaktualny (patrz §8).
 >
-> Ostatnia aktualizacja: 2026-09-10 (§3 Faza 5 „Quality-gates wiring" domknięta: Status → `complete`. Dług lintu wyzerowany (49→0), `vitest.config.unit.ts` + skrypt `test:unit` (zakres `tests/lib/**`, bez `globalSetup`), krok `npm run test:unit` w jobie `ci` między `lint` a `build`, check `ci` jako required status check na `master`. §5 sprostowane: brak osobnej bramy typecheck (złożona w `lint`); brama jednostkowa okablowana w CI, integracyjna nadal local-only. Odświeżenie doc-only 2026-09-10: §4 „Stos" przepisana do profilu `meaningful` (Vitest, dwa configi, jsdom/RTL/dotenv), tabela narzędzi ugruntowania ostemplowana, flagi §6.6 (Fazy 2/3/5) domknięte, §6.4 uzgodniona z migracją `generateText` + `Output.object`, §8 zdatowana. §1–§3, §5, §7 nietknięte.)
+> Ostatnia aktualizacja: 2026-09-11 (dodane **Ryzyko #7** do §2 — utrata nieprzejrzanych propozycji fiszek po odświeżeniu strony — wraz z wierszem wskazówek reagowania; dodana **Faza 6** do §3 „E2E: proposal durability across reload" (`not started`, dokładnie jeden test e2e). §4 wiersz „e2e", §5 brama e2e i §6.3 przestawione z „nieuwzględnione w tym wdrożeniu" na „planowane — §3 Faza 6"; **żaden test e2e jeszcze nie istnieje i żaden runner nie jest zainstalowany**. §1, §3 wiersze 1–5, §7 nietknięte. Poprzednio 2026-09-10: §3 Faza 5 „Quality-gates wiring" domknięta: Status → `complete`. Dług lintu wyzerowany (49→0), `vitest.config.unit.ts` + skrypt `test:unit` (zakres `tests/lib/**`, bez `globalSetup`), krok `npm run test:unit` w jobie `ci` między `lint` a `build`, check `ci` jako required status check na `master`. §5 sprostowane: brak osobnej bramy typecheck (złożona w `lint`); brama jednostkowa okablowana w CI, integracyjna nadal local-only. Odświeżenie doc-only 2026-09-10: §4 „Stos" przepisana do profilu `meaningful` (Vitest, dwa configi, jsdom/RTL/dotenv), tabela narzędzi ugruntowania ostemplowana, flagi §6.6 (Fazy 2/3/5) domknięte, §6.4 uzgodniona z migracją `generateText` + `Output.object`, §8 zdatowana. §1–§3, §5, §7 nietknięte.)
 
 ## 1. Strategia
 
@@ -48,6 +48,7 @@ konkretny plik jako "miejsce, gdzie leży awaria".
 | 4 | Logika harmonogramowania FSRS uszkadza stan powtórek lub pokazuje karty w złej kolejności, a użytkownik traci postęp nauki | Wysoki | Średnie | wywiad Q3 ("wszystko, co nie jest frontendem"); hot-spot `src/components/StudySession.tsx` (4 commity/30d), `src/lib/services/fsrs.ts`, `supabase/migrations` (migracja SM-2→FSRS) |
 | 5 | Generowanie przez AI nie ma kontroli kosztów/limitu, więc jeden użytkownik (lub skrypt) może wywołać nieograniczony koszt generowania | Średni | Średnie | PRD Open Question ("Kontrola kosztów generowania"); soczewka nadużyć/bezpieczeństwa (nadużycie zasobów) |
 | 6 | Zadanie czyszczenia nieaktywnych kont usuwa dane niewłaściwego użytkownika lub uruchamia się wobec aktywnych kont | Wysoki | Niskie | hot-spot `src/lib/inactive-accounts.ts` + `src/pages/api/admin/cleanup-inactive-accounts.ts` (po 3 commity/30d); PRD Guardrail ("dane fiszek nie mogą być tracone") |
+| 7 | Użytkownik traci wygenerowane, jeszcze nieprzejrzane propozycje fiszek po odświeżeniu strony lub zamknięciu karty — bez żadnego ostrzeżenia; musi ponownie zapłacić za generowanie i przejrzeć wszystko od zera | Średni | Wysokie | żądanie użytkownika (sesja 2026-09-11); PRD US-01/FR-004 (etap przeglądu jest must-have, a stan propozycji należy do użytkownika); PRD metryka sukcesu („75% fiszek akceptowanych bez edycji" — mierzona właśnie na etapie przeglądu); PRD Open Question („Kontrola kosztów generowania" — utrata ⇒ regeneracja ⇒ ponowny koszt); skan hot-spotów: **niewystarczająca historia git** (3 commity/30d w zakresach §1) — prawdopodobieństwo oparte na PRD i żądaniu użytkownika, nie na częstotliwości zmian |
 
 **Rubryka Wpływ × Prawdopodobieństwo** — Wysoki: użytkownik traci
 dostęp/dane/pieniądze, a awaria jest publicznie widoczna, lub obszar zmienia
@@ -65,6 +66,7 @@ obejście, lub obszar jest zmieniany okazjonalnie. Niski: kosmetyczne,
 | #4 | Zakończony przegląd aktualizuje pola harmonogramu właściwej karty, a kolejka najbliższych powtórek to odzwierciedla — powtarzane uruchomienia nigdy nie cofają już zaplanowanej karty | "Poprawność biblioteki `ts-fsrs` implikuje, że nasz endpoint przeglądu poprawnie ją okablowuje" | Kontrakt żądanie/odpowiedź `study/review.ts` i `study/queue.ts`, mapowanie pól FSRS po migracji SM-2→FSRS, gwarancja kolejności zapytania o karty do powtórki | jednostkowy (mapowanie pól FSRS) + integracyjny (pełny przebieg endpointu przeglądu) | skopiowana kalkulacja produkcyjna (asercja dokładnie tego samego wzoru, który liczy kod, zamiast niezależnie wyprowadzonego oczekiwanego harmonogramu) |
 | #5 | Powtarzane/szybkie żądania generowania z jednej tożsamości są obserwowalnie ograniczane lub odrzucane po przekroczeniu zdefiniowanego progu, zamiast zawsze się powodzić | "Brak zgłoszonego przekroczenia kosztów do tej pory oznacza, że endpoint jest już bezpieczny w skali" | Czy istnieje dziś jakikolwiek rate-limit/throttle, koszt żądania per wywołanie, punkt wejścia dla nadużycia (nieuwierzytelniony vs. uwierzytelniony) | integracyjny lub ręczny smoke test (jeśli nie ma jeszcze limitera, ta faza może zacząć się jako flaga luki, nie test) | bezsensowna migawka (asercja obecnego nieograniczonego zachowania, jakby to był pożądany kontrakt) |
 | #6 | Zadanie czyszczące usuwa wyłącznie konta spełniające dokładny próg nieaktywności, a aktywne konto nigdy nie zostaje dotknięte przy ponownym uruchomieniu | "Zadanie działało dobrze w ręcznym teście raz, więc zapytanie selekcji jest bezpieczne w przypadkach brzegowych (daty graniczne, strefa czasowa, ponowienia)" | Zapytanie selekcji `inactive-accounts.ts`, definicja progu retencji, czy zadanie jest idempotentne przy ponownym uruchomieniu | jednostkowy (przypadki brzegowe zapytania selekcji) — celowo nie integracyjny/e2e zgodnie z negative-space (§7) | krucha kolejność / testowanie efektu ubocznego usuwania end-to-end, gdy użytkownik wyraźnie zdeprioryzował ten obszar |
+| #7 | Nieprzejrzane propozycje przeżywają przeładowanie strony, **albo** użytkownik dostaje jawne ostrzeżenie przed ich utratą — nigdy cicha utrata pracy, za którą zapłacono | "Test w jsdom, który odmontowuje i montuje komponent ponownie, dowodzi zachowania przy odświeżeniu" — **remount ≠ reload**: jsdom nie niszczy kontekstu wykonania ani nie przechodzi cyklu życia dokumentu, więc dałby fałszywy sygnał maskujący to ryzyko | Gdzie żyje stan propozycji i czy którakolwiek warstwa go utrwala; czy istnieje handler `beforeunload`/`visibilitychange`; kontrakt zapisu (pojedyncza fiszka vs batch) i co przepada, a co zostaje po częściowym zapisie; czy `astro dev` i `npm run preview` (workerd) zachowują się tu identycznie | **e2e** — jedyny wiersz tej mapy, gdzie tańsza warstwa nie może dać sygnału *fizycznie*, a nie kosztowo (§4 „komponentowe" = jsdom, brak przeładowania dokumentu; §6.2 pkt 2 = handlery wołane wprost, bez przeglądarki) | bezsensowna migawka — asercja „po reloadzie lista jest pusta" jako pożądanego kontraktu, bez konwencji „świadoma regresja" z §6.4 pkt 7; oraz e2e ćwiczące happy-path generowania zamiast samego zdarzenia utraty |
 
 ## 3. Wdrożenie Fazowe
 
@@ -80,6 +82,7 @@ na dysku.
 | 3 | Study/FSRS scheduling integrity | Obrona poprawności stanu przeglądu i kolejności kart w silnie zmiennym obszarze nauki | #4 | jednostkowe + integracyjne | complete | `context/changes/study-fsrs-scheduling-integrity/` |
 | 4 | Account-lifecycle safety net | Ograniczenie logiki selekcji zadania czyszczącego do uzgodnionego zakresu, z poszanowaniem negative-space w §7 | #6 | jednostkowe | complete | `context/changes/account-lifecycle-safety-net/` |
 | 5 | Quality-gates wiring | Zablokowanie jednostkowych + integracyjnych jako wymaganej bramy CI na każdym PR | przekrojowe | bramy | complete | `context/changes/quality-gates-wiring/` |
+| 6 | E2E: proposal durability across reload | Rozstrzygnąć, czy przeżycie nieprzejrzanych propozycji przez przeładowanie strony jest chronione, i uruchomić warstwę e2e — **dokładnie jeden test** | #7 | e2e | not started | — |
 
 **Słownictwo statusów** (stałe): `not started` → `change opened` →
 `researched` → `planned` → `implementing` → `complete`.
@@ -117,7 +120,7 @@ plików łącznie — opisuj warstwy, nie totale (totale dryfują co fazę).
 | ładowanie env testów | `dotenv` | `^17.4.2` | Ładuje `.env.test` (`override: true`) w `globalSetup` warstwy integracyjnej |
 | mockowanie API (dostawca AI) | seam `@ai-sdk/groq`; `MockLanguageModelV3` z `ai/test` | `@ai-sdk/groq ^3.0.42`, `ai ^6.0.208` | Mockuj **dostawcę** (`vi.mock("@ai-sdk/groq")`), nigdy `ai` — prawdziwa walidacja `Output.object`/zod ma biec. Helper: `tests/helpers/ai-mock.ts`. Wzorzec: §6.4 |
 | mockowanie Supabase | brak — prawdziwy lokalny Supabase | — | `msw`/mock HTTP niezainstalowany; testy integracyjne biją w instancję `npx supabase start` |
-| e2e | brak — nieuwzględnione w tym wdrożeniu | — | Żadna faza nie zaproponowała e2e; klasyczne + integracyjne pokrycie oceniono jako wystarczające dla skali MVP |
+| e2e | brak — **planowane w §3 Faza 6** | — | Runner **nie jest jeszcze wybrany ani zainstalowany**. Fazy 1–5 nie zaproponowały e2e (klasyczne + integracyjne pokrycie oceniono jako wystarczające dla skali MVP); Faza 6 dokłada **jeden** test dla Ryzyka #7, bo jsdom nie potrafi przeładować dokumentu. Wybór runnera i runtime (`astro dev` vs `npm run preview`/workerd) to otwarte pytanie dla `/10x-research`. Instalacja runnera **będzie** zmianą stosu ⇒ wyzwalacz §8 |
 | dostępność | brak — nieuwzględnione w tym wdrożeniu | — | Poza zakresem tego wdrożenia; wrócić, jeśli pojawią się regresje UI |
 | (opcjonalnie) natywne dla AI | nieocenione w tym wdrożeniu | n/a | Nie zaproponowano warstwy natywnej dla AI; koszt × sygnał nie uzasadnił jej przy obecnej skali |
 
@@ -135,7 +138,7 @@ plików łącznie — opisuj warstwy, nie totale (totale dryfują co fazę).
 | build | CI | wymagana (już okablowana; krok `npm run build` w jobie `ci`) | błędy przerywające build |
 | jednostkowe | lokalnie + CI | wymagana, okablowana w CI (§3 Faza 5 — krok `npm run test:unit` w jobie `ci` po `lint` przed `build`; required status check `ci` na `master`) | regresje czystej logiki `tests/lib/**` (59 testów: `fsrs` + `inactive-accounts`) — bez Supabase, przez `vitest.config.unit.ts` |
 | integracyjne | lokalnie | local-only — wymaga `npx supabase start`; **nieokablowana w CI w tym wdrożeniu** (§3 „Czego NIE robimy": żywy Supabase + znany flaky `study-review.test.ts` 2.4) | regresje kontraktów endpointów i izolacji danych — uruchom `npx supabase start && npm run test` przed pushem |
-| e2e na ścieżkach krytycznych | — | nieplanowana w tym wdrożeniu | — |
+| e2e (trwałość propozycji przez reload) | lokalnie (planowane) | **planowana — §3 Faza 6**; jeszcze nieokablowana | utratę nieprzejrzanych propozycji fiszek po przeładowaniu strony (Ryzyko #7). Prawie na pewno local-only jak integracyjne — wymaga przeglądarki i żywego serwera, więc nie trafi do bramy CI bez osobnej decyzji |
 | smoke test przed produkcją | — | nieplanowany w tym wdrożeniu | — |
 
 ## 6. Wzorce Podręcznika
@@ -310,7 +313,12 @@ Uruchomienie: `npx supabase start` (raz), następnie `npm run test` (lub
 `npx supabase db reset && npm run test`.
 
 ### 6.3 Dodawanie testu e2e
-- Nieuwzględnione w tym wdrożeniu — patrz §4.
+- TBD — patrz §3 Faza 6 dla wzorca „trwałość stanu klienta przez przeładowanie
+  strony" (Ryzyko #7). Runner nie jest jeszcze wybrany; do czasu realizacji Fazy 6
+  **nie ma w tym projekcie żadnego testu e2e ani narzędzia do jego uruchomienia**.
+  Kluczowe rozróżnienie, które ten wzorzec musi utrwalić: **remount ≠ reload** —
+  jsdom (§6.4 pkt 8) potrafi odmontować i zamontować komponent, ale nigdy nie
+  niszczy kontekstu wykonania, więc nie może udowodnić niczego o odświeżeniu.
 
 ### 6.4 Dodawanie testu dla nowego endpointu API opartego na AI
 
@@ -540,9 +548,10 @@ założenie się zmieni.
 
 ## 8. Rejestr Aktualności
 
-- Strategia (§1–§5) ostatnio przejrzana: 2026-09-10 (tylko brzmienie §4; ryzyka §1–§3 i §7 bez zmian)
-- Wersje stosu ostatnio zweryfikowane: 2026-09-10 (stos testowy udokumentowany — profil `meaningful`, Vitest z dwoma configami)
+- Strategia (§1–§5) ostatnio przejrzana: 2026-09-11 (dodane Ryzyko #7 do §2 i Faza 6 do §3; §4/§5 przestawione na „planowane"; §1 zasady i §7 negative-space bez zmian)
+- Wersje stosu ostatnio zweryfikowane: 2026-09-10 (stos testowy udokumentowany — profil `meaningful`, Vitest z dwoma configami). **Uwaga:** Faza 6 doda runner e2e — po jej realizacji ten wpis wymaga ponownej weryfikacji
 - Referencje narzędzi natywnych dla AI ostatnio zweryfikowane: 2026-09-10 (żadna nie zaproponowana w tym wdrożeniu)
+- Skan hot-spotów ostatnio uruchomiony: 2026-09-11 — **3 commity/30d** w zakresach §1, poniżej progu 5. Prawdopodobieństwa dodane po tej dacie (Ryzyko #7) nie opierają się na częstotliwości zmian; zakres hot-spotów w §1 („20 commitów/30 dni") pochodzi z pierwotnego wdrożenia i jest już nieaktualny jako *bieżący* sygnał
 
 Odśwież (`/10x-test-plan --refresh`), gdy:
 
