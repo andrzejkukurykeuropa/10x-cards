@@ -7,7 +7,15 @@
 > Odświeżenie: uruchom ponownie `/10x-test-plan --refresh`, gdy plan jest
 > nieaktualny (patrz §8).
 >
-> Ostatnia aktualizacja: 2026-09-11 (**Faza 6 zrealizowana** przez `/10x-e2e`
+> Ostatnia aktualizacja: 2026-09-11 (**dodany spec wzorcowy** `tests/e2e/seed.spec.ts`
+> — pojedyncze źródło konwencji tej warstwy, wykonywalne, nie szablon: lokatory
+> ról, czekanie na stan, unikalne identyfikatory, `afterEach` sprzątający przez
+> prawdziwe `DELETE /api/flashcards/:id`. Pokrywa pozytywną połowę Ryzyka #7
+> (przejrzana propozycja jest utrwalona i przeżywa reload); zweryfikowany celowym
+> uszkodzeniem (`GET /api/flashcards` → `[]` ⇒ czerwień na asercji po reloadzie,
+> nie na kontroli pozytywnej), uszkodzenie cofnięte. Zaktualizowane: §4 wiersz
+> „e2e", §5 wiersz bramy e2e, §6.3 (nowy pkt 0 + pkt 7 o sprzątaniu). §1, §2, §3,
+> §7 nietknięte. Wcześniej tego samego dnia: **Faza 6 zrealizowana** przez `/10x-e2e`
 > standalone: Playwright zainstalowany i skonfigurowany, jeden test
 > `tests/e2e/proposal-durability-across-reload.spec.ts` utrwala Ryzyko #7 jako
 > świadomą regresję, zweryfikowany dwoma celowymi uszkodzeniami na `dev` i
@@ -145,7 +153,7 @@ plików łącznie — opisuj warstwy, nie totale (totale dryfują co fazę).
 | build | CI | wymagana (już okablowana; krok `npm run build` w jobie `ci`) | błędy przerywające build |
 | jednostkowe | lokalnie + CI | wymagana, okablowana w CI (§3 Faza 5 — krok `npm run test:unit` w jobie `ci` po `lint` przed `build`; required status check `ci` na `master`) | regresje czystej logiki `tests/lib/**` (59 testów: `fsrs` + `inactive-accounts`) — bez Supabase, przez `vitest.config.unit.ts` |
 | integracyjne | lokalnie | local-only — wymaga `npx supabase start`; **nieokablowana w CI w tym wdrożeniu** (§3 „Czego NIE robimy": żywy Supabase + znany flaky `study-review.test.ts` 2.4) | regresje kontraktów endpointów i izolacji danych — uruchom `npx supabase start && npm run test` przed pushem |
-| e2e (trwałość propozycji przez reload) | lokalnie | local-only — wymaga `npx supabase start` + `.env.test` + przeglądarki (`npx playwright install chromium`); **nieokablowana w CI** (jak integracyjne) | utratę nieprzejrzanych propozycji fiszek po przeładowaniu strony (Ryzyko #7) — dziś utrwaloną jako świadoma regresja: test **poczerwienieje**, gdy wejdzie trwałość propozycji albo ostrzeżenie `beforeunload`. Uruchom `npm run test:e2e` przed pushem zmian w `FlashcardGenerator` |
+| e2e (trwałość propozycji przez reload) | lokalnie | local-only — wymaga `npx supabase start` + `.env.test` + przeglądarki (`npx playwright install chromium`); **nieokablowana w CI** (jak integracyjne) | obie połowy Ryzyka #7. `proposal-durability-across-reload.spec.ts`: utratę **nieprzejrzanych** propozycji po przeładowaniu — dziś utrwaloną jako świadoma regresja (test **poczerwienieje**, gdy wejdzie trwałość propozycji albo ostrzeżenie `beforeunload`). `seed.spec.ts`: utratę **zaakceptowanej** fiszki — kontrakt, który ma trzymać (czerwień = realna regresja). Uruchom `npm run test:e2e` przed pushem zmian w `FlashcardGenerator`/`FlashcardCollection` |
 | smoke test przed produkcją | — | nieplanowany w tym wdrożeniu | — |
 
 ## 6. Wzorce Podręcznika
@@ -321,12 +329,20 @@ Uruchomienie: `npx supabase start` (raz), następnie `npm run test` (lub
 
 ### 6.3 Dodawanie testu e2e
 
-Wzorzec ustalony w §3 Faza 6, zweryfikowany plikiem
-`tests/e2e/proposal-durability-across-reload.spec.ts` (jeden test, Ryzyko #7).
-Rozróżnienie, które ta warstwa istnieje żeby utrwalić: **remount ≠ reload** —
-jsdom (§6.4 pkt 8) odmontowuje i montuje komponent, ale nigdy nie niszczy
-kontekstu wykonania, więc nie udowodni niczego o odświeżeniu strony.
+Wzorzec ustalony w §3 Faza 6, zweryfikowany dwoma plikami w `tests/e2e/`
+(oba dotyczą Ryzyka #7, z dwóch stron). Rozróżnienie, które ta warstwa
+istnieje żeby utrwalić: **remount ≠ reload** — jsdom (§6.4 pkt 8) odmontowuje
+i montuje komponent, ale nigdy nie niszczy kontekstu wykonania, więc nie
+udowodni niczego o odświeżeniu strony.
 
+0. **Zacznij od `tests/e2e/seed.spec.ts`.** To spec **wzorcowy**: każda
+   konwencja z tej sekcji jest w nim pokazana raz, w miejscu użycia, z
+   uzasadnieniem obok. Jest wykonywalny, nie jest szablonem — konwencja,
+   której nikt nie uruchamia, gnije. Pokrywa pozytywną połowę Ryzyka #7
+   (zaakceptowana propozycja jest utrwalona i przeżywa reload), więc w
+   przeciwieństwie do swojego rodzeństwa jest **kontraktem, który ma trzymać**,
+   nie świadomą regresją. Czytaj go przed napisaniem — albo wygenerowaniem —
+   kolejnego speca; generatorowi podaj go jako wzorzec razem z tą sekcją.
 1. **Lokalizacja i uruchomienie**: `tests/e2e/<scenariusz>.spec.ts`, **jeden test
    na plik**; nagłówek pochodzenia (`// risk:` + `// layer:`) wiąże spec z
    wierszem §2. Uruchomienie: `npm run test:e2e` (wymaga `npx supabase start` +
@@ -372,11 +388,26 @@ kontekstu wykonania, więc nie udowodni niczego o odświeżeniu strony.
    `getByText`, zero CSS/XPath. `getByText("Pytanie X")` dopasowuje
    **podciąg, bez rozróżniania wielkości liter** — trafi też w „Drugie pytanie
    X". Dawaj danym testowym rozłączne prefiksy i asertuj `{ exact: true }`.
-7. **Sprzątanie**: ten spec nie tworzy wierszy w bazie (zatrzymuje się na etapie
-   przeglądu, nigdy nie akceptuje propozycji), a mock trasy ginie razem z
-   kontekstem przeglądarki — brak sprzątania jest tu **wyborem projektowym
-   udokumentowanym w komentarzu**, nie przeoczeniem. Spec, który zacznie
-   akceptować fiszki, musi rejestrować `id` i sprzątać jak §6.2 pkt 4.
+7. **Sprzątanie**: `proposal-durability-across-reload.spec.ts` nie tworzy wierszy
+   w bazie (zatrzymuje się na etapie przeglądu, nigdy nie akceptuje propozycji),
+   a mock trasy ginie razem z kontekstem przeglądarki — brak sprzątania jest tam
+   **wyborem projektowym udokumentowanym w komentarzu**, nie przeoczeniem.
+   Spec, który tworzy dane, sprząta wzorcem z `seed.spec.ts`:
+   - `id` bierz z **odpowiedzi**, nie z tekstu w UI — promise
+     `page.waitForResponse(...)` utworzony **przed** kliknięciem „Zaakceptuj",
+     `await` po; z ciała odpowiedzi `POST /api/flashcards` wyjmij `id` do listy.
+   - sprzątaj w **`afterEach`**, nie na końcu ciała testu: test, który padnie na
+     trzeciej asercji, musi i tak usunąć to, co stworzył na drugiej, inaczej
+     kolejne uruchomienie startuje z brudniejszej bazy niż to.
+   - czyść listę przez `splice(0)`, żeby retry nie próbował usunąć tego samego
+     wiersza dwa razy i nie wywrócił sprzątania na 404.
+   - `DELETE` przez `request` (nie `page.request`) — ten sam `storageState`, ale
+     bez zależności od tego, czy strona przeżyła awarię — **z nagłówkiem
+     `Origin`**, bo `security.checkOrigin` odpowiada na żądanie zmieniające stan
+     bez pasującego Origin kodem 403 (jak `auth.setup.ts`).
+   - porównuj **ścieżkę**, nie `url.includes()`: `/api/generate-flashcards`
+     *zawiera* `/api/flashcards`, więc dopasowanie po podciągu złapie zmockowane
+     generowanie zamiast zapisu.
 8. **Konwencja „świadoma regresja"** (jak §6.4 pkt 7): nazwa testu ma sufiks
    `(deliberate regression)`, a blok komentarza wymienia **oba** warianty
    poprawki, które mają go złamać (trwałość propozycji **albo** ostrzeżenie
