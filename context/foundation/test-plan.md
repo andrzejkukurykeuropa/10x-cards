@@ -7,7 +7,14 @@
 > Odświeżenie: uruchom ponownie `/10x-test-plan --refresh`, gdy plan jest
 > nieaktualny (patrz §8).
 >
-> Ostatnia aktualizacja: 2026-09-11 (dodane **Ryzyko #7** do §2 — utrata nieprzejrzanych propozycji fiszek po odświeżeniu strony — wraz z wierszem wskazówek reagowania; dodana **Faza 6** do §3 „E2E: proposal durability across reload" (`not started`, dokładnie jeden test e2e). §4 wiersz „e2e", §5 brama e2e i §6.3 przestawione z „nieuwzględnione w tym wdrożeniu" na „planowane — §3 Faza 6"; **żaden test e2e jeszcze nie istnieje i żaden runner nie jest zainstalowany**. §1, §3 wiersze 1–5, §7 nietknięte. Poprzednio 2026-09-10: §3 Faza 5 „Quality-gates wiring" domknięta: Status → `complete`. Dług lintu wyzerowany (49→0), `vitest.config.unit.ts` + skrypt `test:unit` (zakres `tests/lib/**`, bez `globalSetup`), krok `npm run test:unit` w jobie `ci` między `lint` a `build`, check `ci` jako required status check na `master`. §5 sprostowane: brak osobnej bramy typecheck (złożona w `lint`); brama jednostkowa okablowana w CI, integracyjna nadal local-only. Odświeżenie doc-only 2026-09-10: §4 „Stos" przepisana do profilu `meaningful` (Vitest, dwa configi, jsdom/RTL/dotenv), tabela narzędzi ugruntowania ostemplowana, flagi §6.6 (Fazy 2/3/5) domknięte, §6.4 uzgodniona z migracją `generateText` + `Output.object`, §8 zdatowana. §1–§3, §5, §7 nietknięte.)
+> Ostatnia aktualizacja: 2026-09-11 (**Faza 6 zrealizowana** przez `/10x-e2e`
+> standalone: Playwright zainstalowany i skonfigurowany, jeden test
+> `tests/e2e/proposal-durability-across-reload.spec.ts` utrwala Ryzyko #7 jako
+> świadomą regresję, zweryfikowany dwoma celowymi uszkodzeniami na `dev` i
+> `preview`. §3 wiersz 6 → `complete`; §4 wiersz „e2e" i §5 brama e2e
+> przestawione z „planowane" na stan faktyczny; §6.3 wypełniona wzorcem;
+> §6.6 uzupełniona notatką Fazy 6; §8 zdatowana. §1, §2, §7 nietknięte.
+> Wcześniej tego samego dnia: dodane **Ryzyko #7** do §2 — utrata nieprzejrzanych propozycji fiszek po odświeżeniu strony — wraz z wierszem wskazówek reagowania; dodana **Faza 6** do §3 „E2E: proposal durability across reload" (`not started`, dokładnie jeden test e2e). §4 wiersz „e2e", §5 brama e2e i §6.3 przestawione z „nieuwzględnione w tym wdrożeniu" na „planowane — §3 Faza 6" (stan nieaktualny od realizacji Fazy 6 powyżej). §1, §3 wiersze 1–5, §7 nietknięte. Poprzednio 2026-09-10: §3 Faza 5 „Quality-gates wiring" domknięta: Status → `complete`. Dług lintu wyzerowany (49→0), `vitest.config.unit.ts` + skrypt `test:unit` (zakres `tests/lib/**`, bez `globalSetup`), krok `npm run test:unit` w jobie `ci` między `lint` a `build`, check `ci` jako required status check na `master`. §5 sprostowane: brak osobnej bramy typecheck (złożona w `lint`); brama jednostkowa okablowana w CI, integracyjna nadal local-only. Odświeżenie doc-only 2026-09-10: §4 „Stos" przepisana do profilu `meaningful` (Vitest, dwa configi, jsdom/RTL/dotenv), tabela narzędzi ugruntowania ostemplowana, flagi §6.6 (Fazy 2/3/5) domknięte, §6.4 uzgodniona z migracją `generateText` + `Output.object`, §8 zdatowana. §1–§3, §5, §7 nietknięte.)
 
 ## 1. Strategia
 
@@ -82,7 +89,7 @@ na dysku.
 | 3 | Study/FSRS scheduling integrity | Obrona poprawności stanu przeglądu i kolejności kart w silnie zmiennym obszarze nauki | #4 | jednostkowe + integracyjne | complete | `context/changes/study-fsrs-scheduling-integrity/` |
 | 4 | Account-lifecycle safety net | Ograniczenie logiki selekcji zadania czyszczącego do uzgodnionego zakresu, z poszanowaniem negative-space w §7 | #6 | jednostkowe | complete | `context/changes/account-lifecycle-safety-net/` |
 | 5 | Quality-gates wiring | Zablokowanie jednostkowych + integracyjnych jako wymaganej bramy CI na każdym PR | przekrojowe | bramy | complete | `context/changes/quality-gates-wiring/` |
-| 6 | E2E: proposal durability across reload | Rozstrzygnąć, czy przeżycie nieprzejrzanych propozycji przez przeładowanie strony jest chronione, i uruchomić warstwę e2e — **dokładnie jeden test** | #7 | e2e | not started | — |
+| 6 | E2E: proposal durability across reload | Rozstrzygnąć, czy przeżycie nieprzejrzanych propozycji przez przeładowanie strony jest chronione, i uruchomić warstwę e2e | #7 | e2e | complete | — (wykonane bez folderu zmiany, przez `/10x-e2e` standalone) |
 
 **Słownictwo statusów** (stałe): `not started` → `change opened` →
 `researched` → `planned` → `implementing` → `complete`.
@@ -120,7 +127,7 @@ plików łącznie — opisuj warstwy, nie totale (totale dryfują co fazę).
 | ładowanie env testów | `dotenv` | `^17.4.2` | Ładuje `.env.test` (`override: true`) w `globalSetup` warstwy integracyjnej |
 | mockowanie API (dostawca AI) | seam `@ai-sdk/groq`; `MockLanguageModelV3` z `ai/test` | `@ai-sdk/groq ^3.0.42`, `ai ^6.0.208` | Mockuj **dostawcę** (`vi.mock("@ai-sdk/groq")`), nigdy `ai` — prawdziwa walidacja `Output.object`/zod ma biec. Helper: `tests/helpers/ai-mock.ts`. Wzorzec: §6.4 |
 | mockowanie Supabase | brak — prawdziwy lokalny Supabase | — | `msw`/mock HTTP niezainstalowany; testy integracyjne biją w instancję `npx supabase start` |
-| e2e | brak — **planowane w §3 Faza 6** | — | Runner **nie jest jeszcze wybrany ani zainstalowany**. Fazy 1–5 nie zaproponowały e2e (klasyczne + integracyjne pokrycie oceniono jako wystarczające dla skali MVP); Faza 6 dokłada **jeden** test dla Ryzyka #7, bo jsdom nie potrafi przeładować dokumentu. Wybór runnera i runtime (`astro dev` vs `npm run preview`/workerd) to otwarte pytanie dla `/10x-research`. Instalacja runnera **będzie** zmianą stosu ⇒ wyzwalacz §8 |
+| e2e | Playwright (`playwright.config.ts`) | `@playwright/test ^1.63.0` | Jeden projekt `chromium` + projekt `setup` (`storageState` z prawdziwego `POST /api/auth/signin`); `testDir: tests/e2e`, `globalSetup` deleguje do `tests/setup/global-setup.ts` (te same guardy `.env.test` + `assertLocalSupabaseUrl`). Runtime przełączany `E2E_TARGET` (`dev` domyślnie, `preview` = workerd), port `E2E_PORT`. Skrypty `test:e2e` / `test:e2e:ui` / `test:e2e:report`; **local-only**, poza bramą CI. Zakres: **jeden** test dla Ryzyka #7. Wzorzec: §6.3 |
 | dostępność | brak — nieuwzględnione w tym wdrożeniu | — | Poza zakresem tego wdrożenia; wrócić, jeśli pojawią się regresje UI |
 | (opcjonalnie) natywne dla AI | nieocenione w tym wdrożeniu | n/a | Nie zaproponowano warstwy natywnej dla AI; koszt × sygnał nie uzasadnił jej przy obecnej skali |
 
@@ -138,7 +145,7 @@ plików łącznie — opisuj warstwy, nie totale (totale dryfują co fazę).
 | build | CI | wymagana (już okablowana; krok `npm run build` w jobie `ci`) | błędy przerywające build |
 | jednostkowe | lokalnie + CI | wymagana, okablowana w CI (§3 Faza 5 — krok `npm run test:unit` w jobie `ci` po `lint` przed `build`; required status check `ci` na `master`) | regresje czystej logiki `tests/lib/**` (59 testów: `fsrs` + `inactive-accounts`) — bez Supabase, przez `vitest.config.unit.ts` |
 | integracyjne | lokalnie | local-only — wymaga `npx supabase start`; **nieokablowana w CI w tym wdrożeniu** (§3 „Czego NIE robimy": żywy Supabase + znany flaky `study-review.test.ts` 2.4) | regresje kontraktów endpointów i izolacji danych — uruchom `npx supabase start && npm run test` przed pushem |
-| e2e (trwałość propozycji przez reload) | lokalnie (planowane) | **planowana — §3 Faza 6**; jeszcze nieokablowana | utratę nieprzejrzanych propozycji fiszek po przeładowaniu strony (Ryzyko #7). Prawie na pewno local-only jak integracyjne — wymaga przeglądarki i żywego serwera, więc nie trafi do bramy CI bez osobnej decyzji |
+| e2e (trwałość propozycji przez reload) | lokalnie | local-only — wymaga `npx supabase start` + `.env.test` + przeglądarki (`npx playwright install chromium`); **nieokablowana w CI** (jak integracyjne) | utratę nieprzejrzanych propozycji fiszek po przeładowaniu strony (Ryzyko #7) — dziś utrwaloną jako świadoma regresja: test **poczerwienieje**, gdy wejdzie trwałość propozycji albo ostrzeżenie `beforeunload`. Uruchom `npm run test:e2e` przed pushem zmian w `FlashcardGenerator` |
 | smoke test przed produkcją | — | nieplanowany w tym wdrożeniu | — |
 
 ## 6. Wzorce Podręcznika
@@ -313,12 +320,73 @@ Uruchomienie: `npx supabase start` (raz), następnie `npm run test` (lub
 `npx supabase db reset && npm run test`.
 
 ### 6.3 Dodawanie testu e2e
-- TBD — patrz §3 Faza 6 dla wzorca „trwałość stanu klienta przez przeładowanie
-  strony" (Ryzyko #7). Runner nie jest jeszcze wybrany; do czasu realizacji Fazy 6
-  **nie ma w tym projekcie żadnego testu e2e ani narzędzia do jego uruchomienia**.
-  Kluczowe rozróżnienie, które ten wzorzec musi utrwalić: **remount ≠ reload** —
-  jsdom (§6.4 pkt 8) potrafi odmontować i zamontować komponent, ale nigdy nie
-  niszczy kontekstu wykonania, więc nie może udowodnić niczego o odświeżeniu.
+
+Wzorzec ustalony w §3 Faza 6, zweryfikowany plikiem
+`tests/e2e/proposal-durability-across-reload.spec.ts` (jeden test, Ryzyko #7).
+Rozróżnienie, które ta warstwa istnieje żeby utrwalić: **remount ≠ reload** —
+jsdom (§6.4 pkt 8) odmontowuje i montuje komponent, ale nigdy nie niszczy
+kontekstu wykonania, więc nie udowodni niczego o odświeżeniu strony.
+
+1. **Lokalizacja i uruchomienie**: `tests/e2e/<scenariusz>.spec.ts`, **jeden test
+   na plik**; nagłówek pochodzenia (`// risk:` + `// layer:`) wiąże spec z
+   wierszem §2. Uruchomienie: `npm run test:e2e` (wymaga `npx supabase start` +
+   `.env.test`); `E2E_PORT=<port>` gdy 4321 zajmuje inny serwer,
+   `E2E_TARGET=preview` dla buildu produkcyjnego na workerd.
+2. **Uwierzytelnianie bez UI**: projekt `setup` (`tests/e2e/setup/auth.setup.ts`)
+   loguje się przez prawdziwy `POST /api/auth/signin` i zapisuje `storageState`;
+   spec dostaje sesję gotową. Spec, który musi być anonimowy, robi
+   `test.use({ storageState: { cookies: [], origins: [] } })`.
+3. **Granica rzeczywiste vs. mockowane**: auth, middleware, routing, SSR i
+   `/api/flashcards` zostają **prawdziwe**. Mockowany jest wyłącznie
+   `/api/generate-flashcards` przez `page.route()` — kosztuje i jest
+   niedeterministyczny, a Ryzyko #7 zaczyna się **po** tym, jak propozycje
+   trafią na etap przeglądu (anty-wzorzec z §2: e2e ćwiczące happy-path
+   generowania zamiast zdarzenia utraty). Payload niesie marker
+   `E2E-${Date.now()}` — unikalny per uruchomienie, bezpieczny dla równoległych
+   workerów.
+4. **Hydracja wyspy Astro to stan, na który trzeba poczekać — dwa razy.** To jest
+   krytyczny punkt tej warstwy; oba błędy dają test, który *przechodzi* i
+   niczego nie chroni:
+   - **Przed akcją**: `fill()` wykonany przed hydracją zostaje zgubiony (React
+     montuje się z pustym stanem), a jego value-tracker jest zasiewany z
+     wartości już obecnej w DOM — więc **ponowny `fill()` tym samym tekstem nie
+     wywołuje zdarzenia zmiany** i przycisk zostaje `disabled` na zawsze.
+     Wzorzec: `await expect(async () => { await input.fill(""); await
+     input.fill(TEXT); await expect(button).toBeEnabled({ timeout: 1000 }); })
+     .toPass({ timeout: 30_000 })` — czyszczenie w każdej iteracji gwarantuje
+     realną zmianę, a warunkiem wyjścia jest stan aplikacji, nie upływ czasu.
+   - **Po `page.reload()`, przed asercją nieobecności**: świeży dokument najpierw
+     serwuje HTML z SSR, w którym stanu klienta **z definicji** nie ma. Asercja
+     `toHaveCount(0)` postawiona w tym oknie przechodzi trywialnie — także dla
+     aplikacji, która przywraca stan chwilę później. Zakotwicz się na dowodzie,
+     że efekty montowania już poszły: `page.waitForResponse(r =>
+     r.url().includes("/api/flashcards") && r.request().method() === "GET")`
+     (promise **przed** `reload()`, `await` po). Wykryte dokładnie przez krok
+     celowego uszkodzenia — bez tej kotwicy wersja z `sessionStorage` była
+     zielona.
+5. **Kontrola pozytywna obowiązkowa przy asercjach nieobecności**: zanim spec
+   stwierdzi „propozycji nie ma", musi stwierdzić, że strona wróciła zdrowa
+   (nagłówek + pole tekstowe widoczne). Inaczej biała strona albo `500` daje
+   zielony test.
+6. **Lokatory i pułapka podciągów**: wyłącznie `getByRole` / `getByLabel` /
+   `getByText`, zero CSS/XPath. `getByText("Pytanie X")` dopasowuje
+   **podciąg, bez rozróżniania wielkości liter** — trafi też w „Drugie pytanie
+   X". Dawaj danym testowym rozłączne prefiksy i asertuj `{ exact: true }`.
+7. **Sprzątanie**: ten spec nie tworzy wierszy w bazie (zatrzymuje się na etapie
+   przeglądu, nigdy nie akceptuje propozycji), a mock trasy ginie razem z
+   kontekstem przeglądarki — brak sprzątania jest tu **wyborem projektowym
+   udokumentowanym w komentarzu**, nie przeoczeniem. Spec, który zacznie
+   akceptować fiszki, musi rejestrować `id` i sprzątać jak §6.2 pkt 4.
+8. **Konwencja „świadoma regresja"** (jak §6.4 pkt 7): nazwa testu ma sufiks
+   `(deliberate regression)`, a blok komentarza wymienia **oba** warianty
+   poprawki, które mają go złamać (trwałość propozycji **albo** ostrzeżenie
+   `beforeunload`). Oba zweryfikowane celowym uszkodzeniem — każde dało czerwień
+   na innej asercji.
+9. **Werdykt potwierdzony na obu runtime'ach**: `dev` (`astro dev`) i `preview`
+   (build + workerd) zachowują się tu identycznie — propozycje giną, żadnego
+   ostrzeżenia. Otwarte pytanie z §4 („czy `astro dev` i `npm run preview`
+   zachowują się tak samo") jest dla tego ryzyka **zamknięte**; dla nowego
+   ryzyka o niepewnym werdykcie powtórz przebieg z `E2E_TARGET=preview`.
 
 ### 6.4 Dodawanie testu dla nowego endpointu API opartego na AI
 
@@ -538,6 +606,33 @@ plikach spoza zakresu testowego (`src/components/AccountDeletion.tsx`,
 Śledzone było w
 `context/changes/study-fsrs-scheduling-integrity/follow-ups/review-fixes.md` (F1).
 
+**Faza 6 — E2E: proposal durability across reload (Ryzyko #7).** Zob. §6.3.
+Zrealizowana przez `/10x-e2e` w trybie standalone (bez folderu zmiany —
+pojedyncze ryzyko, jeden test). Dostarczono:
+- `playwright.config.ts` — `testDir: tests/e2e`, projekt `setup` + projekt
+  `chromium` ze `storageState`, `webServer` przełączany `E2E_TARGET`
+  (`dev` | `preview`) i `E2E_PORT`, `globalSetup` delegujący do
+  `tests/setup/global-setup.ts` (bez duplikowania guardu local-only).
+- `tests/e2e/setup/auth.setup.ts` + `tests/e2e/setup/global-setup.ts` — logowanie
+  przez prawdziwy endpoint, `tests/e2e/.auth/` w `.gitignore`.
+- `tests/e2e/proposal-durability-across-reload.spec.ts` — **jeden** test:
+  propozycje docierają na etap przeglądu (mock tylko na
+  `/api/generate-flashcards`), `page.reload()`, po czym asercja, że (a) żadne
+  ostrzeżenie się nie pojawiło i (b) nieprzejrzane propozycje oraz tekst
+  źródłowy zniknęły. **Świadoma regresja** — dokumentuje, nie wymaga.
+- Weryfikacja celowym uszkodzeniem, dwa przebiegi: handler `beforeunload` →
+  czerwień na asercji „brak ostrzeżenia"; utrwalanie propozycji w
+  `sessionStorage` → czerwień na asercji „propozycji nie ma". Oba uszkodzenia
+  cofnięte (`git checkout`), zestaw zielony na `dev` i na `preview`.
+- **Odkrycie, które zmieniło test**: pierwsza wersja przechodziła *także* przy
+  włączonym utrwalaniu — asercje nieobecności trafiały w HTML z SSR przed
+  hydracją wyspy. Stąd kotwica `waitForResponse` z §6.3 pkt 4.
+- **Wpływ na §4 „Stos"**: ta faza dodała runner e2e (Playwright) — wiersz „e2e"
+  w tabeli stosu i wpis w §8 zaktualizowane.
+- **Ryzyko #7 pozostaje nierozwiązane produkcyjnie** — ten test je *utrwala*, nie
+  naprawia. Naprawa (utrwalanie propozycji albo ostrzeżenie przed utratą) to
+  kandydat na osobny `/10x-new`.
+
 ## 7. Czego Celowo Nie Testujemy
 
 Wyłączenia uzgodnione podczas wdrożenia (wywiad Fazy 2, Q5). Przyszli
@@ -548,8 +643,8 @@ założenie się zmieni.
 
 ## 8. Rejestr Aktualności
 
-- Strategia (§1–§5) ostatnio przejrzana: 2026-09-11 (dodane Ryzyko #7 do §2 i Faza 6 do §3; §4/§5 przestawione na „planowane"; §1 zasady i §7 negative-space bez zmian)
-- Wersje stosu ostatnio zweryfikowane: 2026-09-10 (stos testowy udokumentowany — profil `meaningful`, Vitest z dwoma configami). **Uwaga:** Faza 6 doda runner e2e — po jej realizacji ten wpis wymaga ponownej weryfikacji
+- Strategia (§1–§5) ostatnio przejrzana: 2026-09-11 (dodane Ryzyko #7 do §2 i Faza 6 do §3; po realizacji Fazy 6 §3/§4/§5 przestawione z „planowane" na stan faktyczny; §1 zasady i §7 negative-space bez zmian)
+- Wersje stosu ostatnio zweryfikowane: 2026-09-11 (Faza 6 dodała runner e2e: `@playwright/test ^1.63.0` + `playwright.config.ts`; warstwy Vitest bez zmian od 2026-09-10)
 - Referencje narzędzi natywnych dla AI ostatnio zweryfikowane: 2026-09-10 (żadna nie zaproponowana w tym wdrożeniu)
 - Skan hot-spotów ostatnio uruchomiony: 2026-09-11 — **3 commity/30d** w zakresach §1, poniżej progu 5. Prawdopodobieństwa dodane po tej dacie (Ryzyko #7) nie opierają się na częstotliwości zmian; zakres hot-spotów w §1 („20 commitów/30 dni") pochodzi z pierwotnego wdrożenia i jest już nieaktualny jako *bieżący* sygnał
 
